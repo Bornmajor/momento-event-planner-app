@@ -54,7 +54,7 @@
 | Calendar | **`expo-calendar`** (new object API: `ExpoCalendar`, `createEvent`, `event.delete()`) | Writes the personalized event and its reminder to the device calendar |
 | Google sign-in | **Decision needed, see §10** | Both Expo-recommended libraries need a dev build |
 | Tests | **jest-expo + React Native Testing Library**, lean (core logic plus key flows) | Matches the project's lean-testing preference |
-| Builds | **Development build** (EAS Build or `npx expo run:android`) | `expo-calendar`, Google sign-in and the font plugin don't run in Expo Go |
+| Builds | **Development build** with **EAS Build** (run by EAS Workflows, §9.3) | `expo-calendar`, Google sign-in and the font plugin don't run in Expo Go |
 
 All packages are added with `npx expo install` so the versions match SDK 58.
 
@@ -115,8 +115,18 @@ Splash ──▶ restore session (refresh token in SecureStore?)
 - **Root layout guards:** `<Stack.Protected guard={!session}>` around `(auth)` and `<Stack.Protected guard={!!session}>`
   around `(app)`. Signing in or out flips the guard and Expo Router switches screens. History of the guarded group is
   dropped, so the back button can't return to a signed-in screen after logout.
-- **Splash:** `SplashScreen.preventAutoHideAsync()` at module level, then hidden once fonts are loaded and the session
-  restore has finished (success or not).
+- **Splash:** `SplashScreen.preventAutoHideAsync()` at module level, then hidden once fonts are loaded, the persisted
+  query cache is restored, and the session restore has finished (success or not).
+- **Session restore must survive being offline.** "Signed in" means *a refresh token is stored*, not "the last refresh
+  succeeded":
+
+  | Refresh result at start-up | What happens |
+  |---|---|
+  | Success | Signed in, with a fresh access token |
+  | `401` (token revoked or expired) | Signed out: tokens and cache cleared, welcome screen |
+  | **Network error / timeout / 5xx** | **Stay signed in, offline.** No access token yet; My Events shows the cached copy. The refresh is retried when the connection returns (`onlineManager`), then queued requests run. |
+
+  Without this, opening the app offline would log the user out and throw away the offline copy of My Events.
 - Route guards are client-side only (Expo docs). The API still checks every request.
 
 ## 5. API client and token handling
@@ -128,10 +138,14 @@ Splash ──▶ restore session (refresh token in SecureStore?)
   `Authorization: Bearer <accessToken>`.
 - **Access token:** in memory only (session store). **Refresh token:** `expo-secure-store` (key `momento.refresh`).
 - **On `401 UNAUTHENTICATED`:** run one shared refresh (a single in-flight promise), save the new pair, retry the
-  request once. If the refresh fails, clear the tokens and the query cache, which flips the guard to the welcome screen.
-  This avoids the backend's reuse detection logging the user out (backend docs/API.md).
-- **Errors** become `ApiError { status, code, message, details }`. Screens show translated messages per `code`, and
-  forms map `details[].path` to field errors.
+  request once. **Only a `401` from the refresh itself signs the user out** (tokens and query cache cleared, guard
+  flips to welcome). A network failure during the refresh keeps the session and surfaces as "You're offline". The
+  single in-flight refresh avoids the backend's reuse detection logging the user out (backend docs/API.md).
+- **Sign out:** `POST /auth/logout { refreshToken }` (best effort; ignore failures), then clear SecureStore, the
+  session, the query cache, its persisted copy and paused mutations.
+- **Errors** become `ApiError { status, code, message, details }`, or `NetworkError` when there's no response.
+  Screens show translated messages per `code`, and forms map `details[].path` to field errors.
+
 ### 5.1 Caching server data (TanStack Query)
 
 The backend already caches Ticketmaster (search 5 min, details 1 h). The app adds a cache on top, tuned per kind of data:
@@ -139,7 +153,7 @@ The backend already caches Ticketmaster (search 5 min, details 1 h). The app add
 | Query key | Data | Fresh for (`staleTime`) | Kept in memory (`gcTime`) | Notes |
 |---|---|---|---|---|
 | `['categories']` | Category list | Infinity | Infinity | Fixed list; fetched once per app run |
-| `['events', params]` | Search pages (infinite) | 2 min | 10 min | Pull to refresh forces a refetch |
+| `['events', params]` | Search pages (infinite) | 2 min | 10 min | Pull to refresh forces a refetch. Stops at the last page or at result 1,000 (the backend's paging limit). |
 | `['event', id]` | Event details | 10 min | 30 min | Seeded from the list item, so details open instantly |
 | `['me']` | Profile | 5 min | Infinity | Replaced with the `PATCH /me` response, no refetch |
 | `['saved-events']` | My Events | 1 min | 7 days | **Persisted for offline** (§5.2). Refetched on focus. |
@@ -156,9 +170,16 @@ The backend already caches Ticketmaster (search 5 min, details 1 h). The app add
   removing events offline is queued and sent automatically when the connection returns. Search and Personalize need
   the network and show a clear "You're offline" state.
 - **How:** `PersistQueryClientProvider` with an AsyncStorage persister. A filter (`shouldDehydrateQuery`) persists
-  only `['saved-events']` (and the `['event', id]` entries of saved events). Mutations use TanStack Query's offline
-  mode: paused while offline, resumed with `resumePausedMutations()` on reconnect. The persisted cache is versioned
-  (`buster`) so an app update with new shapes discards old data.
+  only `['saved-events']`. Each saved item already contains the full event, so the details screen falls back to it when
+  offline; no separate per-event persistence is needed. The persisted cache is versioned (`buster`), so an app update
+  with new data shapes discards the old copy.
+- **Queued changes:** save and remove are mutations in TanStack Query's offline mode: paused while offline, resumed
+  with `resumePausedMutations()` once back online, including after an app restart. For that to work after a restart,
+  each mutation has a **mutation key with its function registered via `setMutationDefaults`**, because functions can't
+  be stored and only the key and variables are persisted. Language changes made offline sync the same way.
+- **Edge cases:** saving an event that was removed at the source fails with `404` when resumed. The item is dropped
+  from My Events with a notice. Removing works offline in full: the calendar entry is deleted immediately and the
+  server delete is queued.
 - **Why not WatermelonDB:** it's built for syncing large local databases. It needs its own native module, model
   schemas, and a pull/push sync protocol the backend would have to implement. That's heavy for at most 100 saved
   events whose source of truth is the API. If offline needs grow (e.g. offline search history), the next step up is
@@ -180,7 +201,7 @@ event, update and invalidate `saved-events`. After `PATCH /me`, set `['me']` fro
 | **Explore** | Search field (debounced 400 ms), category chips (from `/events/categories`), infinite list of `EventCard`s (`size=20`). Pull to refresh. Empty and error states. |
 | **Event details** | Image, title, status badge (cancelled, postponed…), date and time in the venue's time zone, venue, description, "Tickets" link (opens in the browser), **Set reminder** button |
 | **Personalize** (`events/[id]/personalize`) | Original text first. Toggles for **Shorten** and **Translate** (language picker, user's language pre-selected). **Apply** calls the API and shows the result in editable fields (with a "From cache" hint). A reminder time picker (at start, 15 min, 1 h, 1 day before). **Add to calendar**. |
-| **Add to calendar** | Ask for calendar permission. Pick a writable calendar: the primary one that allows changes, or create a "Momento" calendar if none. Create the event (start from `event.start.dateTime` in its time zone, or an all-day event if there's no time; 2-hour default end; notes = description + facts). Store `eventId → calendarEventId` locally, then `POST /me/saved-events`. |
+| **Add to calendar** | Ask for calendar permission. If it's denied, explain why it's needed and offer a button to open the system settings. Pick a writable calendar: the primary one that allows changes, or create a "Momento" calendar if none. Create the event (start from `event.start.dateTime` in its time zone, or an all-day event if there's no time; 2-hour default end; notes = description + facts; one alarm for the chosen reminder). Store `eventId → calendarEventId` locally, **keyed by user id** so two accounts on one phone never mix, then `POST /me/saved-events`. The exact alarm fields (`relativeOffset` etc.) are checked against the SDK 58 calendar docs and the migration guide when implemented. |
 | **My Events** | Saved events, newest first, with "Unavailable" for removed events. Swipe or button to remove: deletes the calendar entry (if this device created it) and the saved event. |
 | **Settings** | Theme (System / Light / Dark), Language (English / Français / Kiswahili; also `PATCH /me { language }`), Profile (first name, last name, phone), Sign out, Delete account (with confirmation; also removes the app's calendar entries). |
 
@@ -206,6 +227,9 @@ event, update and invalidate `saved-events`. After `PATCH /me`, set `['me']` fro
   scheme, so system UI and pickers match). The exact React Native API for overriding the native scheme (e.g.
   `Appearance.setColorScheme`) gets checked in the RN 0.88 docs during implementation, since the Expo page doesn't
   cover it.
+- **Accessibility:** every icon-only control (back, eye toggle, remove) gets an `accessibilityLabel`. Touch targets
+  are at least 44×44. Text scales with the system font size. Text-on-brand uses `#C9356F` for contrast. Status is
+  never shown by colour alone (badges have text).
 
 ## 8. Internationalisation
 
@@ -267,16 +291,18 @@ API URL on `APP_VARIANT`.
 |---|---|---|---|
 | 1 | Google sign-in library | `@react-native-google-signin/google-signin`: mature and widely used; the free version uses the older Google Sign-In SDK, while Android's newer Credential Manager is in its paid tier · `react-native-nitro-google-signin`: Credential Manager included, newer and less proven | **@react-native-google-signin (free)**, checked in a short spike first. Either way the backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (audience of the ID token) and the Android client ID. |
 | 2 | ~~How to make development builds~~ | **Decided:** EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) | — |
-| 6 | ~~Offline support in Version 1?~~ | **Decided:** included in Version 1, saved events only (§5.2); intent.md §4.6 updated | — |
 | 3 | Welcome collage photos | Your own photos · free-licence photos (e.g. Unsplash, credited) · abstract illustrated tiles in brand colours | Free-licence event photos, 5–6 images, compressed |
 | 4 | Tabs | Explore · My Events · Settings | As listed |
 | 5 | Screens without a design (Explore, Details, Personalize, My Events, Settings) | Derived from the welcome and auth visual language | A quick mockup of these for your approval before building them |
+| 6 | ~~Offline support in Version 1?~~ | **Decided:** included in Version 1, saved events only (§5.2); intent.md §4.6 updated | — |
 
 ## 11. Testing strategy (lean)
 
 - **Unit:** the API client (token header, single-flight refresh, error mapping), `buildCalendarNotes`, form schemas.
   The calendar helper is tested with `expo-calendar` mocked.
 - **Component:** sign-in form (validation and API error display) and the Personalize flow with mocked API.
+- **Session restore:** start-up refresh results in all three cases (success, `401`, network error), since the
+  offline case is the one most likely to regress.
 - **Manual on an Android dev build:** the end-to-end path against the API over ngrok: sign up → explore → details →
   personalize (Swahili) → add to calendar → My Events → remove → settings (theme, language, profile) → sign out.
 - **Gates before each commit:** `npx expo lint`, `npx tsc --noEmit`, `npm test`.
