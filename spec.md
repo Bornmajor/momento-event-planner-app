@@ -38,10 +38,13 @@
 | Framework | **Expo SDK 58**, React 19.3, React Native 0.88, TypeScript strict, React Compiler (already on) | Existing project |
 | Navigation | **Expo Router** with **`Stack.Protected`** guards; native tabs (`expo-router/native-tabs`) | File-based routes (AGENTS.md). Protected routes are the documented SDK 58 auth pattern. |
 | Server data | **TanStack Query v5** | Caching, loading/error states, infinite scrolling for event lists, retries, refetch on focus, cache updates after mutations |
-| HTTP | **`fetch` wrapper** in `src/api/client.ts` (no axios) | Adds the base URL, Bearer token and ngrok header, refreshes tokens once at a time, maps errors to `ApiError { code, message, details }` |
+| HTTP | **`fetch` wrapper** in `src/api/client.ts`. **No axios.** | ~40 lines cover what axios would add: base URL, Bearer token, ngrok header, JSON handling, a 15 s timeout (`AbortController`), one-at-a-time token refresh, and `ApiError { code, message, details }` for non-2xx responses |
+| Offline | **TanStack Query persistence** (`@tanstack/react-query-persist-client` + the AsyncStorage persister), **saved events only** | My Events opens instantly offline. Save and remove actions done offline are queued and sent when back online. WatermelonDB was considered and rejected (§5.2). |
+| Logging | `src/lib/logger.ts` (no output unless `__DEV__`) + ESLint `no-console` | Release builds print nothing. Tokens and personal data are never logged. |
+| CI / CD | **GitHub Actions** (checks on every PR) + **EAS Workflows** (builds) | §9 |
 | API types | **`openapi-typescript`**, generated from the backend's `docs/openapi.yaml` into `src/api/schema.d.ts` | Request and response types can't drift from the backend contract |
 | Forms | **react-hook-form + zod** | Validation rules mirror the backend (password: 8+ characters, a letter and a digit; names 1–50) |
-| Client state | **Zustand** with persistence to **AsyncStorage** (`@react-native-async-storage/async-storage`) | Small and explicit. Holds theme and language choice, plus the event id → calendar entry id map. |
+| Client state | **Zustand** with persistence to **AsyncStorage** (`@react-native-async-storage/async-storage`) | Small and explicit. Holds the session (access token in memory only), theme and language choice, and the event id → calendar entry id map. |
 | Tokens | **`expo-secure-store`** | Encrypted storage (Android Keystore / iOS Keychain). Works in Expo Go. |
 | i18n | **i18next + react-i18next** with **`expo-localization`** | Expo docs list react-i18next as an option. Mature: interpolation and plurals. Device language read with `getLocales()`. |
 | Dates | `Intl.DateTimeFormat` with the event's time zone | Recommended by the Expo docs. No date library needed. |
@@ -129,8 +132,43 @@ Splash ──▶ restore session (refresh token in SecureStore?)
   This avoids the backend's reuse detection logging the user out (backend docs/API.md).
 - **Errors** become `ApiError { status, code, message, details }`. Screens show translated messages per `code`, and
   forms map `details[].path` to field errors.
-- **Query keys:** `['events', params]`, `['event', id]`, `['categories']`, `['me']`, `['saved-events']`. After saving
-  or removing an event, invalidate `saved-events`. After `PATCH /me`, set `['me']` from the response.
+### 5.1 Caching server data (TanStack Query)
+
+The backend already caches Ticketmaster (search 5 min, details 1 h). The app adds a cache on top, tuned per kind of data:
+
+| Query key | Data | Fresh for (`staleTime`) | Kept in memory (`gcTime`) | Notes |
+|---|---|---|---|---|
+| `['categories']` | Category list | Infinity | Infinity | Fixed list; fetched once per app run |
+| `['events', params]` | Search pages (infinite) | 2 min | 10 min | Pull to refresh forces a refetch |
+| `['event', id]` | Event details | 10 min | 30 min | Seeded from the list item, so details open instantly |
+| `['me']` | Profile | 5 min | Infinity | Replaced with the `PATCH /me` response, no refetch |
+| `['saved-events']` | My Events | 1 min | 7 days | **Persisted for offline** (§5.2). Refetched on focus. |
+| Personalize | — | — | — | A mutation, not cached in the app; the backend caches AI results |
+
+- **Defaults:** retry twice on network or 5xx errors, never on 4xx. Refetch when the app comes back to the foreground
+  (`focusManager` + `AppState`) and when the connection returns (`onlineManager` + `@react-native-community/netinfo`).
+- **After a change:** saving or removing an event updates `['saved-events']` immediately (optimistic), then
+  re-syncs. Signing out clears the whole cache and the persisted copy.
+
+### 5.2 Offline support (saved events only)
+
+- **What works offline:** opening My Events and event details for saved events, from the last synced copy. Saving or
+  removing events offline is queued and sent automatically when the connection returns. Search and Personalize need
+  the network and show a clear "You're offline" state.
+- **How:** `PersistQueryClientProvider` with an AsyncStorage persister. A filter (`shouldDehydrateQuery`) persists
+  only `['saved-events']` (and the `['event', id]` entries of saved events). Mutations use TanStack Query's offline
+  mode: paused while offline, resumed with `resumePausedMutations()` on reconnect. The persisted cache is versioned
+  (`buster`) so an app update with new shapes discards old data.
+- **Why not WatermelonDB:** it's built for syncing large local databases. It needs its own native module, model
+  schemas, and a pull/push sync protocol the backend would have to implement. That's heavy for at most 100 saved
+  events whose source of truth is the API. If offline needs grow (e.g. offline search history), the next step up is
+  Expo's own **`expo-sqlite`** (with Drizzle), still lighter than WatermelonDB.
+- The calendar entries the app created already work offline, because they live in the device calendar.
+
+### 5.3 Query keys and invalidation
+
+`['events', params]`, `['event', id]`, `['categories']`, `['me']`, `['saved-events']`. After saving or removing an
+event, update and invalidate `saved-events`. After `PATCH /me`, set `['me']` from the response.
 
 ## 6. Feature behaviour
 
@@ -189,15 +227,47 @@ Splash ──▶ restore session (refresh token in SecureStore?)
   the logo (pink tile), plugins `expo-calendar` (with `calendarPermission` text), `expo-localization`, `expo-font`,
   `expo-secure-store`, and the Google sign-in plugin. Android calendar permissions are confirmed when the plugin is
   added.
-- **Development build** required. Android first. iOS config is kept but not tested (intent.md).
+- **Development build** required (`expo-calendar`, Google sign-in and the font plugin don't run in Expo Go; confirmed in
+  the SDK 58 docs). Android first. iOS config is kept but not tested (intent.md).
 - `ios/` and `android/` are generated and never edited by hand (AGENTS.md).
+
+### 9.1 No build variants yet
+
+There's one app id and one API URL (from `.env`) for now; no dev/staging/prod flavours, since there's only one
+backend. Adding variants later is a standard change: convert `app.json` to `app.config.ts` and switch the name, id and
+API URL on `APP_VARIANT`.
+
+### 9.2 Logging in release builds
+
+- All app logging goes through `src/lib/logger.ts`, whose methods do nothing unless `__DEV__` is true. Release builds
+  therefore print nothing from our code.
+- ESLint `no-console` (error) stops stray `console.*` calls; only the logger may use `console`.
+- Never log tokens, passwords or full API responses, even in development.
+- *Optional:* a Babel plugin that strips `console.*` from the whole bundle in production (including library logs). Not
+  needed for Version 1.
+
+### 9.3 CI/CD: GitHub Actions + EAS Workflows
+
+| Pipeline | Runs on | Does |
+|---|---|---|
+| **GitHub Actions** `ci.yml` | Every pull request and every push to `main` | `npm ci` → `npx expo lint` → `npx tsc --noEmit` → `npm test` → `npx expo-doctor` |
+| **EAS Workflow** `development-build.yml` | Manual trigger (or when native dependencies change) | EAS Build, `development` profile: Android dev-client APK for daily development |
+| **EAS Workflow** `preview-build.yml` | Push to `main` (after a PR merges) | EAS Build, `preview` profile: an installable Android APK to share for testing |
+| *(later)* `production` | Tag or manual | AAB for the Play Store, and EAS Submit. Not used in Version 1 (no store release). |
+
+- `eas.json` profiles: `development` (`developmentClient: true`, internal APK), `preview` (internal APK), `production`
+  (AAB).
+- **Secrets:** `EXPO_TOKEN` as a GitHub secret (only needed if GitHub Actions calls EAS). `EXPO_PUBLIC_API_URL` set as
+  an EAS environment variable for builds. Nothing secret ships in the app.
+- The exact EAS Workflow YAML syntax gets checked against the current EAS docs when it's written (AGENTS.md).
 
 ## 10. Open decisions
 
 | # | Question | Options | Recommendation |
 |---|---|---|---|
 | 1 | Google sign-in library | `@react-native-google-signin/google-signin`: mature and widely used; the free version uses the older Google Sign-In SDK, while Android's newer Credential Manager is in its paid tier · `react-native-nitro-google-signin`: Credential Manager included, newer and less proven | **@react-native-google-signin (free)**, checked in a short spike first. Either way the backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (audience of the ID token) and the Android client ID. |
-| 2 | How to make development builds | **EAS Build** (cloud, free tier, no Android Studio needed) · **`npx expo run:android`** (needs Android Studio and the SDK locally) | EAS Build if Android Studio isn't installed |
+| 2 | ~~How to make development builds~~ | **Decided:** EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) | — |
+| 6 | Offline support in Version 1? | intent.md lists offline support as a **future** feature; §5.2 makes it small enough for Version 1 | **Include it in Version 1** (persisted saved events + queued save/remove), and update intent.md |
 | 3 | Welcome collage photos | Your own photos · free-licence photos (e.g. Unsplash, credited) · abstract illustrated tiles in brand colours | Free-licence event photos, 5–6 images, compressed |
 | 4 | Tabs | Explore · My Events · Settings | As listed |
 | 5 | Screens without a design (Explore, Details, Personalize, My Events, Settings) | Derived from the welcome and auth visual language | A quick mockup of these for your approval before building them |
