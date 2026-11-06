@@ -1,6 +1,6 @@
 # Spec — Momento mobile app (frontend)
 
-> Status: **DRAFT — awaiting approval**. Phase 2 of the workflow. Implements [intent.md](intent.md), following the
+> Status: **APPROVED (2026-11-06)**. Phase 2 of the workflow. Implements [intent.md](intent.md), following the
 > design direction in [design/README.md](design/README.md). The backend is documented in the
 > `momento-planner-api` repo (`docs/API-REFERENCE.md`, `docs/openapi.yaml`).
 > Expo facts below were checked against the **SDK 58** docs on 2026-11-06.
@@ -52,7 +52,7 @@
 | Fonts | **Poppins** via `@expo-google-fonts/poppins` + the **`expo-font` config plugin** | Matches the reference design. The config plugin is the documented recommended method (needs a dev build). |
 | Images | **`expo-image`** (already installed) | Caching and placeholders for event photos |
 | Calendar | **`expo-calendar`** (new object API: `ExpoCalendar`, `createEvent`, `event.delete()`) | Writes the personalized event and its reminder to the device calendar |
-| Google sign-in | **Decision needed, see §10** | Both Expo-recommended libraries need a dev build |
+| Google sign-in | **`@react-native-google-signin/google-signin`** (free version), confirmed in a short spike first (§10) | Recommended by the Expo guide. Needs a dev build. Returns an ID token whose audience is the Web client ID, which the backend checks. |
 | Tests | **jest-expo + React Native Testing Library**, lean (core logic plus key flows) | Matches the project's lean-testing preference |
 | Builds | **Development build** with **EAS Build** (run by EAS Workflows, §9.3) | `expo-calendar`, Google sign-in and the font plugin don't run in Expo Go |
 
@@ -285,16 +285,18 @@ API URL on `APP_VARIANT`.
   an EAS environment variable for builds. Nothing secret ships in the app.
 - The exact EAS Workflow YAML syntax gets checked against the current EAS docs when it's written (AGENTS.md).
 
-## 10. Open decisions
+## 10. Decisions log
 
-| # | Question | Options | Recommendation |
-|---|---|---|---|
-| 1 | Google sign-in library | `@react-native-google-signin/google-signin`: mature and widely used; the free version uses the older Google Sign-In SDK, while Android's newer Credential Manager is in its paid tier · `react-native-nitro-google-signin`: Credential Manager included, newer and less proven | **@react-native-google-signin (free)**, checked in a short spike first. Either way the backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (audience of the ID token) and the Android client ID. |
-| 2 | ~~How to make development builds~~ | **Decided:** EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) | — |
-| 3 | Welcome collage photos | Your own photos · free-licence photos (e.g. Unsplash, credited) · abstract illustrated tiles in brand colours | Free-licence event photos, 5–6 images, compressed |
-| 4 | Tabs | Explore · My Events · Settings | As listed |
-| 5 | Screens without a design (Explore, Details, Personalize, My Events, Settings) | Derived from the welcome and auth visual language | A quick mockup of these for your approval before building them |
-| 6 | ~~Offline support in Version 1?~~ | **Decided:** included in Version 1, saved events only (§5.2); intent.md §4.6 updated | — |
+| # | Decision | Outcome |
+|---|---|---|
+| 1 | Google sign-in library | `@react-native-google-signin/google-signin` (free version), confirmed in a short spike before the auth screens are wired. Fallback: `react-native-nitro-google-signin`. The backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (the ID token's audience) and the Android client ID. |
+| 2 | How to make development builds | EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) |
+| 3 | Welcome collage photos | 5–6 free-licence event photos (e.g. Unsplash), compressed, credited in the README |
+| 4 | Tabs | Explore · My Events · Settings |
+| 5 | Screens without a design (Explore, Details, Personalize, My Events, Settings) | Mocked up in the welcome/auth visual language and approved by the user before they're built |
+| 6 | Offline support | Included in Version 1, saved events only (§5.2); intent.md §4.6 |
+| 7 | State and data | Zustand for client state, TanStack Query + `fetch` for server data (no axios) |
+| 8 | Build variants | None for now (§9.1). Logging is silent in release builds (§9.2). |
 
 ## 11. Testing strategy (lean)
 
