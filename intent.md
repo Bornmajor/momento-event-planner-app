@@ -81,6 +81,12 @@ AI rules:
 - **Profile:** view and edit first name, last name and phone number. Email is shown but can't be edited.
 - Log out.
 
+### 4.6 Offline support (saved events only)
+- **My Events and its event details open without a connection,** from the last synced copy kept on the device.
+- **Saving or removing an event while offline is queued** and sent automatically when the connection returns.
+- Search, event discovery and AI personalization need a connection and show a clear "You're offline" message.
+- Calendar entries already work offline, because they live in the device calendar.
+
 ## 5. Out of scope — future features
 
 | Feature | Notes |
@@ -90,7 +96,7 @@ AI rules:
 | Sign in with Apple | Needed before publishing to the iOS App Store when Google sign-in is offered |
 | Profile picture | Upload and storage |
 | Translating event descriptions on the details screen | Can reuse the Version 1 AI translation and its cache |
-| Offline support for saved events | Keep My Events viewable without a connection, kept on the device |
+| Offline support beyond saved events (e.g. search history) | Saved events are offline in Version 1 (§4.6) |
 | AI event recommendations ("For you") | Needs interests and booking history |
 | Capacity limits / RSVP counts | — |
 | Payments / ticket purchase in the app | Version 1 links out to Ticketmaster |
@@ -116,6 +122,8 @@ AI rules:
 5. Switching theme or language takes effect immediately and is kept after a restart.
 6. Profile edits are saved to the backend and appear again after logging back in.
 7. No third-party API keys are in the mobile app bundle.
+8. With the network off, My Events still shows the saved events. An event removed offline is gone from the server
+   once the connection returns.
 
 ## 8. Decisions log
 
@@ -126,3 +134,4 @@ AI rules:
 | 3 | Saved event storage | Event IDs only, no copy of event data. Calendar entry IDs stay on the device. |
 | 4 | Sign in with Apple | Future (no app store release planned) |
 | 5 | Personalization approach | One AI request on demand (shorten and/or translate), cached, previewed by the user |
+| 6 | Offline support | Moved into Version 1 (2026-11-06), **saved events only**, using TanStack Query persistence, not WatermelonDB (frontend spec §5.2) |

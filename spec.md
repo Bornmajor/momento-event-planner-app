@@ -267,7 +267,7 @@ API URL on `APP_VARIANT`.
 |---|---|---|---|
 | 1 | Google sign-in library | `@react-native-google-signin/google-signin`: mature and widely used; the free version uses the older Google Sign-In SDK, while Android's newer Credential Manager is in its paid tier · `react-native-nitro-google-signin`: Credential Manager included, newer and less proven | **@react-native-google-signin (free)**, checked in a short spike first. Either way the backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (audience of the ID token) and the Android client ID. |
 | 2 | ~~How to make development builds~~ | **Decided:** EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) | — |
-| 6 | Offline support in Version 1? | intent.md lists offline support as a **future** feature; §5.2 makes it small enough for Version 1 | **Include it in Version 1** (persisted saved events + queued save/remove), and update intent.md |
+| 6 | ~~Offline support in Version 1?~~ | **Decided:** included in Version 1, saved events only (§5.2); intent.md §4.6 updated | — |
 | 3 | Welcome collage photos | Your own photos · free-licence photos (e.g. Unsplash, credited) · abstract illustrated tiles in brand colours | Free-licence event photos, 5–6 images, compressed |
 | 4 | Tabs | Explore · My Events · Settings | As listed |
 | 5 | Screens without a design (Explore, Details, Personalize, My Events, Settings) | Derived from the welcome and auth visual language | A quick mockup of these for your approval before building them |
