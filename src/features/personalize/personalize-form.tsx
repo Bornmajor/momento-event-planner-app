@@ -51,12 +51,14 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
   const [adding, setAdding] = useState(false);
 
   const personalize = useMutation({
-    mutationFn: () =>
+    /** `textLanguage`: the language the result is written in (the translation target, else the app language). */
+    mutationFn: (_textLanguage: string) =>
       personalizeApi.run(event.id, { shorten, ...(translate ? { translateTo: language } : {}) }),
-    onSuccess: (result) => {
+    onSuccess: (result, textLanguage) => {
       setTitle(result.title);
       setDescription(result.description);
-      setFacts(result.facts);
+      // The backend writes the date in the venue's time zone; show it in the user's, like everywhere else in the app.
+      setFacts({ ...result.facts, dateTimeText: formatEventDate(event.start, textLanguage) });
       setFromCache(result.cached);
     },
     onError: (error) => {
@@ -134,7 +136,7 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
           label={t('personalize.apply')}
           variant="outline"
           icon="sparkles-outline"
-          onPress={() => personalize.mutate()}
+          onPress={() => personalize.mutate(translate ? language : i18n.language)}
           loading={personalize.isPending}
           disabled={!canApply}
         />
