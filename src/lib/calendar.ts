@@ -26,8 +26,10 @@ export async function requestCalendarAccess(): Promise<PermissionResult> {
 export const openSystemSettings = () => Linking.openSettings();
 
 /**
- * A calendar the app can write to: the system default (iOS) or a primary, modifiable calendar (Android; it has no
- * single default), then an existing "Momento" calendar, then any modifiable one; otherwise a new local "Momento".
+ * A calendar the app can write to and the user will actually see. iOS: the system default. Android has no single
+ * default, so writable calendars are ranked: hidden ones are skipped; a synced account calendar (e.g. Google) beats a
+ * phone-only one, because the Google Calendar app doesn't show phone-only calendars; the account's main calendar
+ * (primary, or titled like the account) comes first. Only when nothing is writable is a local "Momento" created.
  */
 export async function getWritableCalendar(): Promise<Calendar.ExpoCalendar> {
   if (Platform.OS === 'ios') {
@@ -38,12 +40,35 @@ export async function getWritableCalendar(): Promise<Calendar.ExpoCalendar> {
       logger.warn('no default iOS calendar', error);
     }
   }
-  const calendars = (await Calendar.getCalendars(Calendar.EntityTypes.EVENT)).filter((c) => c.allowsModifications);
-  const pick =
-    calendars.find((c) => c.isPrimary) ??
-    calendars.find((c) => c.title === MOMENTO_CALENDAR_TITLE) ??
-    calendars[0];
+  const all = await Calendar.getCalendars(Calendar.EntityTypes.EVENT);
+  const writable = all.filter((c) => c.allowsModifications && c.isVisible !== false);
+  const pick = [...writable].sort((a, b) => calendarRank(b) - calendarRank(a))[0];
+  logger.debug(
+    'calendars',
+    all.map((c) => ({
+      title: c.title,
+      account: c.source?.name,
+      local: c.source?.isLocalAccount ?? false,
+      primary: c.isPrimary ?? false,
+      writable: c.allowsModifications,
+      visible: c.isVisible,
+      synced: c.isSynced,
+    })),
+    '→ chosen:',
+    pick?.title ?? '(none, creating Momento)',
+  );
   return pick ?? createMomentoCalendar();
+}
+
+/** Higher is better (see getWritableCalendar). */
+export function calendarRank(c: Pick<Calendar.ExpoCalendar, 'isPrimary' | 'isSynced' | 'title' | 'source'>): number {
+  let rank = 0;
+  if (!c.source?.isLocalAccount) rank += 4; // synced to an account, so it shows in Google Calendar too
+  if (c.isPrimary) rank += 2;
+  if (c.source?.name && c.title === c.source.name) rank += 2; // Google names the main calendar after the account
+  if (c.isSynced) rank += 1;
+  if (c.title === MOMENTO_CALENDAR_TITLE) rank += 1;
+  return rank;
 }
 
 function createMomentoCalendar() {
@@ -90,8 +115,9 @@ export function entryTiming(start: EventSummary['start']) {
 /** Creates the entry with one reminder and returns its id (stored to update or delete it later). */
 export async function createCalendarEntry(input: CalendarEntryInput): Promise<string> {
   const calendar = await getWritableCalendar();
+  const timing = entryTiming(input.start);
   const entry = await calendar.createEvent({
-    ...entryTiming(input.start),
+    ...timing,
     title: input.title,
     notes: input.notes,
     location: input.location,
@@ -99,7 +125,21 @@ export async function createCalendarEntry(input: CalendarEntryInput): Promise<st
     // Negative offsets fire before the start (SDK 58 Alarm type). Android needs a method.
     alarms: [{ relativeOffset: -input.reminderMinutes, method: Calendar.AlarmMethod.ALERT }],
   });
+  logger.info(
+    `calendar entry ${entry.id} created in "${calendar.title}" (${calendar.source?.name ?? 'no account'})`,
+    `for ${timing.startDate.toISOString()}${timing.allDay ? ' (all day)' : ''}`,
+  );
   return entry.id;
+}
+
+/** Opens the entry in the phone's calendar app, so the user sees exactly where it went. */
+export async function openCalendarEntry(id: string): Promise<void> {
+  try {
+    const entry = await Calendar.ExpoCalendarEvent.get(id);
+    await entry.openInCalendar();
+  } catch (error) {
+    logger.warn('could not open the calendar entry', error);
+  }
 }
 
 /** Deletes an entry this app created. Already gone (deleted in the calendar app) counts as done. */

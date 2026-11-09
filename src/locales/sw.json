@@ -184,10 +184,11 @@
       "1440": "Siku 1 kabla"
     },
     "addToCalendar": "Ongeza kwenye Kalenda",
-    "added": "Limeongezwa kwenye kalenda yako.",
+    "added": "Limeongezwa kwenye kalenda yako kwa {{date}}.",
     "permissionNeeded": "Momento inahitaji ruhusa ya kalenda ili kuongeza tukio hili.",
     "openSettings": "Fungua Mipangilio",
     "calendarFailed": "Imeshindwa kuliongeza kwenye kalenda. Tafadhali jaribu tena.",
-    "limitReached": "Umetumia ubinafsishaji wa AI wa leo. Bado unaweza kuongeza maandishi ya asili."
+    "limitReached": "Umetumia ubinafsishaji wa AI wa leo. Bado unaweza kuongeza maandishi ya asili.",
+    "view": "Tazama"
   }
 }

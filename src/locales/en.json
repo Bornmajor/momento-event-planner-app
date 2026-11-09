@@ -184,10 +184,11 @@
       "1440": "1 day before"
     },
     "addToCalendar": "Add to Calendar",
-    "added": "Added to your calendar.",
+    "added": "Added to your calendar for {{date}}.",
     "permissionNeeded": "Momento needs calendar access to add this event.",
     "openSettings": "Open Settings",
     "calendarFailed": "Couldn't add it to your calendar. Please try again.",
-    "limitReached": "You've used today's AI personalizations. You can still add the original text."
+    "limitReached": "You've used today's AI personalizations. You can still add the original text.",
+    "view": "View"
   }
 }

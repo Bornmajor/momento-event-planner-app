@@ -184,10 +184,11 @@
       "1440": "1 jour avant"
     },
     "addToCalendar": "Ajouter au calendrier",
-    "added": "Ajouté à votre calendrier.",
+    "added": "Ajouté à votre calendrier pour le {{date}}.",
     "permissionNeeded": "Momento a besoin d'accéder à votre calendrier pour ajouter cet événement.",
     "openSettings": "Ouvrir les réglages",
     "calendarFailed": "Impossible de l'ajouter à votre calendrier. Réessayez.",
-    "limitReached": "Vous avez utilisé vos personnalisations IA du jour. Vous pouvez quand même ajouter le texte original."
+    "limitReached": "Vous avez utilisé vos personnalisations IA du jour. Vous pouvez quand même ajouter le texte original.",
+    "view": "Voir"
   }
 }

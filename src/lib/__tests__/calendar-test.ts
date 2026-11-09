@@ -29,18 +29,20 @@ describe('calendar', () => {
     ).toBe('Jazz night.\n\n🗓 Tue 1 Dec · 19:30\n📍 Ronnie Scott’s, London\n🎟 https://t.co/x');
   });
 
-  it('prefers a primary writable calendar and never picks a read-only one', async () => {
-    const readOnlyPrimary = { id: 'a', isPrimary: true, allowsModifications: false };
-    const writable = { id: 'b', isPrimary: false, allowsModifications: true };
-    const writablePrimary = { id: 'c', isPrimary: true, allowsModifications: true };
-    getCalendars.mockResolvedValue([readOnlyPrimary, writable, writablePrimary]);
+  it("picks the Google account's main calendar over phone-only, hidden or read-only ones", async () => {
+    const account = { name: 'ada@gmail.com', isLocalAccount: false };
+    const readOnlyPrimary = { id: 'a', title: 'Holidays', isPrimary: true, allowsModifications: false, source: account };
+    const phoneOnly = { id: 'b', title: 'My calendar', allowsModifications: true, source: { name: 'Phone', isLocalAccount: true } };
+    const hidden = { id: 'c', title: 'ada@gmail.com', allowsModifications: true, isVisible: false, source: account };
+    const main = { id: 'd', title: 'ada@gmail.com', allowsModifications: true, isVisible: true, isSynced: true, source: account };
+    getCalendars.mockResolvedValue([readOnlyPrimary, phoneOnly, hidden, main]);
 
-    await expect(getWritableCalendar()).resolves.toBe(writablePrimary);
+    await expect(getWritableCalendar()).resolves.toBe(main);
     expect(createCalendar).not.toHaveBeenCalled();
   });
 
   it('creates a local "Momento" calendar when nothing is writable', async () => {
-    getCalendars.mockResolvedValue([{ id: 'a', allowsModifications: false }]);
+    getCalendars.mockResolvedValue([{ id: 'a', title: 'Holidays', allowsModifications: false }]);
     createCalendar.mockResolvedValue({ id: 'new' });
 
     await expect(getWritableCalendar()).resolves.toEqual({ id: 'new' });

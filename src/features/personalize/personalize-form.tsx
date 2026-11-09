@@ -11,7 +11,7 @@ import { useSession } from '@/features/auth/session';
 import { formatEventDate, formatVenue } from '@/features/events/format';
 import { useSaveEvent } from '@/features/saved-events/mutations';
 import { LANGUAGES } from '@/lib/i18n';
-import { openSystemSettings } from '@/lib/calendar';
+import { openCalendarEntry, openSystemSettings } from '@/lib/calendar';
 import { logger } from '@/lib/logger';
 import { MIN_TOUCH } from '@/theme/tokens';
 import { useTheme } from '@/theme/use-theme';
@@ -79,9 +79,13 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
     if (!userId) return;
     setAdding(true);
     try {
-      await addToCalendar({ userId, event, title, description, facts, reminderMinutes: reminder });
+      const calendarEventId = await addToCalendar({ userId, event, title, description, facts, reminderMinutes: reminder });
       saveEvent.mutate(event.id); // queued and sent later when offline
-      snackbar.success(t('personalize.added'));
+      // The event is usually weeks away; "View" jumps straight to it in the calendar app.
+      snackbar.success(t('personalize.added', { date: facts.dateTimeText }), {
+        label: t('personalize.view'),
+        onPress: () => void openCalendarEntry(calendarEventId),
+      });
       router.back();
     } catch (error) {
       if (error instanceof CalendarPermissionError) {
