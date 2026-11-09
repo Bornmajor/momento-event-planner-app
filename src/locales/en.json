@@ -13,15 +13,6 @@
     "offlineHint": "Some things may be out of date until you reconnect.",
     "somethingWrong": "Something went wrong"
   },
-  "placeholder": {
-    "signedIn": "You're signed in. Explore, My Events and Settings arrive soon.",
-    "theme": "Theme",
-    "language": "Language",
-    "system": "System",
-    "light": "Light",
-    "dark": "Dark",
-    "signOut": "Sign out"
-  },
   "a11y": {
     "back": "Go back",
     "showPassword": "Show password",
@@ -100,7 +91,8 @@
     "nameTooLong": "Use 50 characters or fewer.",
     "passwordWeak": "This password is too easy to guess. Try a longer one.",
     "confirmRequired": "Confirm your password.",
-    "passwordsMatch": "Passwords don't match."
+    "passwordsMatch": "Passwords don't match.",
+    "phone": "Use the international format starting with +, e.g. +254 712 345 678."
   },
   "signUp": {
     "progress": "Step {{step}} of {{total}}",
@@ -159,7 +151,20 @@
   },
   "myEvents": {
     "emptyTitle": "No saved events yet",
-    "emptyBody": "Events you add to your calendar will show up here."
+    "emptyBody": "Events you add to your calendar will show up here.",
+    "subtitle": "Events you've added to your calendar.",
+    "count_one": "{{count}} saved event",
+    "count_other": "{{count}} saved events",
+    "lastUpdated": "Offline · last updated {{when}}",
+    "offlineEmptyTitle": "You're offline",
+    "offlineEmptyBody": "Connect once to load your saved events. After that they're available offline too.",
+    "unavailable": "Unavailable",
+    "unavailableHint": "This event was cancelled or removed by the organiser.",
+    "remove": "Remove",
+    "removeTitle": "Remove this event?",
+    "removeBody": "\"{{title}}\" will be removed from My Events and from your calendar.",
+    "removeFailed": "Couldn't remove the event. It's back in your list.",
+    "goneWhileOffline": "An event you saved offline is no longer available, so it wasn't saved."
   },
   "languages": {
     "en": "English",
@@ -193,5 +198,31 @@
     "calendarFailed": "Couldn't add it to your calendar. Please try again.",
     "limitReached": "You've used today's AI personalizations. You can still add the original text.",
     "view": "View"
+  },
+  "settings": {
+    "editProfile": "Edit profile",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "language": "Language",
+    "languageHint": "Also used as the default language when personalizing events.",
+    "signOut": "Sign Out",
+    "signOutTitle": "Sign out?",
+    "signOutBody": "Your saved events stay in your account.",
+    "deleteAccount": "Delete account",
+    "deleting": "Deleting…",
+    "deleteTitle": "Delete your account?",
+    "deleteBody": "This permanently deletes your account and saved events, and removes the events Momento added to this phone's calendar. This can't be undone.",
+    "deleteConfirm": "Delete",
+    "deleted": "Your account was deleted."
+  },
+  "profile": {
+    "title": "Profile",
+    "phone": "Phone (optional)",
+    "phoneHint": "International format, e.g. +254 712 345 678.",
+    "emailHint": "Your email can't be changed.",
+    "save": "Save Changes",
+    "saved": "Profile updated."
   }
 }

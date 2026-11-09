@@ -1,14 +1,12 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 
-import { AppText } from '@/components/ui';
-import { useLanguageStore } from '@/features/settings/language-store';
-import { LANGUAGE_NAMES, LANGUAGES } from '@/lib/i18n';
 import { MIN_TOUCH } from '@/theme/tokens';
-import { useThemeStore, type ThemePreference } from '@/theme/theme-store';
 import { useTheme } from '@/theme/use-theme';
 
-function Segmented<T extends string>({
+import { AppText } from './app-text';
+
+/** Pill segmented control (one choice from a few), e.g. theme or language in Settings. */
+export function SegmentedControl<T extends string>({
   options,
   value,
   onChange,
@@ -48,34 +46,6 @@ function Segmented<T extends string>({
           );
         })}
       </View>
-    </View>
-  );
-}
-
-/**
- * Temporary theme and language switches so Batch 1 can be checked on a device.
- * Replaced by the real Settings screen in Batch 4.
- */
-export function SettingsPreview() {
-  const { t, i18n } = useTranslation();
-  const preference = useThemeStore((s) => s.preference);
-  const setPreference = useThemeStore((s) => s.setPreference);
-  const setLanguage = useLanguageStore((s) => s.setLanguage);
-
-  const themeOptions: { value: ThemePreference; label: string }[] = [
-    { value: 'system', label: t('placeholder.system') },
-    { value: 'light', label: t('placeholder.light') },
-    { value: 'dark', label: t('placeholder.dark') },
-  ];
-  return (
-    <View style={{ gap: 16, alignSelf: 'stretch' }}>
-      <Segmented label={t('placeholder.theme')} options={themeOptions} value={preference} onChange={setPreference} />
-      <Segmented
-        label={t('placeholder.language')}
-        options={LANGUAGES.map((code) => ({ value: code, label: LANGUAGE_NAMES[code] }))}
-        value={i18n.language as (typeof LANGUAGES)[number]}
-        onChange={setLanguage}
-      />
     </View>
   );
 }

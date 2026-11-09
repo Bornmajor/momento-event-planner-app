@@ -13,15 +13,6 @@
     "offlineHint": "Baadhi ya taarifa huenda zimepitwa na wakati hadi utakapounganishwa tena.",
     "somethingWrong": "Hitilafu imetokea"
   },
-  "placeholder": {
-    "signedIn": "Umeingia. Gundua, Matukio Yangu na Mipangilio vinakuja hivi karibuni.",
-    "theme": "Mandhari",
-    "language": "Lugha",
-    "system": "Mfumo",
-    "light": "Mwanga",
-    "dark": "Giza",
-    "signOut": "Toka"
-  },
   "a11y": {
     "back": "Rudi nyuma",
     "showPassword": "Onyesha nenosiri",
@@ -100,7 +91,8 @@
     "nameTooLong": "Tumia herufi 50 au chache.",
     "passwordWeak": "Nenosiri hili ni rahisi sana kukisia. Jaribu refu zaidi.",
     "confirmRequired": "Thibitisha nenosiri lako.",
-    "passwordsMatch": "Manenosiri hayalingani."
+    "passwordsMatch": "Manenosiri hayalingani.",
+    "phone": "Tumia muundo wa kimataifa unaoanza na +, mf. +254 712 345 678."
   },
   "signUp": {
     "progress": "Hatua {{step}} kati ya {{total}}",
@@ -159,7 +151,20 @@
   },
   "myEvents": {
     "emptyTitle": "Bado hakuna matukio yaliyohifadhiwa",
-    "emptyBody": "Matukio unayoongeza kwenye kalenda yataonekana hapa."
+    "emptyBody": "Matukio unayoongeza kwenye kalenda yataonekana hapa.",
+    "subtitle": "Matukio uliyoongeza kwenye kalenda yako.",
+    "count_one": "Tukio {{count}} limehifadhiwa",
+    "count_other": "Matukio {{count}} yamehifadhiwa",
+    "lastUpdated": "Nje ya mtandao · ilisasishwa {{when}}",
+    "offlineEmptyTitle": "Uko nje ya mtandao",
+    "offlineEmptyBody": "Unganisha mara moja ili kupakia matukio yako. Baada ya hapo yatapatikana hata bila mtandao.",
+    "unavailable": "Halipatikani",
+    "unavailableHint": "Tukio hili lilighairiwa au kuondolewa na mwandaaji.",
+    "remove": "Ondoa",
+    "removeTitle": "Ondoa tukio hili?",
+    "removeBody": "\"{{title}}\" litaondolewa kwenye Matukio Yangu na kwenye kalenda yako.",
+    "removeFailed": "Imeshindwa kuondoa tukio. Limerudi kwenye orodha yako.",
+    "goneWhileOffline": "Tukio ulilohifadhi ukiwa nje ya mtandao halipatikani tena, kwa hivyo halikuhifadhiwa."
   },
   "languages": {
     "en": "English",
@@ -193,5 +198,31 @@
     "calendarFailed": "Imeshindwa kuliongeza kwenye kalenda. Tafadhali jaribu tena.",
     "limitReached": "Umetumia ubinafsishaji wa AI wa leo. Bado unaweza kuongeza maandishi ya asili.",
     "view": "Tazama"
+  },
+  "settings": {
+    "editProfile": "Hariri wasifu",
+    "theme": "Mandhari",
+    "themeSystem": "Mfumo",
+    "themeLight": "Mwanga",
+    "themeDark": "Giza",
+    "language": "Lugha",
+    "languageHint": "Pia hutumika kama lugha chaguo-msingi wakati wa kubinafsisha matukio.",
+    "signOut": "Toka",
+    "signOutTitle": "Toka?",
+    "signOutBody": "Matukio uliyohifadhi yanabaki kwenye akaunti yako.",
+    "deleteAccount": "Futa akaunti",
+    "deleting": "Inafuta…",
+    "deleteTitle": "Futa akaunti yako?",
+    "deleteBody": "Hii itafuta kabisa akaunti yako na matukio uliyohifadhi, na kuondoa matukio ambayo Momento iliongeza kwenye kalenda ya simu hii. Haiwezi kutenduliwa.",
+    "deleteConfirm": "Futa",
+    "deleted": "Akaunti yako imefutwa."
+  },
+  "profile": {
+    "title": "Wasifu",
+    "phone": "Simu (si lazima)",
+    "phoneHint": "Muundo wa kimataifa, mf. +254 712 345 678.",
+    "emailHint": "Barua pepe yako haiwezi kubadilishwa.",
+    "save": "Hifadhi Mabadiliko",
+    "saved": "Wasifu umesasishwa."
   }
 }

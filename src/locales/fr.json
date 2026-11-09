@@ -13,15 +13,6 @@
     "offlineHint": "Certaines informations peuvent être obsolètes jusqu'à votre reconnexion.",
     "somethingWrong": "Une erreur s'est produite"
   },
-  "placeholder": {
-    "signedIn": "Vous êtes connecté. Explorer, Mes événements et Paramètres arrivent bientôt.",
-    "theme": "Thème",
-    "language": "Langue",
-    "system": "Système",
-    "light": "Clair",
-    "dark": "Sombre",
-    "signOut": "Se déconnecter"
-  },
   "a11y": {
     "back": "Retour",
     "showPassword": "Afficher le mot de passe",
@@ -100,7 +91,8 @@
     "nameTooLong": "50 caractères maximum.",
     "passwordWeak": "Ce mot de passe est trop facile à deviner. Essayez-en un plus long.",
     "confirmRequired": "Confirmez votre mot de passe.",
-    "passwordsMatch": "Les mots de passe ne correspondent pas."
+    "passwordsMatch": "Les mots de passe ne correspondent pas.",
+    "phone": "Utilisez le format international commençant par +, ex. +33 6 12 34 56 78."
   },
   "signUp": {
     "progress": "Étape {{step}} sur {{total}}",
@@ -159,7 +151,20 @@
   },
   "myEvents": {
     "emptyTitle": "Aucun événement enregistré",
-    "emptyBody": "Les événements ajoutés à votre calendrier apparaîtront ici."
+    "emptyBody": "Les événements ajoutés à votre calendrier apparaîtront ici.",
+    "subtitle": "Les événements ajoutés à votre calendrier.",
+    "count_one": "{{count}} événement enregistré",
+    "count_other": "{{count}} événements enregistrés",
+    "lastUpdated": "Hors ligne · mis à jour {{when}}",
+    "offlineEmptyTitle": "Vous êtes hors ligne",
+    "offlineEmptyBody": "Connectez-vous une fois pour charger vos événements. Ensuite, ils seront aussi disponibles hors ligne.",
+    "unavailable": "Indisponible",
+    "unavailableHint": "Cet événement a été annulé ou retiré par l'organisateur.",
+    "remove": "Retirer",
+    "removeTitle": "Retirer cet événement ?",
+    "removeBody": "« {{title}} » sera retiré de Mes événements et de votre calendrier.",
+    "removeFailed": "Impossible de retirer l'événement. Il est de retour dans votre liste.",
+    "goneWhileOffline": "Un événement enregistré hors ligne n'est plus disponible ; il n'a pas été enregistré."
   },
   "languages": {
     "en": "English",
@@ -193,5 +198,31 @@
     "calendarFailed": "Impossible de l'ajouter à votre calendrier. Réessayez.",
     "limitReached": "Vous avez utilisé vos personnalisations IA du jour. Vous pouvez quand même ajouter le texte original.",
     "view": "Voir"
+  },
+  "settings": {
+    "editProfile": "Modifier le profil",
+    "theme": "Thème",
+    "themeSystem": "Système",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "language": "Langue",
+    "languageHint": "Aussi utilisée par défaut pour personnaliser les événements.",
+    "signOut": "Se déconnecter",
+    "signOutTitle": "Se déconnecter ?",
+    "signOutBody": "Vos événements enregistrés restent dans votre compte.",
+    "deleteAccount": "Supprimer le compte",
+    "deleting": "Suppression…",
+    "deleteTitle": "Supprimer votre compte ?",
+    "deleteBody": "Votre compte et vos événements enregistrés seront définitivement supprimés, ainsi que les événements ajoutés par Momento au calendrier de ce téléphone. Action irréversible.",
+    "deleteConfirm": "Supprimer",
+    "deleted": "Votre compte a été supprimé."
+  },
+  "profile": {
+    "title": "Profil",
+    "phone": "Téléphone (facultatif)",
+    "phoneHint": "Format international, ex. +33 6 12 34 56 78.",
+    "emailHint": "Votre e-mail ne peut pas être modifié.",
+    "save": "Enregistrer",
+    "saved": "Profil mis à jour."
   }
 }

@@ -80,7 +80,8 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
     setAdding(true);
     try {
       const calendarEventId = await addToCalendar({ userId, event, title, description, facts, reminderMinutes: reminder });
-      saveEvent.mutate(event.id); // queued and sent later when offline
+      // Shows in My Events at once; sent now, or queued and sent when back online.
+      saveEvent.mutate({ eventId: event.id, event: { ...event, description: event.description ?? null, notes: event.notes ?? null } });
       // The event is usually weeks away; "View" jumps straight to it in the calendar app.
       snackbar.success(t('personalize.added', { date: facts.dateTimeText }), {
         label: t('personalize.view'),

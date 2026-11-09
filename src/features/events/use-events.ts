@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { eventsApi, type CategoryId, type EventPage, type EventSearchParams, type EventSummary } from '@/api/endpoints';
+import { findSavedEvent } from '@/features/saved-events/mutations';
 import { cacheTimes, queryClient, queryKeys } from '@/lib/query-client';
 
 import { nextPageParam, PAGE_SIZE } from './format';
@@ -31,11 +32,16 @@ export function useEventSearch({ q, category, when }: { q: string; category: Cat
   });
 }
 
-/** Event details. Shows the list's summary straight away while the full event (with description) loads. */
+/**
+ * Event details. A saved event's full copy (kept on the phone for offline use) is used straight away and refreshed
+ * when online; otherwise the list's summary shows while the full event (with description) loads.
+ */
 export function useEvent(id: string) {
   return useQuery({
     queryKey: queryKeys.event(id),
     queryFn: async () => (await eventsApi.get(id)).event,
+    initialData: () => findSavedEvent(id),
+    initialDataUpdatedAt: () => queryClient.getQueryState(queryKeys.savedEvents)?.dataUpdatedAt,
     placeholderData: () => findSummary(id) as never,
     ...cacheTimes.event,
   });

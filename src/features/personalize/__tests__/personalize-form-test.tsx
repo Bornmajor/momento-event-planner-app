@@ -6,7 +6,7 @@ import { SnackbarHost } from '@/components/ui';
 import '@/lib/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
-jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, savedEventsApi: { save: jest.fn() } }));
+jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, savedEventsApi: { save: jest.fn() }, meApi: { update: jest.fn() } }));
 jest.mock('@/features/auth/session', () => ({
   onSessionEnd: jest.fn(),
   useSession: (select: (s: { userId: string }) => unknown) => select({ userId: 'u1' }),

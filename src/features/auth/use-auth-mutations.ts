@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { authApi } from '@/api/endpoints';
+import { queueLanguageUpdate } from '@/features/saved-events/mutations';
+import i18n, { isAppLanguage } from '@/lib/i18n';
 import { queryClient, queryKeys } from '@/lib/query-client';
 
 import type { SignInValues, SignUpValues } from './schemas';
@@ -25,6 +27,8 @@ export function useSignUp() {
       const result = await authApi.register(values);
       await startSession(result, true);
       queryClient.setQueryData(queryKeys.me, result.user);
+      // New accounts start in English; use the app's language for AI personalization instead (intent §4.5).
+      if (isAppLanguage(i18n.language) && i18n.language !== result.user.language) queueLanguageUpdate(i18n.language);
       return result.user;
     },
   });
