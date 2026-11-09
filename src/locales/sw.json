@@ -41,7 +41,8 @@
     "UPSTREAM_UNAVAILABLE": "Huduma ina shughuli nyingi. Tafadhali jaribu tena.",
     "INTERNAL": "Hitilafu imetokea upande wetu.",
     "NETWORK": "Hakuna muunganisho. Kagua intaneti yako kisha ujaribu tena.",
-    "UNKNOWN": "Hitilafu imetokea. Tafadhali jaribu tena."
+    "UNKNOWN": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "SERVER_UNREACHABLE": "Imeshindwa kufikia seva kwa sasa. Tafadhali jaribu tena baada ya muda mfupi."
   },
   "welcome": {
     "getStarted": "Anza",

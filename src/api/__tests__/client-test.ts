@@ -4,6 +4,8 @@ import { ApiError, NetworkError } from '../errors';
 interface FakeResponse {
   status: number;
   body?: unknown;
+  /** Raw response text instead of JSON (e.g. an HTML error page). */
+  raw?: string;
 }
 
 /** A fetch stand-in: returns queued responses in order and records each call. */
@@ -16,7 +18,7 @@ function fakeFetch(responses: (FakeResponse | Error)[]) {
     return {
       status: next.status,
       ok: next.status >= 200 && next.status < 300,
-      text: async () => (next.body === undefined ? '' : JSON.stringify(next.body)),
+      text: async () => next.raw ?? (next.body === undefined ? '' : JSON.stringify(next.body)),
     } as unknown as Response;
   });
 }
@@ -108,6 +110,16 @@ describe('api client', () => {
       details: [{ path: 'email' }],
     });
     await expect(api.get('/events')).rejects.toBeInstanceOf(NetworkError);
+  });
+
+  it('reports SERVER_UNREACHABLE for a non-API error page (e.g. ngrok 502)', async () => {
+    const fetchFn = fakeFetch([{ status: 502, raw: '<!DOCTYPE html><html>ERR_NGROK_8012</html>' }]);
+    const api = createApiClient({ baseUrl: 'https://api.test', fetchFn, auth: authHooks() });
+
+    await expect(api.post('/auth/login', {}, { auth: false })).rejects.toMatchObject({
+      status: 502,
+      code: 'SERVER_UNREACHABLE',
+    });
   });
 
   it('returns undefined for 204 No Content', async () => {

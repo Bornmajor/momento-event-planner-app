@@ -41,7 +41,8 @@
     "UPSTREAM_UNAVAILABLE": "Le service est occupé. Veuillez réessayer.",
     "INTERNAL": "Une erreur s'est produite de notre côté.",
     "NETWORK": "Pas de connexion. Vérifiez votre accès à Internet et réessayez.",
-    "UNKNOWN": "Une erreur s'est produite. Veuillez réessayer."
+    "UNKNOWN": "Une erreur s'est produite. Veuillez réessayer.",
+    "SERVER_UNREACHABLE": "Impossible de joindre le serveur pour le moment. Réessayez dans un instant."
   },
   "welcome": {
     "getStarted": "Commencer",

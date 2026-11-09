@@ -41,7 +41,8 @@
     "UPSTREAM_UNAVAILABLE": "The service is busy. Please try again.",
     "INTERNAL": "Something went wrong on our side.",
     "NETWORK": "No connection. Check your internet and try again.",
-    "UNKNOWN": "Something went wrong. Please try again."
+    "UNKNOWN": "Something went wrong. Please try again.",
+    "SERVER_UNREACHABLE": "Can't reach the server right now. Please try again in a moment."
   },
   "welcome": {
     "getStarted": "Get Started",

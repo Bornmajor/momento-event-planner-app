@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 import { ApiError, NetworkError } from './errors';
 
 export interface AuthHooks {
@@ -78,11 +80,15 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
     if (response.ok) return data as T;
 
     const error = (data as { error?: { code?: string; message?: string; details?: unknown } } | undefined)?.error;
+    if (!error) {
+      // Not our API's error shape: e.g. ngrok's HTML page when the tunnel can't reach the server (502), or a proxy.
+      throw new ApiError(response.status, 'SERVER_UNREACHABLE', `Server unreachable (status ${response.status})`);
+    }
     throw new ApiError(
       response.status,
-      error?.code ?? 'UNKNOWN',
-      error?.message ?? `Request failed with status ${response.status}`,
-      error?.details,
+      error.code ?? 'UNKNOWN',
+      error.message ?? `Request failed with status ${response.status}`,
+      error.details,
     );
   }
 
@@ -90,12 +96,21 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
     const useAuth = options.auth !== false;
     const url = buildUrl(baseUrl, path, options.query);
 
-    let response = await send(method, url, body, useAuth ? auth.getAccessToken() : null);
-    if (response.status === 401 && useAuth) {
-      const token = await refreshOnce(); // rejects with ApiError(401) or NetworkError
-      response = await send(method, url, body, token);
+    const started = Date.now();
+    try {
+      let response = await send(method, url, body, useAuth ? auth.getAccessToken() : null);
+      if (response.status === 401 && useAuth) {
+        logger.debug(`${method} ${path} → 401, refreshing the access token`);
+        const token = await refreshOnce(); // rejects with ApiError(401) or NetworkError
+        response = await send(method, url, body, token);
+      }
+      const result = await parse<T>(response);
+      logRequest(method, path, started, `${response.status}`);
+      return result;
+    } catch (error) {
+      logRequest(method, path, started, describe(error));
+      throw error;
     }
-    return parse<T>(response);
   }
 
   return {
@@ -107,6 +122,22 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
 }
 
 export type ApiClient = ReturnType<typeof createApiClient>;
+
+/**
+ * Dev-only request log (logger prints nothing in release builds): method, path, outcome and time. Never the body,
+ * headers or tokens (spec §9.2). Example: "POST /auth/login → 401 INVALID_CREDENTIALS (312 ms)".
+ */
+function logRequest(method: string, path: string, started: number, outcome: string) {
+  const line = `${method} ${path} → ${outcome} (${Date.now() - started} ms)`;
+  if (/^2dd$/.test(outcome)) logger.info(line);
+  else logger.warn(line);
+}
+
+function describe(error: unknown): string {
+  if (error instanceof ApiError) return `${error.status} ${error.code}`;
+  if (error instanceof NetworkError) return 'network error (offline, timeout or wrong URL)';
+  return 'failed';
+}
 
 function safeJson(text: string): unknown {
   try {
