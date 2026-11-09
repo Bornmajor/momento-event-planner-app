@@ -70,10 +70,13 @@ function RootNavigator({ cacheRestored }: { cacheRestored: boolean }) {
     <ThemeProvider value={navigationTheme}>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={signedIn}>
+        {/* "/" redirects to welcome or home, so the app always opens on a real screen. */}
+        <Stack.Screen name="index" />
+        {/* redirectTo makes sign-in/sign-out land on a defined screen. */}
+        <Stack.Protected guard={signedIn} redirectTo="/welcome">
           <Stack.Screen name="(app)" />
         </Stack.Protected>
-        <Stack.Protected guard={!signedIn}>
+        <Stack.Protected guard={!signedIn} redirectTo="/home">
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
       </Stack>
