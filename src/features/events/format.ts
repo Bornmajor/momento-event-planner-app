@@ -1,17 +1,40 @@
 import type { EventSummary } from '@/api/endpoints';
 
-/**
- * Event date in the venue's local time, as Ticketmaster gives it (localDate + localTime), e.g. "Sat, 12 Dec · 19:30".
- * Formatted in UTC from the local parts so the device's own time zone never shifts it.
- */
-export function formatEventDate(start: EventSummary['start'], locale: string): string {
-  const [y, m, d] = start.localDate.split('-').map(Number);
-  const [hh = 0, mm = 0] = (start.localTime ?? '').split(':').map(Number);
-  const date = new Date(Date.UTC(y, m - 1, d, hh, mm));
-  const day = new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).format(date);
-  if (!start.localTime) return day;
-  const time = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }).format(date);
+/** The phone's own time zone, e.g. "Africa/Nairobi". */
+export const deviceTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+function formatDayTime(date: Date, locale: string, timeZone: string, withTime: boolean) {
+  const day = new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone }).format(date);
+  if (!withTime) return day;
+  const time = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit', timeZone }).format(date);
   return `${day} · ${time}`;
+}
+
+/**
+ * Event date and time in the user's own time zone, e.g. "Sat, 12 Dec · 22:30". Ticketmaster gives the start as a UTC
+ * instant (`dateTime`), which converts exactly; Ticketmaster itself can't return times in the user's zone.
+ * Without a UTC start (time not announced) only the venue's local date is known, so that date is shown as is.
+ */
+export function formatEventDate(start: EventSummary['start'], locale: string, timeZone = deviceTimeZone()): string {
+  if (start.dateTime) return formatDayTime(new Date(start.dateTime), locale, timeZone, true);
+  const [y, m, d] = start.localDate.split('-').map(Number);
+  return formatDayTime(new Date(Date.UTC(y, m - 1, d)), locale, 'UTC', false);
+}
+
+/**
+ * The same start in the venue's time zone, for the details screen ("19:30 in Europe/London"), or null when it would
+ * read the same as the user's time (same zone, or no exact start).
+ */
+export function formatVenueTime(start: EventSummary['start'], locale: string, timeZone = deviceTimeZone()): string | null {
+  if (!start.dateTime || !start.timezone) return null;
+  const date = new Date(start.dateTime);
+  const venue = formatDayTime(date, locale, start.timezone, true);
+  return venue === formatDayTime(date, locale, timeZone, true) ? null : venue;
+}
+
+/** Started already (Ticketmaster gives no end time, so a started event in the list counts as happening now). */
+export function hasStarted(start: EventSummary['start'], nowMs = Date.now()): boolean {
+  return start.dateTime !== null && Date.parse(start.dateTime) <= nowMs;
 }
 
 /** "Venue, City" (whatever parts exist), or null. */

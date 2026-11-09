@@ -130,7 +130,10 @@
     "emptyTitle": "Hakuna matukio yaliyopatikana",
     "emptyFiltered": "Jaribu neno au kundi lingine.",
     "emptyAll": "Hakuna matukio yajayo kwa sasa. Vuta chini ili kuonyesha upya.",
-    "endOfList": "Umefika mwisho."
+    "endOfList": "Umefika mwisho.",
+    "happeningNow": "Yanayoendelea sasa",
+    "upcoming": "Yajayo",
+    "emptyNow": "Hakuna kinachoendelea sasa hivi. Jaribu Yajayo."
   },
   "categories": {
     "music": "Muziki",
@@ -152,7 +155,7 @@
     "setReminder": "Weka Kikumbusho",
     "updateReminder": "Badilisha Kikumbusho",
     "inCalendar": "Kwenye kalenda yako",
-    "localTime": "Saa za eneo ({{zone}})"
+    "venueTime": "Ukumbini: {{time}} ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "Bado hakuna matukio yaliyohifadhiwa",

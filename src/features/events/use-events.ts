@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { eventsApi, type CategoryId, type EventPage, type EventSummary } from '@/api/endpoints';
+import { eventsApi, type CategoryId, type EventPage, type EventSearchParams, type EventSummary } from '@/api/endpoints';
 import { cacheTimes, queryClient, queryKeys } from '@/lib/query-client';
 
 import { nextPageParam, PAGE_SIZE } from './format';
@@ -14,9 +14,14 @@ export function useCategories() {
   });
 }
 
-/** Infinite event search. An empty keyword and no category list everything upcoming, soonest first. */
-export function useEventSearch({ q, category }: { q: string; category: CategoryId | null }) {
-  const params = { q: q.trim() || undefined, category: category ?? undefined };
+export type EventWhen = NonNullable<EventSearchParams['when']>;
+
+/**
+ * Infinite event search, soonest first. `when`: upcoming (not started), now (started in the last 3 hours) or all
+ * (both). The backend never returns finished events.
+ */
+export function useEventSearch({ q, category, when }: { q: string; category: CategoryId | null; when: EventWhen }) {
+  const params = { q: q.trim() || undefined, category: category ?? undefined, when };
   return useInfiniteQuery({
     queryKey: queryKeys.events(params),
     queryFn: ({ pageParam }) => eventsApi.search({ ...params, page: pageParam, size: PAGE_SIZE }),

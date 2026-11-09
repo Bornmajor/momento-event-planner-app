@@ -10,6 +10,7 @@ import { AppText, EmptyState, ErrorState, OfflineBanner, TextField } from '@/com
 import { CategoryChips } from '@/features/events/components/category-chips';
 import { EventCard } from '@/features/events/components/event-card';
 import { ExploreHeader } from '@/features/events/components/explore-header';
+import { toWhen, WhenFilter, type WhenSelection } from '@/features/events/components/when-filter';
 import { useCategories, useEventSearch } from '@/features/events/use-events';
 import { useDebouncedValue } from '@/lib/use-debounced-value';
 import { useTheme } from '@/theme/use-theme';
@@ -21,10 +22,12 @@ export default function ExploreScreen() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState<CategoryId | null>(null);
+  const [timing, setTiming] = useState<WhenSelection>({ now: true, upcoming: true });
+  const when = toWhen(timing);
   const q = useDebouncedValue(keyword, 400);
 
   const categories = useCategories();
-  const search = useEventSearch({ q, category });
+  const search = useEventSearch({ q, category, when });
   const events = search.data?.pages.flatMap((page) => page.items) ?? [];
 
   const toggleSearch = () => {
@@ -50,6 +53,7 @@ export default function ExploreScreen() {
         </View>
       )}
       <CategoryChips categories={categories.data ?? []} selected={category} onSelect={setCategory} />
+      <WhenFilter value={timing} onChange={setTiming} />
     </View>
   );
 
@@ -61,7 +65,13 @@ export default function ExploreScreen() {
     <EmptyState
       icon="search-outline"
       title={t('explore.emptyTitle')}
-      message={q || category ? t('explore.emptyFiltered') : t('explore.emptyAll')}
+      message={
+        when === 'now' && !q && !category
+          ? t('explore.emptyNow')
+          : q || category
+            ? t('explore.emptyFiltered')
+            : t('explore.emptyAll')
+      }
     />
   );
 

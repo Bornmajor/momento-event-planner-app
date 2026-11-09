@@ -1,10 +1,27 @@
-import { formatEventDate, formatVenue, nextPageParam } from '../format';
+import { formatEventDate, formatVenue, formatVenueTime, hasStarted, nextPageParam } from '../format';
 
 describe('event formatting', () => {
-  it("formats the venue's local date and time without shifting time zones", () => {
-    const start = { localDate: '2026-12-12', localTime: '19:30:00', dateTime: null, timezone: 'Europe/London' };
-    expect(formatEventDate(start, 'en-GB')).toBe('Sat 12 Dec · 19:30');
-    expect(formatEventDate({ ...start, localTime: null }, 'en-GB')).toBe('Sat 12 Dec');
+  // A London show at 19:30 local time (19:30 UTC in December).
+  const london = { localDate: '2026-12-12', localTime: '19:30:00', dateTime: '2026-12-12T19:30:00Z', timezone: 'Europe/London' };
+
+  it("shows the start in the user's own time zone", () => {
+    expect(formatEventDate(london, 'en-GB', 'Africa/Nairobi')).toBe('Sat 12 Dec · 22:30');
+    expect(formatEventDate(london, 'en-GB', 'Europe/London')).toBe('Sat 12 Dec · 19:30');
+  });
+
+  it("keeps the venue's date when the time isn't announced", () => {
+    const tba = { localDate: '2026-12-12', localTime: null, dateTime: null, timezone: 'Europe/London' };
+    expect(formatEventDate(tba, 'en-GB', 'Africa/Nairobi')).toBe('Sat 12 Dec');
+  });
+
+  it("adds the venue's own time only when it differs from the user's", () => {
+    expect(formatVenueTime(london, 'en-GB', 'Africa/Nairobi')).toBe('Sat 12 Dec · 19:30');
+    expect(formatVenueTime(london, 'en-GB', 'Europe/London')).toBeNull();
+  });
+
+  it('knows when an event has started', () => {
+    expect(hasStarted(london, Date.parse('2026-12-12T19:31:00Z'))).toBe(true);
+    expect(hasStarted(london, Date.parse('2026-12-12T19:29:00Z'))).toBe(false);
   });
 
   it('joins the venue name and city', () => {

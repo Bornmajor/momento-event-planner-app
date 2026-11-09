@@ -9,7 +9,7 @@ import { AppText } from '@/components/ui';
 import { MIN_TOUCH } from '@/theme/tokens';
 import { useTheme } from '@/theme/use-theme';
 
-import { formatEventDate, formatVenue } from '../format';
+import { formatEventDate, formatVenue, hasStarted } from '../format';
 
 /** Statuses worth flagging on the card (on sale / unknown show nothing). */
 const FLAGGED = new Set(['cancelled', 'postponed', 'rescheduled', 'offsale']);
@@ -53,6 +53,14 @@ export const EventCard = memo(function EventCard({ event, onPress }: { event: Ev
         ) : (
           <Ionicons name="image-outline" size={40} color={colors.textMuted} />
         )}
+        {!FLAGGED.has(event.status) && hasStarted(event.start) && (
+          <View style={[styles.badge, styles.liveBadge, { backgroundColor: colors.success, borderRadius: radii.pill }]}>
+            <View style={styles.liveDot} />
+            <AppText variant="caption" style={styles.badgeLabel}>
+              {t('explore.happeningNow')}
+            </AppText>
+          </View>
+        )}
         {FLAGGED.has(event.status) && (
           <View style={[styles.badge, { backgroundColor: colors.danger, borderRadius: radii.pill }]}>
             <AppText variant="caption" style={styles.badgeLabel}>
@@ -94,4 +102,6 @@ const styles = StyleSheet.create({
   imageWrap: { height: 200, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
   badge: { position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 4 },
   badgeLabel: { color: '#FFFFFF', fontWeight: '700' },
+  liveBadge: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#FFFFFF' },
 });

@@ -124,6 +124,8 @@ export interface paths {
         /**
          * Search upcoming events
          * @description Version 1 searches GB, US, IE, AU, NZ and CA, soonest first. `(page + 1) * size` must be at most 1000.
+         *     Events that have already finished are never returned. `when` picks upcoming events (not started yet), events
+         *     happening now (started in the last 3 hours, since Ticketmaster rarely gives end times), or both.
          */
         get: operations["searchEvents"];
         put?: never;
@@ -767,6 +769,7 @@ export interface operations {
             query?: {
                 q?: string;
                 category?: components["schemas"]["CategoryId"];
+                when?: "upcoming" | "now" | "all";
                 page?: number;
                 size?: number;
             };

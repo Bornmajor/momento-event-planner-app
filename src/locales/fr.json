@@ -130,7 +130,10 @@
     "emptyTitle": "Aucun événement trouvé",
     "emptyFiltered": "Essayez un autre mot-clé ou une autre catégorie.",
     "emptyAll": "Aucun événement à venir pour le moment. Tirez vers le bas pour actualiser.",
-    "endOfList": "Vous avez tout vu."
+    "endOfList": "Vous avez tout vu.",
+    "happeningNow": "En ce moment",
+    "upcoming": "À venir",
+    "emptyNow": "Rien en ce moment. Essayez « À venir »."
   },
   "categories": {
     "music": "Musique",
@@ -152,7 +155,7 @@
     "setReminder": "Créer un rappel",
     "updateReminder": "Modifier le rappel",
     "inCalendar": "Dans votre calendrier",
-    "localTime": "Heure locale ({{zone}})"
+    "venueTime": "Sur place : {{time}} ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "Aucun événement enregistré",

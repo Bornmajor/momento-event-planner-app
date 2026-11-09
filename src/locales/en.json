@@ -130,7 +130,10 @@
     "emptyTitle": "No events found",
     "emptyFiltered": "Try another keyword or category.",
     "emptyAll": "There are no upcoming events right now. Pull down to refresh.",
-    "endOfList": "You've reached the end."
+    "endOfList": "You've reached the end.",
+    "happeningNow": "Happening now",
+    "upcoming": "Upcoming",
+    "emptyNow": "Nothing is happening right now. Try Upcoming."
   },
   "categories": {
     "music": "Music",
@@ -152,7 +155,7 @@
     "setReminder": "Set Reminder",
     "updateReminder": "Update Reminder",
     "inCalendar": "In your calendar",
-    "localTime": "Local time ({{zone}})"
+    "venueTime": "At the venue: {{time}} ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "No saved events yet",

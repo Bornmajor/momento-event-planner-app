@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import type { Event, EventSummary } from '@/api/endpoints';
 import { ApiError, errorMessageKey } from '@/api/errors';
 import { AppText, BackButton, Button, EmptyState, ErrorState, FormScreen, OfflineBanner } from '@/components/ui';
-import { formatEventDate, formatVenue } from '@/features/events/format';
+import { formatEventDate, formatVenue, formatVenueTime } from '@/features/events/format';
 import { useEvent } from '@/features/events/use-events';
 import { useSession } from '@/features/auth/session';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
@@ -88,9 +88,12 @@ export default function EventDetailsScreen() {
       </AppText>
       <View style={{ gap: spacing.sm }}>
         <Row icon="calendar-outline" text={formatEventDate(event.start, i18n.language)} />
-        {event.start.timezone && (
+        {formatVenueTime(event.start, i18n.language) && event.start.timezone && (
           <AppText variant="caption" color="textMuted" style={styles.indent}>
-            {t('event.localTime', { zone: event.start.timezone.replace(/_/g, ' ') })}
+            {t('event.venueTime', {
+              time: formatVenueTime(event.start, i18n.language),
+              zone: event.start.timezone.replace(/_/g, ' '),
+            })}
           </AppText>
         )}
         {inCalendar && <Row icon="checkmark-circle-outline" text={t('event.inCalendar')} />}
