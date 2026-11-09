@@ -22,7 +22,8 @@ export type EventWhen = NonNullable<EventSearchParams['when']>;
  * (both). The backend never returns finished events.
  */
 export function useEventSearch({ q, category, when }: { q: string; category: CategoryId | null; when: EventWhen }) {
-  const params = { q: q.trim() || undefined, category: category ?? undefined, when };
+  // Ticketmaster's keyword match ignores case, so "Jazz" and "jazz" share one cached result.
+  const params = { q: q.trim().toLowerCase() || undefined, category: category ?? undefined, when };
   return useInfiniteQuery({
     queryKey: queryKeys.events(params),
     queryFn: ({ pageParam }) => eventsApi.search({ ...params, page: pageParam, size: PAGE_SIZE }),
