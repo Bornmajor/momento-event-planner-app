@@ -41,6 +41,28 @@ describe('calendar', () => {
     expect(createCalendar).not.toHaveBeenCalled();
   });
 
+  it("skips a phone maker's primary \"Local Calendar\" for the Google one (seen on a real device)", async () => {
+    const vendorLocal = {
+      id: '1',
+      title: 'Local Calendar',
+      isPrimary: true,
+      isSynced: true,
+      allowsModifications: true,
+      source: { name: 'Local Calendar', type: 'Local Calendar', isLocalAccount: false },
+    };
+    const google = {
+      id: '3',
+      title: 'ada@gmail.com',
+      isPrimary: true,
+      isSynced: true,
+      allowsModifications: true,
+      source: { name: 'ada@gmail.com', type: 'com.google', isLocalAccount: false },
+    };
+    getCalendars.mockResolvedValue([vendorLocal, google]);
+
+    await expect(getWritableCalendar()).resolves.toBe(google);
+  });
+
   it('creates a local "Momento" calendar when nothing is writable', async () => {
     getCalendars.mockResolvedValue([{ id: 'a', title: 'Holidays', allowsModifications: false }]);
     createCalendar.mockResolvedValue({ id: 'new' });

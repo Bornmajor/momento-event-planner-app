@@ -60,10 +60,19 @@ export async function getWritableCalendar(): Promise<Calendar.ExpoCalendar> {
   return pick ?? createMomentoCalendar();
 }
 
-/** Higher is better (see getWritableCalendar). */
+/**
+ * Phone-only calendars. Android's own marker is isLocalAccount (account type "LOCAL"), but phone makers ship their
+ * own, e.g. a "Local Calendar" account type marked primary, so the type and name are checked too.
+ */
+function isPhoneOnly(c: Pick<Calendar.ExpoCalendar, 'source'>) {
+  return Boolean(c.source?.isLocalAccount) || /local/i.test(String(c.source?.type ?? '')) || /local/i.test(c.source?.name ?? '');
+}
+
+/** Higher is better (see getWritableCalendar). Ties keep the phone's order (lowest id first). */
 export function calendarRank(c: Pick<Calendar.ExpoCalendar, 'isPrimary' | 'isSynced' | 'title' | 'source'>): number {
   let rank = 0;
-  if (!c.source?.isLocalAccount) rank += 4; // synced to an account, so it shows in Google Calendar too
+  if (c.source?.type === 'com.google') rank += 8; // a Google account calendar: shows in the Google Calendar app
+  if (!isPhoneOnly(c)) rank += 4; // synced to some account
   if (c.isPrimary) rank += 2;
   if (c.source?.name && c.title === c.source.name) rank += 2; // Google names the main calendar after the account
   if (c.isSynced) rank += 1;
