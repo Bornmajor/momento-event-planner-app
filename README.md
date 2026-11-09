@@ -26,6 +26,9 @@ description or translate it into English, French or Swahili.
 
 - **Explore events** from Ticketmaster (GB, US, IE, AU, NZ, CA): search, category filter, and Happening now / Upcoming
   filters. Times show in your own time zone.
+- **Fast, light search**: it waits until you pause typing (400 ms) before searching, so a whole word costs one request.
+  "Jazz" and "jazz" count as the same search. Results are cached on the phone and on the server for a few minutes, so
+  repeat searches are instant, and the list loads 20 events at a time as you scroll.
 - **Personalize with AI**: shorten and/or translate an event's details, then edit the result.
 - **Add to calendar** with a reminder (at start, 15 min, 1 hour or 1 day before), using the phone's own calendar.
 - **My Events, offline**: saved events open without a connection; saving and removing offline sync when you're back
