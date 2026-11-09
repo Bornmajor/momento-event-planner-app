@@ -19,6 +19,14 @@ export class NetworkError extends Error {
   }
 }
 
+/** The caller cancelled the request (its AbortSignal fired); nothing to show the user. */
+export class RequestCancelledError extends Error {
+  constructor() {
+    super('Request cancelled');
+    this.name = 'RequestCancelledError';
+  }
+}
+
 /** Translation key for an error (`errors.<CODE>`), for showing a message to the user. */
 export function errorMessageKey(error: unknown): string {
   if (error instanceof ApiError) return `errors.${error.code}`;

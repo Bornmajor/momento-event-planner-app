@@ -36,9 +36,10 @@ export const meApi = {
 };
 
 export const eventsApi = {
-  search: (params: EventSearchParams) => api.get<EventPage>('/events', { query: params }),
-  categories: () => api.get<{ items: Category[] }>('/events/categories'),
-  get: (id: string) => api.get<{ event: Event }>(`/events/${encodeURIComponent(id)}`),
+  // `signal`: lets TanStack Query cancel a request whose result is no longer needed.
+  search: (params: EventSearchParams, signal?: AbortSignal) => api.get<EventPage>('/events', { query: params, signal }),
+  categories: (signal?: AbortSignal) => api.get<{ items: Category[] }>('/events/categories', { signal }),
+  get: (id: string, signal?: AbortSignal) => api.get<{ event: Event }>(`/events/${encodeURIComponent(id)}`, { signal }),
 };
 
 export const personalizeApi = {

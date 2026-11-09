@@ -10,7 +10,7 @@ import { nextPageParam, PAGE_SIZE } from './format';
 export function useCategories() {
   return useQuery({
     queryKey: queryKeys.categories,
-    queryFn: async () => (await eventsApi.categories()).items,
+    queryFn: async ({ signal }) => (await eventsApi.categories(signal)).items,
     ...cacheTimes.categories,
   });
 }
@@ -26,7 +26,8 @@ export function useEventSearch({ q, category, when }: { q: string; category: Cat
   const params = { q: q.trim().toLowerCase() || undefined, category: category ?? undefined, when };
   return useInfiniteQuery({
     queryKey: queryKeys.events(params),
-    queryFn: ({ pageParam }) => eventsApi.search({ ...params, page: pageParam, size: PAGE_SIZE }),
+    // Passing `signal` makes search restartable: an old search still loading is cancelled when the search changes.
+    queryFn: ({ pageParam, signal }) => eventsApi.search({ ...params, page: pageParam, size: PAGE_SIZE }, signal),
     initialPageParam: 0,
     getNextPageParam: nextPageParam,
     ...cacheTimes.events,
@@ -40,7 +41,7 @@ export function useEventSearch({ q, category, when }: { q: string; category: Cat
 export function useEvent(id: string) {
   return useQuery({
     queryKey: queryKeys.event(id),
-    queryFn: async () => (await eventsApi.get(id)).event,
+    queryFn: async ({ signal }) => (await eventsApi.get(id, signal)).event,
     initialData: () => findSavedEvent(id),
     initialDataUpdatedAt: () => queryClient.getQueryState(queryKeys.savedEvents)?.dataUpdatedAt,
     placeholderData: () => findSummary(id) as never,

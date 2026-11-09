@@ -1,5 +1,5 @@
 import { createApiClient, type AuthHooks } from '../client';
-import { ApiError, NetworkError } from '../errors';
+import { ApiError, NetworkError, RequestCancelledError } from '../errors';
 
 interface FakeResponse {
   status: number;
@@ -125,5 +125,24 @@ describe('api client', () => {
   it('returns undefined for 204 No Content', async () => {
     const api = createApiClient({ baseUrl: 'https://api.test', fetchFn: fakeFetch([{ status: 204 }]), auth: authHooks() });
     await expect(api.delete('/me')).resolves.toBeUndefined();
+  });
+
+  it('cancels the request when the caller aborts it (restartable search), without reporting a network error', async () => {
+    // A fetch that never answers, but stops when its signal fires (like the real one).
+    const fetchFn = jest.fn(
+      (_url: RequestInfo | URL, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener('abort', () => reject(new Error('aborted')))),
+    );
+    const api = createApiClient({ baseUrl: 'https://api.test', fetchFn, auth: authHooks() });
+    const controller = new AbortController();
+
+    const pending = api.get('/events', { query: { q: 'jaz' }, signal: controller.signal });
+    controller.abort();
+
+    await expect(pending).rejects.toBeInstanceOf(RequestCancelledError);
+    expect(fetchFn.mock.calls[0]![1]?.signal?.aborted).toBe(true);
+    // Already cancelled: no request is sent at all.
+    await expect(api.get('/events', { signal: controller.signal })).rejects.toBeInstanceOf(RequestCancelledError);
+    expect(fetchFn).toHaveBeenCalledTimes(1);
   });
 });

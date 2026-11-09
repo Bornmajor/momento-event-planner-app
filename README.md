@@ -26,7 +26,8 @@ description or translate it into English, French or Swahili.
 
 - **Explore events** from Ticketmaster (GB, US, IE, AU, NZ, CA): search, category filter, and Happening now / Upcoming
   filters. Times show in your own time zone.
-- **Fast, light search**: it waits until you pause typing (400 ms) before searching, so a whole word costs one request.
+- **Fast, light search**: it waits until you pause typing (400 ms) before searching, so a whole word costs one request, and a search
+  still loading is cancelled as soon as you change it.
   "Jazz" and "jazz" count as the same search. Results are cached on the phone and on the server for a few minutes, so
   repeat searches are instant, and the list loads 20 events at a time as you scroll.
 - **Personalize with AI**: shorten and/or translate an event's details, then edit the result.
