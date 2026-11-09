@@ -151,6 +151,10 @@ Tests sit next to the code in `__tests__` folders (outside `src/app`, since ever
 Welcome screen photos from [Pexels](https://www.pexels.com/), free to use under the
 [Pexels license](https://www.pexels.com/license/). Event data from the Ticketmaster Discovery API.
 
+## License
+
+[MIT](LICENSE) © 2026 Bornmajor
+
 ## Project docs
 
 [intent.md](intent.md) (what and why) · [spec.md](spec.md) (how) · [plan.md](plan.md) (build plan) ·
