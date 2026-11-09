@@ -1,7 +1,7 @@
 # Plan — Momento mobile app (frontend)
 
-> Status: **DRAFT — awaiting approval**. Phase 3 of the workflow. Implements [spec.md](spec.md) (approved).
-> No implementation starts until this plan is approved.
+> Status: **APPROVED (2026-11-09)**. Phase 3 of the workflow. Implements [spec.md](spec.md) (approved).
+> Progress: Batch 1 in progress (`2-foundation`).
 
 ## How the work runs
 
