@@ -26,15 +26,8 @@ while (stack.length) {
 let bottom = 0;
 for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (!bg[y * w + x] && minc((y * w + x) * 4) < 250) bottom = y;
 const outH = Math.min(h, bottom + 4);
-// Mask: the background, plus a vertical ramp over the white fade baked into the bottom-left photo
-// (left of the bottom-right tile's tilted edge), so that fade stays smooth on dark themes.
+// Mask: the white background found by the flood fill.
 const m = Float32Array.from(bg);
-const RAMP_TOP = +process.env.RT || 440, RAMP_END = +process.env.RE || 545;
-for (let y = RAMP_TOP; y < h; y++) {
-  const k = Math.min(1, (y - RAMP_TOP) / (RAMP_END - RAMP_TOP));
-  const edge = 300 - ((y - 310) * 125) / 270 - 6; // bottom-right tile's left edge, with margin
-  for (let x = 0; x < Math.min(w, edge); x++) m[y * w + x] = Math.max(m[y * w + x], k);
-}
 const dst = new PNG({ width: w, height: outH });
 for (let p = 0; p < w * outH; p++) {
   const i = p * 4;
