@@ -1,4 +1,4 @@
 # Screenshots
 
-PNG screenshots used by the main README. Expected names: `welcome.png`, `explore.png`, `event-details.png`,
-`personalize.png`, `my-events.png`, `settings.png`. Portrait phone shots, about 1080 px wide, work well.
+Screenshots used by the main README (portrait phone shots, JPG or PNG, about 720–1080 px wide). Keep the file names
+the README uses: `welcome`, `sign-up-details`, `sign-up-password`, `explore`, `my-events`, `settings`.

@@ -10,13 +10,13 @@ description or translate it into English, French or Swahili.
 
 ## Screenshots
 
-| Welcome | Explore | Event details |
+| Welcome | Sign up: your details | Sign up: password |
 |---|---|---|
-| <img src="docs/screenshots/welcome.png" width="220" alt="Welcome screen" /> | <img src="docs/screenshots/explore.png" width="220" alt="Explore screen" /> | <img src="docs/screenshots/event-details.png" width="220" alt="Event details" /> |
+| <img src="docs/screenshots/welcome.jpg" width="220" alt="Welcome screen with the photo collage" /> | <img src="docs/screenshots/sign-up-details.jpg" width="220" alt="Sign up step 1: name and email" /> | <img src="docs/screenshots/sign-up-password.jpg" width="220" alt="Sign up step 2: password with strength meter" /> |
 
-| Personalize | My Events | Settings |
+| Explore | My Events | Settings |
 |---|---|---|
-| <img src="docs/screenshots/personalize.png" width="220" alt="Personalize screen" /> | <img src="docs/screenshots/my-events.png" width="220" alt="My Events" /> | <img src="docs/screenshots/settings.png" width="220" alt="Settings" /> |
+| <img src="docs/screenshots/explore.jpg" width="220" alt="Explore: categories, Happening now / Upcoming filters and events" /> | <img src="docs/screenshots/my-events.jpg" width="220" alt="My Events: saved events in the calendar" /> | <img src="docs/screenshots/settings.jpg" width="220" alt="Settings: profile, theme and language" /> |
 
 ## Features
 
