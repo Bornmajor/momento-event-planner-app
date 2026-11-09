@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
@@ -15,11 +15,11 @@ import { useTheme } from '@/theme/use-theme';
 export default function WelcomeScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useTheme();
-  const { height } = useWindowDimensions();
 
   return (
     <View style={[styles.fill, { backgroundColor: colors.background }]}>
-      <WelcomeCollage height={height * 0.55} />
+      {/* The collage fills the space above the text; the text block keeps its natural height. */}
+      <WelcomeCollage />
       <SafeAreaView edges={['bottom']} style={[styles.content, { padding: spacing.xl, gap: spacing.lg }]}>
         <OfflineBanner />
         <View style={{ gap: spacing.sm }}>
@@ -43,5 +43,5 @@ export default function WelcomeScreen() {
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  content: { flex: 1, justifyContent: 'center' },
+  content: { justifyContent: 'center' },
 });
