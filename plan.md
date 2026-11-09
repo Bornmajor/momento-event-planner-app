@@ -95,10 +95,25 @@ language, light and dark. Batch 3 starts once you approve them (changes go into 
 | 5.4 | **End-to-end on the device** against the API over ngrok: intent.md success criteria 1–8 | All 8 criteria pass |
 | 5.5 | **Independent code review** (`/code-review`), fix findings | Findings fixed or explained |
 | 5.6 | **README**: setup, `.env`, dev build install, scripts, architecture summary, photo credits | A new contributor can run the app from the README |
-| 5.7 | **TODO: revise the project structure**: review the `src/` layout (feature boundaries, shared components, where hooks live), move files if needed, and update the README's Project structure section | Agreed structure documented; no behaviour change |
+| 5.7 | **Layered feature architecture** (spec §12): move to sources → repository → use case → hooks/stores → UI, one feature per step (breakdown below) | spec §12 approved; every step keeps lint, typecheck and tests green; no behaviour change |
 | 5.8 | **TODO (after the backend is hosted): production APK workflow** — an EAS Workflow `.eas/workflows/production-build.yml` (manual trigger, or on a version tag) that builds the `production` profile as an installable APK. Before it: host the backend on HTTPS, set `EXPO_PUBLIC_API_URL` for the EAS `production` environment to that URL, and add `"android": { "buildType": "apk" }` to the `production` profile (it builds a Play Store AAB by default). Syntax checked against the current EAS Workflows docs when written. | A production APK installs from the EAS build page and works against the hosted API |
 | 5.9 | **Google sign-in for release builds**: add `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` to the EAS `preview` and `production` environments, and create a Google Cloud Android OAuth client for each release keystore SHA-1 (EAS keystore, plus Google Play app signing if published there) | "Continue with Google" works in the preview APK |
 | 5.10 | **Clear restored cache when signed out**: after a reinstall with an Android backup, the previous user's saved My Events can come back from AsyncStorage. At start-up with no stored session, clear the query cache and its saved copy (docs/authentication.md, "Known gap") | A different user signing in never sees the old list |
+
+### 5.7 breakdown: layered feature architecture
+
+Branch `7-layered-architecture`, one commit or more per step. Every step: `npx expo lint`, `npx tsc --noEmit`, `npm test`
+green, and the app behaves the same.
+
+| # | Step | Done when |
+|---|---|---|
+| 5.7.1 | **Core**: move the HTTP client, API errors, generated schema, storage, query client, i18n and logger into `src/core/`. Add `core/failures/` (`AppFailure` and the shared failures, `mapApiError`, `failureMessage`) with tests | Old imports updated; failure mapping tested |
+| 5.7.2 | **Auth (reference feature)**: `data/` (auth remote source, token local source, user mapper, auth repository with error → failure mapping); `domain/` (User and Session models, auth failures, use cases `sign-up`, `sign-in`, `sign-in-with-google`, `restore-session`, `sign-out`); `presentation/` (session store, draft store, hooks, screens, components, schemas). Route files become re-exports | **Review gate:** you approve the auth layout before the other features follow it |
+| 5.7.3 | **Events**: events remote source, event mapper, events repository; hooks and screens into `presentation/` | Explore, details and search behave the same |
+| 5.7.4 | **Saved events**: remote source, calendar-entries local source, repository; use case `remove-saved-event`; optimistic updates and offline queue in `presentation/` | Offline save and remove test still passes |
+| 5.7.5 | **Personalize**: personalize remote source, device-calendar local source, calendar repository; use case `add-event-to-calendar` | Personalize test still passes |
+| 5.7.6 | **Profile, settings, welcome**: profile repository and use case `delete-account`; settings and welcome become presentation only | Account test still passes |
+| 5.7.7 | **Guard rails and docs**: ESLint `no-restricted-imports` for the dependency rules (spec §12.1); remove the old `api/`, `lib/` and flat feature files; update the README's Project structure, `docs/authentication.md` file paths, and spec §1/§3 | Lint fails on a cross-layer import; docs match the code |
 
 ---
 

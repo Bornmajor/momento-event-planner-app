@@ -297,6 +297,7 @@ API URL on `APP_VARIANT`.
 | 6 | Offline support | Included in Version 1, saved events only (§5.2); intent.md §4.6 |
 | 7 | State and data | Zustand for client state, TanStack Query + `fetch` for server data (no axios) |
 | 8 | Build variants | None for now (§9.1). Logging is silent in release builds (§9.2). |
+| 9 | Code organisation | **Proposed (2026-11-10):** layered features, sources → repository → use case (only with rules) → hooks/stores → UI, with `data/`, `domain/` and `presentation/` in each feature and a shared `core/` (§12) |
 
 ## 11. Testing strategy (lean)
 
@@ -308,3 +309,97 @@ API URL on `APP_VARIANT`.
 - **Manual on an Android dev build:** the end-to-end path against the API over ngrok: sign up → explore → details →
   personalize (Swahili) → add to calendar → My Events → remove → settings (theme, language, profile) → sign out.
 - **Gates before each commit:** `npx expo lint`, `npx tsc --noEmit`, `npm test`.
+
+## 12. Layered feature architecture (task 5.7)
+
+> Status: **PROPOSED (2026-11-10), awaiting approval.** Once approved it replaces §1's diagram and §3's folder
+> structure. No behaviour changes: it only reorganises the code.
+
+### 12.1 Flow and rules
+
+```
+remote / local source  →  repository  →  use case (only with real rules)  →  hook / store  →  UI
+   raw DTOs, raw errors    DTO → domain     business rules across            TanStack Query,    screens,
+                           errors → failures repositories                     Zustand            components
+```
+
+1. **Sources** do I/O only: HTTP (`*-remote-source.ts`) or the device (`*-local-source.ts`: SecureStore, AsyncStorage,
+   calendar). They return DTOs and throw raw errors (`ApiError`, `NetworkError`).
+2. **Repositories** are the only place that maps:
+   - DTOs → domain models (`*.mapper.ts`);
+   - raw errors → **domain failures**.
+
+   They **throw** failures; they don't return `Result` types, because TanStack Query's error states, retries and the
+   offline queue all rely on thrown errors.
+3. **Use cases** exist only when there are rules across steps or repositories. Pure reads (search, categories, `/me`)
+   go straight from the hook to the repository.
+4. **Hooks and stores** (presentation) hold server state (TanStack Query) and client state (Zustand), including
+   optimistic updates and the offline queue.
+5. **UI** turns a failure into words with `failureMessage(failure)` → i18n key → `t()`. Failures are types; messages
+   live only in presentation.
+
+**Dependency rules:**
+- `presentation → domain ← data`: `domain/` imports nothing from `data/`, `presentation/`, React or TanStack.
+- Features import other features **only through their `domain/`** (for example `Event` from `events/domain`), never
+  through their `data/` or `presentation/`. This is enforced with an ESLint `no-restricted-imports` rule.
+- Domain models stay **JSON-safe**: dates are ISO strings, not `Date`, because the saved-events cache is persisted as
+  JSON.
+- **No DI container or `*Impl` classes:** a repository is a typed object (`export const authRepository:
+  AuthRepository = {...}`), and tests replace it with `jest.mock`.
+
+### 12.2 Folders and naming
+
+```
+src/
+  app/                       routes only: one-line re-exports of feature screens (Expo Router needs them here)
+  core/
+    api/                     http-client.ts (fetch, Bearer, single-flight refresh, timeout, abort) · api-error.ts
+                             · schema.d.ts (generated DTO types)
+    failures/                app-failure.ts (Network, Unauthenticated, RateLimited, ServerUnavailable, Cancelled,
+                             Unknown) · map-api-error.ts (shared codes → failures) · failure-message.ts (→ i18n key)
+    storage/  query/  i18n/  theme/  logger.ts
+  components/                shared UI kit (unchanged)
+  features/<feature>/
+    data/        sources/*-remote-source.ts · sources/*-local-source.ts · dto/*.dto.ts · mappers/*.mapper.ts
+                 · <feature>-repository.ts
+    domain/      models/*.ts · failures.ts · use-cases/*.ts
+    presentation/ hooks/use-*.ts · state/*-store.ts · screens/*-screen.tsx · components/*.tsx · schemas.ts
+```
+
+File names are kebab-case with a role suffix, as listed above.
+
+### 12.3 Features after the move
+
+| Feature | data | domain (use cases) | presentation |
+|---|---|---|---|
+| auth | auth remote source, token local source, user mapper, auth repository | `sign-up`, `sign-in`, `sign-in-with-google`, `restore-session`, `sign-out` | session store, sign-up draft, hooks, sign-in and sign-up screens, strength meter, form schemas |
+| events | events remote source, event mapper, events repository | none | `use-event-search`, `use-event`, `use-categories`, explore and details screens, event card, `format.ts` |
+| saved-events | saved-events remote source, calendar-entries local source, repository | `remove-saved-event` (calendar + API) | `use-saved-events`, optimistic save and remove, offline queue (`setMutationDefaults`), My Events screen |
+| personalize | personalize remote source, device-calendar local source, calendar repository | `add-event-to-calendar` (calendar entry + save + entry map) | personalize screen and form, `notes.ts` |
+| profile | me remote source, profile repository | `delete-account` (API + calendar clean-up + sign-out) | `use-me`, `use-update-profile`, profile screen |
+| settings | none (local preferences) | none | language and theme stores, settings screen |
+| welcome | none | none | welcome screen, collage |
+
+### 12.4 Error mapping
+
+| Raw (data) | Failure (domain) | Shown as (presentation) |
+|---|---|---|
+| `NetworkError` | `NetworkFailure` | `errors.NETWORK` snackbar or error state |
+| `ApiError` `SERVER_UNREACHABLE` / `UPSTREAM_UNAVAILABLE` / `INTERNAL` | `ServerUnavailableFailure` | `errors.SERVER_UNREACHABLE` |
+| `ApiError` `UNAUTHENTICATED` | `UnauthenticatedFailure` | session ends (route guard) |
+| `ApiError` `RATE_LIMITED` | `RateLimitedFailure` | `errors.RATE_LIMITED` |
+| `RequestCancelledError` | `CancelledFailure` | nothing |
+| `ApiError` `EMAIL_TAKEN` | auth `EmailTakenFailure` | email field error; sign-up step 2 returns to step 1 |
+| `ApiError` `INVALID_CREDENTIALS` | auth `InvalidCredentialsFailure` | `errors.INVALID_CREDENTIALS` |
+| `ApiError` `VALIDATION_ERROR` | `ValidationFailure(fields)` | errors on the matching fields |
+| `ApiError` `AI_LIMIT_REACHED` | personalize `AiLimitFailure` | snackbar with "Use original text" |
+| `ApiError` `SAVED_LIMIT_REACHED` | saved-events `SavedLimitFailure` | `errors.SAVED_LIMIT_REACHED` |
+| `ApiError` `NOT_FOUND` (event) | events `EventNotFoundFailure` | not-found state / "gone while offline" notice |
+| Google SDK errors | auth `GoogleSignInFailure(reason)` | `auth.googleFailed` / `googleNoPlayServices` / `googleEmailTaken` |
+| Anything else | `UnknownFailure` | `errors.UNKNOWN` |
+
+### 12.5 Testing
+
+- **Repositories:** sources mocked; DTO mapping and error → failure mapping.
+- **Use cases:** repositories mocked; their rules.
+- The existing tests move with their code and keep passing at every step.
