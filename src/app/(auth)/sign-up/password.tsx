@@ -1,6 +1,5 @@
 import { Redirect } from 'expo-router';
 
-import { OfflineBanner, Screen } from '@/components/ui';
 import { PasswordStep } from '@/features/auth/components/sign-up-steps';
 import { useSignUpDraft } from '@/features/auth/sign-up-draft';
 
@@ -8,10 +7,5 @@ import { useSignUpDraft } from '@/features/auth/sign-up-draft';
 export default function SignUpPasswordScreen() {
   const details = useSignUpDraft((s) => s.details);
   if (!details) return <Redirect href="/sign-up" />;
-  return (
-    <Screen scroll edges={['bottom', 'left', 'right']}>
-      <OfflineBanner />
-      <PasswordStep details={details} />
-    </Screen>
-  );
+  return <PasswordStep details={details} />;
 }

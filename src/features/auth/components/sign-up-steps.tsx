@@ -2,18 +2,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { ApiError } from '@/api/errors';
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
-import { Button, snackbar, type TextInputRef } from '@/components/ui';
+import { Button, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
 
 import { applyApiError } from '../form-errors';
 import { detailsSchema, passwordStepSchema, type DetailsValues, type PasswordStepValues } from '../schemas';
 import { useSignUpDraft } from '../sign-up-draft';
 import { useSignUp } from '../use-auth-mutations';
-import { AuthHeader } from './auth-parts';
+import { AuthHeader, FooterLink } from './auth-parts';
 import { PasswordStrengthMeter } from './password-strength-meter';
 
 /** Step 1: basic details. Saved to the in-memory draft, then on to the password step. */
@@ -42,7 +41,16 @@ export function DetailsStep() {
   });
 
   return (
-    <View style={styles.gap}>
+    // The onboarding layout above handles the top safe area (progress header).
+    <FormScreen
+      edges={['bottom', 'left', 'right']}
+      actions={
+        <>
+          <Button label={t('signUp.continue')} onPress={onContinue} />
+          <FooterLink prompt={t('auth.haveAccount')} action={t('auth.signIn')} onPress={() => router.replace('/sign-in')} />
+        </>
+      }>
+      <OfflineBanner />
       <AuthHeader title={t('signUp.detailsTitle')} subtitle={t('signUp.detailsSubtitle')} showBack={false} />
       <FormTextField
         control={control}
@@ -78,8 +86,7 @@ export function DetailsStep() {
         returnKeyType="next"
         onSubmitEditing={() => void onContinue()}
       />
-      <Button label={t('signUp.continue')} onPress={onContinue} />
-    </View>
+    </FormScreen>
   );
 }
 
@@ -116,7 +123,10 @@ export function PasswordStep({ details }: { details: DetailsValues }) {
   });
 
   return (
-    <View style={styles.gap}>
+    <FormScreen
+      edges={['bottom', 'left', 'right']}
+      actions={<Button label={t('signUp.createAccount')} onPress={onSubmit} loading={signUp.isPending} />}>
+      <OfflineBanner />
       <AuthHeader title={t('signUp.passwordTitle')} subtitle={t('signUp.passwordSubtitle')} showBack={false} />
       <FormPasswordField
         control={control}
@@ -138,9 +148,6 @@ export function PasswordStep({ details }: { details: DetailsValues }) {
         onSubmitEditing={() => void onSubmit()}
       />
       <PasswordStrengthMeter password={password} userInputs={userInputs} />
-      <Button label={t('signUp.createAccount')} onPress={onSubmit} loading={signUp.isPending} />
-    </View>
+    </FormScreen>
   );
 }
-
-const styles = StyleSheet.create({ gap: { gap: 16 } });

@@ -11,8 +11,9 @@ import { useTheme } from '@/theme/use-theme';
 const STEPS = 2;
 
 /**
- * Sign Up onboarding: step 1 basic details, step 2 password. The progress header sits inside the top safe area (clear
- * of the notch / status bar) and stays put while the steps slide underneath, so the bar animates between steps.
+ * Sign Up onboarding: step 1 basic details, step 2 password. Inside the top safe area (clear of the notch / status
+ * bar): a top bar with the back button, then the two-segment progress indicator. It stays put while the steps slide
+ * underneath, so the bar animates between steps.
  */
 export default function SignUpLayout() {
   const { t } = useTranslation();
@@ -25,19 +26,20 @@ export default function SignUpLayout() {
   return (
     <View style={[styles.fill, { backgroundColor: colors.background }]}>
       <SafeAreaView edges={['top', 'left', 'right']}>
-        <View style={[styles.header, { paddingHorizontal: spacing.xl, paddingTop: spacing.sm, gap: spacing.md }]}>
+        {/* Top bar first (back), then the progress indicator underneath. */}
+        <View style={[styles.topBar, { paddingHorizontal: spacing.xl, paddingTop: spacing.sm }]}>
           <BackButton onPress={() => (router.canGoBack() ? router.back() : router.replace('/welcome'))} />
-          <View style={[styles.fill, { gap: spacing.xs }]}>
-            <SegmentedBar
-              segments={STEPS}
-              filled={step}
-              color={colors.brand}
-              accessibilityLabel={t('signUp.progress', { step, total: STEPS })}
-            />
-            <AppText variant="caption" color="textMuted">
-              {t('signUp.progress', { step, total: STEPS })}
-            </AppText>
-          </View>
+        </View>
+        <View style={{ paddingHorizontal: spacing.xl, paddingTop: spacing.md, gap: spacing.xs }}>
+          <SegmentedBar
+            segments={STEPS}
+            filled={step}
+            color={colors.brand}
+            accessibilityLabel={t('signUp.progress', { step, total: STEPS })}
+          />
+          <AppText variant="caption" color="textMuted">
+            {t('signUp.progress', { step, total: STEPS })}
+          </AppText>
         </View>
       </SafeAreaView>
       <Stack
@@ -53,5 +55,5 @@ export default function SignUpLayout() {
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center' },
+  topBar: { flexDirection: 'row', alignItems: 'center' },
 });

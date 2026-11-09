@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { ComponentProps, ReactNode } from 'react';
-import { ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
@@ -38,6 +38,39 @@ export function Screen({
       ) : (
         <View style={[styles.fill, ...content]}>{children}</View>
       )}
+    </SafeAreaView>
+  );
+}
+
+/**
+ * Layout for every form screen (app-wide UX rule): the fields scroll, and the actions (main button, then links such
+ * as "Already have an account? Sign In") stay pinned to the bottom of the screen, above the keyboard and the home
+ * indicator. Android is edge-to-edge, so the window doesn't resize for the keyboard; KeyboardAvoidingView with
+ * "padding" lifts the actions on both platforms (Expo keyboard-handling guide).
+ */
+export function FormScreen({
+  children,
+  actions,
+  edges = ALL_EDGES,
+}: {
+  children: ReactNode;
+  /** Pinned at the bottom: the primary button first, then secondary links. */
+  actions: ReactNode;
+  edges?: Edge[];
+}) {
+  const { colors, spacing } = useTheme();
+  return (
+    <SafeAreaView edges={edges} style={[styles.fill, { backgroundColor: colors.background }]}>
+      <KeyboardAvoidingView behavior="padding" style={styles.fill}>
+        <ScrollView
+          contentContainerStyle={[styles.grow, { padding: spacing.xl, gap: spacing.lg }]}
+          keyboardShouldPersistTaps="handled">
+          {children}
+        </ScrollView>
+        <View style={{ paddingHorizontal: spacing.xl, paddingTop: spacing.sm, paddingBottom: spacing.lg, gap: spacing.xs }}>
+          {actions}
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

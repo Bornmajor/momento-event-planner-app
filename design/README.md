@@ -47,3 +47,11 @@ Based on [reference/auth-screens.webp](reference/auth-screens.webp), **without t
 - **Forgot Password / Create New Password are UI templates only** in Version 1; no backend yet.
 - The password checklist must match the backend rules: **at least 8 characters, one letter, one number**. The
   reference shows "one uppercase letter", which the backend doesn't require.
+
+## Forms (all screens, app-wide rule)
+
+- Fields scroll; the **actions are pinned to the bottom**: the primary button first, then secondary links such as
+  "Already have an account? Sign In". They stay above the keyboard and the home indicator.
+- Build every form with `FormScreen` (`src/components/ui/layout.tsx`) and pass the buttons as `actions`.
+- Onboarding flows (Sign Up): a top bar with the back button, then the segmented progress indicator under it, both
+  inside the top safe area.

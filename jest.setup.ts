@@ -20,3 +20,6 @@ jest.mock('react-native-reanimated', () => {
 
 // Safe-area insets come from native code; the package ships a Jest mock with zero insets.
 jest.mock('react-native-safe-area-context', () => require('react-native-safe-area-context/jest/mock').default);
+
+// Network status (OfflineBanner) comes from native code; use the mock NetInfo ships.
+jest.mock('@react-native-community/netinfo', () => require('@react-native-community/netinfo/jest/netinfo-mock.js'));

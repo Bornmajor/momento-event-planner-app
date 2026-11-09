@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { AppText, Button, PasswordField, Screen } from '@/components/ui';
+import { AppText, Button, FormScreen, PasswordField } from '@/components/ui';
 import { AuthHeader } from '@/features/auth/components/auth-parts';
 import { PasswordStrengthMeter } from '@/features/auth/components/password-strength-meter';
 
@@ -13,7 +12,10 @@ export default function ResetPasswordScreen() {
   const [confirm, setConfirm] = useState('');
   const [notice, setNotice] = useState(false);
   return (
-    <Screen scroll>
+    <FormScreen
+      actions={
+        <Button label={t('auth.resetPassword')} onPress={() => setNotice(true)} accessibilityHint={t('common.comingSoon')} />
+      }>
       <AuthHeader icon="shield-checkmark-outline" title={t('auth.resetTitle')} subtitle={t('auth.resetSubtitle')} />
       <PasswordField label={t('auth.newPassword')} value={password} onChangeText={setPassword} />
       <PasswordField label={t('auth.confirmPassword')} value={confirm} onChangeText={setConfirm} />
@@ -23,8 +25,6 @@ export default function ResetPasswordScreen() {
           {t('auth.comingSoonBody')}
         </AppText>
       )}
-      <View style={{ flex: 1 }} />
-      <Button label={t('auth.resetPassword')} onPress={() => setNotice(true)} accessibilityHint={t('common.comingSoon')} />
-    </Screen>
+    </FormScreen>
   );
 }

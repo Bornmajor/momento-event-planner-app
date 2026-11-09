@@ -6,13 +6,15 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
-import { AppText, Button, Checkbox, snackbar, type TextInputRef } from '@/components/ui';
+import { AppText, Button, Checkbox, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
 import { MIN_TOUCH } from '@/theme/tokens';
 
 import { applyApiError } from '../form-errors';
 import { signInSchema, type SignInValues } from '../schemas';
 import { useSignIn } from '../use-auth-mutations';
+import { AuthHeader, FooterLink } from './auth-parts';
 
+/** The whole Sign In screen: header and fields scroll; Sign In and the Sign Up link are pinned at the bottom. */
 export function SignInForm() {
   const { t } = useTranslation();
   const signIn = useSignIn();
@@ -34,7 +36,15 @@ export function SignInForm() {
   });
 
   return (
-    <View style={styles.gap}>
+    <FormScreen
+      actions={
+        <>
+          <Button label={t('auth.signIn')} onPress={onSubmit} loading={signIn.isPending} />
+          <FooterLink prompt={t('auth.noAccount')} action={t('auth.signUp')} onPress={() => router.replace('/sign-up')} />
+        </>
+      }>
+      <OfflineBanner />
+      <AuthHeader title={t('auth.signInTitle')} subtitle={t('auth.signInSubtitle')} />
       <FormTextField
         control={control}
         name="email"
@@ -74,13 +84,11 @@ export function SignInForm() {
           </AppText>
         </Pressable>
       </View>
-      <Button label={t('auth.signIn')} onPress={onSubmit} loading={signIn.isPending} />
-    </View>
+    </FormScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  gap: { gap: 16 },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   link: { minHeight: MIN_TOUCH, justifyContent: 'center' },
   bold: { fontWeight: '700' },
