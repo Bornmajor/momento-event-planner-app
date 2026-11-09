@@ -9,7 +9,7 @@ Based on [reference/welcome-screen.png](reference/welcome-screen.png):
 - **Top:** a collage of tilted, rounded event photos with a soft fade. The source image is
   [reference/welcome-collage-source.png](reference/welcome-collage-source.png); `scripts/prepare-collage.cjs` crops it and
   makes the white background transparent (so it works in dark mode), writing `assets/images/welcome-collage.png`.
-  No extra gradient is added on top, apart from a thin one where short screens crop the bottom.
+  A tall, gentle fade sits over the bottom (photos stay ~70–80% visible through most of it, solid only at the edge).
 - **Below, everything centered:**
   1. App name **"Momento"** (large, bold), replacing "Live Every Event Moment"
   2. Slogan **"Looking ahead and planning what's next"**
