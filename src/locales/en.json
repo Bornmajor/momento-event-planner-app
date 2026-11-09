@@ -148,10 +148,46 @@
       "postponed": "Postponed",
       "rescheduled": "Rescheduled",
       "offsale": "Off sale"
-    }
+    },
+    "setReminder": "Set Reminder",
+    "updateReminder": "Update Reminder",
+    "inCalendar": "In your calendar",
+    "localTime": "Local time ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "No saved events yet",
     "emptyBody": "Events you add to your calendar will show up here."
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "sw": "Kiswahili"
+  },
+  "personalize": {
+    "title": "Personalize",
+    "subtitle": "Make the details yours before adding them to your calendar.",
+    "shorten": "Shorter description",
+    "shortenHint": "Keep the key details, drop the rest.",
+    "translate": "Translate",
+    "translateHint": "Rewrite it in another language.",
+    "apply": "Apply with AI",
+    "result": "Calendar details",
+    "useOriginal": "Use original text",
+    "fromCache": "Ready instantly, this was personalized before.",
+    "eventTitle": "Title",
+    "description": "Description",
+    "reminder": "Remind me",
+    "reminders": {
+      "0": "At start",
+      "15": "15 min before",
+      "60": "1 hour before",
+      "1440": "1 day before"
+    },
+    "addToCalendar": "Add to Calendar",
+    "added": "Added to your calendar.",
+    "permissionNeeded": "Momento needs calendar access to add this event.",
+    "openSettings": "Open Settings",
+    "calendarFailed": "Couldn't add it to your calendar. Please try again.",
+    "limitReached": "You've used today's AI personalizations. You can still add the original text."
   }
 }

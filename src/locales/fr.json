@@ -148,10 +148,46 @@
       "postponed": "Reporté",
       "rescheduled": "Reprogrammé",
       "offsale": "Vente terminée"
-    }
+    },
+    "setReminder": "Créer un rappel",
+    "updateReminder": "Modifier le rappel",
+    "inCalendar": "Dans votre calendrier",
+    "localTime": "Heure locale ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "Aucun événement enregistré",
     "emptyBody": "Les événements ajoutés à votre calendrier apparaîtront ici."
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "sw": "Kiswahili"
+  },
+  "personalize": {
+    "title": "Personnaliser",
+    "subtitle": "Adaptez les détails avant de les ajouter à votre calendrier.",
+    "shorten": "Description plus courte",
+    "shortenHint": "Gardez l'essentiel, retirez le reste.",
+    "translate": "Traduire",
+    "translateHint": "Réécrire dans une autre langue.",
+    "apply": "Appliquer avec l'IA",
+    "result": "Détails du calendrier",
+    "useOriginal": "Utiliser le texte original",
+    "fromCache": "Prêt immédiatement, déjà personnalisé auparavant.",
+    "eventTitle": "Titre",
+    "description": "Description",
+    "reminder": "Me rappeler",
+    "reminders": {
+      "0": "Au début",
+      "15": "15 min avant",
+      "60": "1 heure avant",
+      "1440": "1 jour avant"
+    },
+    "addToCalendar": "Ajouter au calendrier",
+    "added": "Ajouté à votre calendrier.",
+    "permissionNeeded": "Momento a besoin d'accéder à votre calendrier pour ajouter cet événement.",
+    "openSettings": "Ouvrir les réglages",
+    "calendarFailed": "Impossible de l'ajouter à votre calendrier. Réessayez.",
+    "limitReached": "Vous avez utilisé vos personnalisations IA du jour. Vous pouvez quand même ajouter le texte original."
   }
 }

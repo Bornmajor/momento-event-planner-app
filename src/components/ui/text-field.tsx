@@ -26,13 +26,16 @@ export const TextField = forwardRef<TextInputRef, TextFieldProps>(function TextF
   const { colors, radii, spacing, typography } = useTheme();
   const [focused, setFocused] = useState(false);
   const borderColor = error ? colors.danger : focused ? colors.brand : colors.border;
+  // Multi-line fields (e.g. an editable description) use a rounded box instead of the pill.
+  const multiline = rest.multiline === true;
 
   return (
     <View style={{ gap: spacing.xs }}>
       <View
         style={[
           styles.field,
-          { borderColor, borderRadius: radii.pill, backgroundColor: colors.surface, paddingHorizontal: spacing.lg },
+          { borderColor, borderRadius: multiline ? radii.lg : radii.pill, backgroundColor: colors.surface, paddingHorizontal: spacing.lg },
+          multiline && styles.fieldMultiline,
         ]}>
         {icon && <Ionicons name={icon} size={20} color={colors.textMuted} />}
         <TextInput
@@ -41,7 +44,7 @@ export const TextField = forwardRef<TextInputRef, TextFieldProps>(function TextF
           placeholder={label}
           placeholderTextColor={colors.textMuted}
           selectionColor={colors.brand}
-          style={[styles.input, typography.body, { color: colors.text }]}
+          style={[styles.input, typography.body, { color: colors.text }, multiline && styles.inputMultiline]}
           onFocus={(e) => {
             setFocused(true);
             onFocus?.(e);
@@ -95,4 +98,6 @@ export const PasswordField = forwardRef<TextInputRef, Omit<TextFieldProps, 'secu
 const styles = StyleSheet.create({
   field: { flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: Math.max(MIN_TOUCH, 54), borderWidth: 1 },
   input: { flex: 1, paddingVertical: 12 },
+  fieldMultiline: { alignItems: 'flex-start', paddingVertical: 4 },
+  inputMultiline: { minHeight: 120, textAlignVertical: 'top' },
 });

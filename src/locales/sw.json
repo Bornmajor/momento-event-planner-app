@@ -148,10 +148,46 @@
       "postponed": "Limeahirishwa",
       "rescheduled": "Limepangwa upya",
       "offsale": "Mauzo yamefungwa"
-    }
+    },
+    "setReminder": "Weka Kikumbusho",
+    "updateReminder": "Badilisha Kikumbusho",
+    "inCalendar": "Kwenye kalenda yako",
+    "localTime": "Saa za eneo ({{zone}})"
   },
   "myEvents": {
     "emptyTitle": "Bado hakuna matukio yaliyohifadhiwa",
     "emptyBody": "Matukio unayoongeza kwenye kalenda yataonekana hapa."
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "sw": "Kiswahili"
+  },
+  "personalize": {
+    "title": "Binafsisha",
+    "subtitle": "Rekebisha maelezo kabla ya kuyaongeza kwenye kalenda yako.",
+    "shorten": "Maelezo mafupi",
+    "shortenHint": "Baki na mambo muhimu, ondoa mengine.",
+    "translate": "Tafsiri",
+    "translateHint": "Andika upya kwa lugha nyingine.",
+    "apply": "Tumia AI",
+    "result": "Maelezo ya kalenda",
+    "useOriginal": "Tumia maandishi ya asili",
+    "fromCache": "Tayari mara moja, lilibinafsishwa awali.",
+    "eventTitle": "Kichwa",
+    "description": "Maelezo",
+    "reminder": "Nikumbushe",
+    "reminders": {
+      "0": "Linapoanza",
+      "15": "Dakika 15 kabla",
+      "60": "Saa 1 kabla",
+      "1440": "Siku 1 kabla"
+    },
+    "addToCalendar": "Ongeza kwenye Kalenda",
+    "added": "Limeongezwa kwenye kalenda yako.",
+    "permissionNeeded": "Momento inahitaji ruhusa ya kalenda ili kuongeza tukio hili.",
+    "openSettings": "Fungua Mipangilio",
+    "calendarFailed": "Imeshindwa kuliongeza kwenye kalenda. Tafadhali jaribu tena.",
+    "limitReached": "Umetumia ubinafsishaji wa AI wa leo. Bado unaweza kuongeza maandishi ya asili."
   }
 }

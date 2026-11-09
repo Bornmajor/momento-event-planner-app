@@ -19,6 +19,9 @@ import { PasswordStep } from '../components/sign-up-steps';
 import { useSignUpDraft } from '../sign-up-draft';
 
 const register = authApi.register as jest.Mock;
+
+// The first strength check builds the zxcvbn dictionaries, which is slow when all suites run in parallel.
+jest.setTimeout(20_000);
 const details = { firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.com' };
 
 async function renderStep() {
