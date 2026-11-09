@@ -9,7 +9,14 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.bornmajor.momento",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "CFBundleLocalizations": [
+          "en",
+          "fr",
+          "sw"
+        ]
+      }
     },
     "android": {
       "package": "com.bornmajor.momento",
@@ -19,7 +26,11 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ]
     },
     "web": {
       "output": "static",
@@ -44,8 +55,16 @@
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": ["en", "fr", "sw"],
-            "android": ["en", "fr", "sw"]
+            "ios": [
+              "en",
+              "fr",
+              "sw"
+            ],
+            "android": [
+              "en",
+              "fr",
+              "sw"
+            ]
           }
         }
       ],
@@ -70,6 +89,17 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "38c4cbda-fa1c-4456-ac2f-196ce1671f27"
+      }
+    },
+    "owner": "bornmaja"
   }
 }
