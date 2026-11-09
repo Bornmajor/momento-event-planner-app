@@ -289,7 +289,7 @@ API URL on `APP_VARIANT`.
 
 | # | Decision | Outcome |
 |---|---|---|
-| 1 | Google sign-in library | `@react-native-google-signin/google-signin` (free version), confirmed in a short spike before the auth screens are wired. Fallback: `react-native-nitro-google-signin`. The backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (the ID token's audience) and the Android client ID. |
+| 1 | Google sign-in library | **Deferred from Version 1 (2026-11-09): email + password only for now.** When added: `@react-native-google-signin/google-signin` (free version), confirmed in a short spike before the auth screens are wired. Fallback: `react-native-nitro-google-signin`. The backend's `GOOGLE_CLIENT_IDS` gets the Web client ID (the ID token's audience) and the Android client ID. |
 | 2 | How to make development builds | EAS Build, triggered by EAS Workflows, with GitHub Actions for checks (§9.3) |
 | 3 | Welcome collage photos | 5–6 free-licence event photos (e.g. Unsplash), compressed, credited in the README |
 | 4 | Tabs | Explore · My Events · Settings |

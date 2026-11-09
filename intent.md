@@ -38,7 +38,7 @@ It's a portfolio project built as a full-stack system: an Express + MongoDB back
 
 ### 4.1 Authentication
 - Sign up and log in with **email + password**.
-- Sign up and log in with **Google**.
+- ~~Sign up and log in with **Google**~~: **deferred** (2026-11-09). Version 1 starts with email and password; the backend endpoint already exists.
 - Log out. The session stays active across app restarts.
 - The backend issues and checks sessions. The mobile app stores the session securely on the device.
 - Screens for **Verify email** and **Forgot password** exist in the app as **UI templates only** (not functional in Version 1).
@@ -93,6 +93,7 @@ AI rules:
 |---|---|
 | Location-based filtering ("near me") | Needs location permission and a radius search. Ticketmaster supports this. |
 | Email verification, forgot or reset password | Screens are stubbed in Version 1 |
+| Google sign-in in the app | Backend `POST /auth/google` is ready; the app needs the native library, Google Cloud client IDs and a dev build |
 | Sign in with Apple | Needed before publishing to the iOS App Store when Google sign-in is offered |
 | Profile picture | Upload and storage |
 | Translating event descriptions on the details screen | Can reuse the Version 1 AI translation and its cache |
@@ -115,7 +116,7 @@ AI rules:
 
 ## 7. Success criteria (Version 1 demo)
 
-1. A new user can sign up with email and password or with Google, close the app, and still be logged in after reopening it.
+1. A new user can sign up with email and password, close the app, and still be logged in after reopening it.
 2. The user can browse, search and filter by category, and open an event's details.
 3. The user can personalize an event (shorter and/or translated, e.g. into Swahili), edit the result, and add it to their Android calendar with a reminder.
 4. The saved event appears under My Events with current details, and removing it also deletes the calendar entry.

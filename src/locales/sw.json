@@ -14,7 +14,6 @@
     "somethingWrong": "Hitilafu imetokea"
   },
   "placeholder": {
-    "signedOut": "Skrini ya kukaribisha inakuja katika hatua inayofuata.",
     "signedIn": "Umeingia. Gundua, Matukio Yangu na Mipangilio vinakuja hivi karibuni.",
     "theme": "Mandhari",
     "language": "Lugha",
@@ -43,5 +42,50 @@
     "INTERNAL": "Hitilafu imetokea upande wetu.",
     "NETWORK": "Hakuna muunganisho. Kagua intaneti yako kisha ujaribu tena.",
     "UNKNOWN": "Hitilafu imetokea. Tafadhali jaribu tena."
+  },
+  "welcome": {
+    "getStarted": "Anza",
+    "haveAccount": "Tayari una akaunti?",
+    "signIn": "Ingia"
+  },
+  "auth": {
+    "signInTitle": "Karibu Tena!",
+    "signInSubtitle": "Ingia ili uendelee kupanga matukio unayoyapenda.",
+    "signUpTitle": "Fungua Akaunti",
+    "signUpSubtitle": "Jiunge na Momento usikose tukio lolote.",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "firstName": "Jina la kwanza",
+    "lastName": "Jina la mwisho",
+    "rememberMe": "Nikumbuke",
+    "forgotPassword": "Umesahau nenosiri?",
+    "signIn": "Ingia",
+    "signUp": "Jisajili",
+    "continueWith": "au endelea kwa",
+    "google": "Google",
+    "noAccount": "Huna akaunti?",
+    "haveAccount": "Tayari una akaunti?",
+    "passwordRulesTitle": "Nenosiri lako linahitaji",
+    "ruleLength": "Angalau herufi 8",
+    "ruleLetter": "Herufi moja",
+    "ruleDigit": "Namba moja",
+    "forgotTitle": "Umesahau Nenosiri?",
+    "forgotSubtitle": "Weka barua pepe ya akaunti yako na tutakutumia msimbo wa kubadilisha nenosiri.",
+    "sendCode": "Tuma Msimbo",
+    "rememberPassword": "Unakumbuka nenosiri lako?",
+    "resetTitle": "Unda Nenosiri Jipya",
+    "resetSubtitle": "Nenosiri jipya lazima liwe tofauti na yale uliyotumia awali.",
+    "newPassword": "Nenosiri jipya",
+    "confirmPassword": "Thibitisha nenosiri",
+    "resetPassword": "Badilisha Nenosiri",
+    "comingSoonBody": "Kubadilisha nenosiri kunakuja hivi karibuni. Kwa sasa, ingia kwa barua pepe na nenosiri lako.",
+    "googleUnavailable": "Kuingia kwa Google kunaandaliwa na kutapatikana hivi karibuni."
+  },
+  "validation": {
+    "email": "Weka barua pepe sahihi.",
+    "passwordRequired": "Weka nenosiri lako.",
+    "passwordRules": "Nenosiri lako halikidhi masharti yaliyo hapa chini.",
+    "nameRequired": "Sehemu hii inahitajika.",
+    "nameTooLong": "Tumia herufi 50 au chache."
   }
 }

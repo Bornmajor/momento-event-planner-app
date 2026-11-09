@@ -1,0 +1,29 @@
+import { useState } from 'react';
+import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+
+import { AppText, Button, PasswordField, Screen } from '@/components/ui';
+import { AuthHeader, PasswordChecklist } from '@/features/auth/components/auth-parts';
+
+/** UI template only in Version 1 (intent.md). Reached from the reset code flow once the backend supports it. */
+export default function ResetPasswordScreen() {
+  const { t } = useTranslation();
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [notice, setNotice] = useState(false);
+  return (
+    <Screen scroll>
+      <AuthHeader icon="shield-checkmark-outline" title={t('auth.resetTitle')} subtitle={t('auth.resetSubtitle')} />
+      <PasswordField label={t('auth.newPassword')} value={password} onChangeText={setPassword} />
+      <PasswordField label={t('auth.confirmPassword')} value={confirm} onChangeText={setConfirm} />
+      <PasswordChecklist password={password} />
+      {notice && (
+        <AppText variant="caption" color="textMuted" align="center" accessibilityLiveRegion="polite">
+          {t('auth.comingSoonBody')}
+        </AppText>
+      )}
+      <View style={{ flex: 1 }} />
+      <Button label={t('auth.resetPassword')} onPress={() => setNotice(true)} accessibilityHint={t('common.comingSoon')} />
+    </Screen>
+  );
+}

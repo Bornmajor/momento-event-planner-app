@@ -14,7 +14,6 @@
     "somethingWrong": "Something went wrong"
   },
   "placeholder": {
-    "signedOut": "Welcome screen coming in the next batch.",
     "signedIn": "You're signed in. Explore, My Events and Settings arrive soon.",
     "theme": "Theme",
     "language": "Language",
@@ -43,5 +42,50 @@
     "INTERNAL": "Something went wrong on our side.",
     "NETWORK": "No connection. Check your internet and try again.",
     "UNKNOWN": "Something went wrong. Please try again."
+  },
+  "welcome": {
+    "getStarted": "Get Started",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign In"
+  },
+  "auth": {
+    "signInTitle": "Welcome Back!",
+    "signInSubtitle": "Sign in to keep planning the events you love.",
+    "signUpTitle": "Create Account",
+    "signUpSubtitle": "Join Momento and never miss an event moment.",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot Password?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "continueWith": "or continue with",
+    "google": "Google",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "passwordRulesTitle": "Your password needs",
+    "ruleLength": "At least 8 characters",
+    "ruleLetter": "One letter",
+    "ruleDigit": "One number",
+    "forgotTitle": "Forgot Password?",
+    "forgotSubtitle": "Enter the email linked to your account and we'll send you a code to reset your password.",
+    "sendCode": "Send Code",
+    "rememberPassword": "Remember your password?",
+    "resetTitle": "Create New Password",
+    "resetSubtitle": "Your new password must be different from previously used passwords.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "resetPassword": "Reset Password",
+    "comingSoonBody": "Password reset is coming soon. For now, sign in with your email and password.",
+    "googleUnavailable": "Google sign-in is being set up and will be available soon."
+  },
+  "validation": {
+    "email": "Enter a valid email address.",
+    "passwordRequired": "Enter your password.",
+    "passwordRules": "Your password doesn't meet the rules below.",
+    "nameRequired": "This field is required.",
+    "nameTooLong": "Use 50 characters or fewer."
   }
 }

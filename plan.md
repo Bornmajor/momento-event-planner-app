@@ -1,7 +1,7 @@
 # Plan — Momento mobile app (frontend)
 
 > Status: **APPROVED (2026-11-09)**. Phase 3 of the workflow. Implements [spec.md](spec.md) (approved).
-> Progress: **Batch 1 ✅** (`2-foundation`, awaiting review; dev build pending EAS login).
+> Progress: **Batch 1 ✅** (`2-foundation`) · **Batch 2 ✅** (`3-auth`, email + password; Google deferred; awaiting review).
 
 ## How the work runs
 
@@ -53,7 +53,7 @@ brand theme, fonts, translations and the API client in place.
 
 | # | Task | Done when |
 |---|---|---|
-| 2.1 | **Google sign-in spike**: install `@react-native-google-signin/google-signin`, configure the plugin and Web client ID, get an ID token on the dev build, and confirm `POST /auth/google` accepts it. If it fails, switch to the fallback (`react-native-nitro-google-signin`). | A real Google account signs in against the backend |
+| 2.1 | ~~**Google sign-in spike**~~ **Deferred (2026-11-09):** Version 1 starts with email + password only. The button component is kept but hidden. Original task: install `@react-native-google-signin/google-signin`, configure the plugin and Web client ID, get an ID token on the dev build, and confirm `POST /auth/google` accepts it. If it fails, switch to the fallback (`react-native-nitro-google-signin`). | A real Google account signs in against the backend |
 | 2.2 | **Welcome screen**: photo collage fading into the background, "Momento", slogan, Get Started (to sign-up), "Already have an account? Sign In" | Matches the design in light and dark |
 | 2.3 | **Sign in**: form (zod), remember me, Forgot Password link, Google button, API errors shown (`INVALID_CREDENTIALS`, `RATE_LIMITED`, offline) | **Test:** validation messages and API error display |
 | 2.4 | **Sign up**: first and last name, email, password with a live rules checklist (8+ characters, a letter, a digit); `EMAIL_TAKEN` shown on the email field | Field errors from the API's `details` show on the right fields |

@@ -1,39 +1,47 @@
-import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
-import { SettingsPreview } from '@/components/settings-preview';
-import { AppText, OfflineBanner, Screen } from '@/components/ui';
+import { AppText, Button, OfflineBanner } from '@/components/ui';
+import { FooterLink } from '@/features/auth/components/auth-parts';
+import { WelcomeCollage } from '@/features/welcome/collage';
+import { useTheme } from '@/theme/use-theme';
 
-/** Batch 1 placeholder. The real welcome screen (photo collage, Get Started, Sign In) arrives in Batch 2. */
+/**
+ * First screen after the splash (design/README.md): collage on top, then centred app name, slogan,
+ * Get Started and "Already have an account? Sign In".
+ */
 export default function WelcomeScreen() {
   const { t } = useTranslation();
+  const { colors, spacing } = useTheme();
+  const { height } = useWindowDimensions();
+
   return (
-    <Screen scroll style={styles.center}>
-      <OfflineBanner />
-      <Image
-        source={require('@/assets/images/logo.png')}
-        style={styles.logo}
-        contentFit="contain"
-        accessibilityLabel={t('a11y.logo')}
-      />
-      <View style={{ gap: 6 }}>
-        <AppText variant="display" align="center">
-          {t('app.name')}
-        </AppText>
-        <AppText color="textMuted" align="center">
-          {t('app.slogan')}
-        </AppText>
-      </View>
-      <AppText variant="caption" color="textMuted" align="center">
-        {t('placeholder.signedOut')}
-      </AppText>
-      <SettingsPreview />
-    </Screen>
+    <View style={[styles.fill, { backgroundColor: colors.background }]}>
+      <WelcomeCollage height={height * 0.55} />
+      <SafeAreaView edges={['bottom']} style={[styles.content, { padding: spacing.xl, gap: spacing.lg }]}>
+        <OfflineBanner />
+        <View style={{ gap: spacing.sm }}>
+          <AppText variant="display" align="center" accessibilityRole="header">
+            {t('app.name')}
+          </AppText>
+          <AppText color="textMuted" align="center">
+            {t('app.slogan')}
+          </AppText>
+        </View>
+        <Button label={t('welcome.getStarted')} onPress={() => router.push('/sign-up')} />
+        <FooterLink
+          prompt={t('welcome.haveAccount')}
+          action={t('welcome.signIn')}
+          onPress={() => router.push('/sign-in')}
+        />
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  center: { alignItems: 'center', justifyContent: 'center' },
-  logo: { width: 96, height: 96 },
+  fill: { flex: 1 },
+  content: { flex: 1, justifyContent: 'center' },
 });

@@ -14,7 +14,6 @@
     "somethingWrong": "Une erreur s'est produite"
   },
   "placeholder": {
-    "signedOut": "L'écran d'accueil arrive dans la prochaine étape.",
     "signedIn": "Vous êtes connecté. Explorer, Mes événements et Paramètres arrivent bientôt.",
     "theme": "Thème",
     "language": "Langue",
@@ -43,5 +42,50 @@
     "INTERNAL": "Une erreur s'est produite de notre côté.",
     "NETWORK": "Pas de connexion. Vérifiez votre accès à Internet et réessayez.",
     "UNKNOWN": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "welcome": {
+    "getStarted": "Commencer",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter"
+  },
+  "auth": {
+    "signInTitle": "Bon retour !",
+    "signInSubtitle": "Connectez-vous pour continuer à planifier vos événements préférés.",
+    "signUpTitle": "Créer un compte",
+    "signUpSubtitle": "Rejoignez Momento et ne manquez plus aucun moment.",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "continueWith": "ou continuer avec",
+    "google": "Google",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "passwordRulesTitle": "Votre mot de passe doit contenir",
+    "ruleLength": "Au moins 8 caractères",
+    "ruleLetter": "Une lettre",
+    "ruleDigit": "Un chiffre",
+    "forgotTitle": "Mot de passe oublié ?",
+    "forgotSubtitle": "Saisissez l'e-mail de votre compte et nous vous enverrons un code pour réinitialiser votre mot de passe.",
+    "sendCode": "Envoyer le code",
+    "rememberPassword": "Vous vous souvenez de votre mot de passe ?",
+    "resetTitle": "Nouveau mot de passe",
+    "resetSubtitle": "Votre nouveau mot de passe doit être différent des précédents.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "resetPassword": "Réinitialiser",
+    "comingSoonBody": "La réinitialisation du mot de passe arrive bientôt. En attendant, connectez-vous avec votre e-mail et votre mot de passe.",
+    "googleUnavailable": "La connexion avec Google est en cours de configuration et sera bientôt disponible."
+  },
+  "validation": {
+    "email": "Saisissez une adresse e-mail valide.",
+    "passwordRequired": "Saisissez votre mot de passe.",
+    "passwordRules": "Votre mot de passe ne respecte pas les règles ci-dessous.",
+    "nameRequired": "Ce champ est obligatoire.",
+    "nameTooLong": "50 caractères maximum."
   }
 }

@@ -17,7 +17,7 @@ export interface TextFieldProps extends Omit<TextInputProps, 'style'> {
 }
 
 /** Pill input with a leading icon and an error line underneath (auth design). */
-type TextInputRef = ComponentRef<typeof TextInput>;
+export type TextInputRef = ComponentRef<typeof TextInput>;
 
 export const TextField = forwardRef<TextInputRef, TextFieldProps>(function TextField(
   { label, icon, error, trailing, onFocus, onBlur, ...rest },
