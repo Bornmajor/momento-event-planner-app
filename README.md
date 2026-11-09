@@ -18,6 +18,10 @@ description or translate it into English, French or Swahili.
 |---|---|---|
 | <img src="docs/screenshots/explore.jpg" width="220" alt="Explore: categories, Happening now / Upcoming filters and events" /> | <img src="docs/screenshots/my-events.jpg" width="220" alt="My Events: saved events in the calendar" /> | <img src="docs/screenshots/settings.jpg" width="220" alt="Settings: profile, theme and language" /> |
 
+| Personalize | Personalize: translated by AI |
+|---|---|
+| <img src="docs/screenshots/personalize.jpg" width="220" alt="Personalize: shorten and translate switches, editable details, Add to Calendar" /> | <img src="docs/screenshots/personalize-translated.jpg" width="220" alt="Personalize: details translated to Swahili, reminder choices" /> |
+
 ## Features
 
 - **Explore events** from Ticketmaster (GB, US, IE, AU, NZ, CA): search, category filter, and Happening now / Upcoming
@@ -141,6 +145,15 @@ Tests sit next to the code in `__tests__` folders (outside `src/app`, since ever
 | `npm run lint` / `npm run typecheck` | Lint and type-check |
 | `npm run gen:api` | Regenerate API types after copying the backend's `docs/openapi.yaml` to `api/openapi.yaml` |
 | `npm run doctor` | Check Expo dependencies and config |
+
+## Credits
+
+Welcome screen photos from [Pexels](https://www.pexels.com/), free to use under the
+[Pexels license](https://www.pexels.com/license/). Event data from the Ticketmaster Discovery API.
+
+## License
+
+[MIT](LICENSE) © 2026 Bornmajor
 
 ## Project docs
 

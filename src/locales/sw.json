@@ -69,7 +69,9 @@
     "confirmPassword": "Thibitisha nenosiri",
     "resetPassword": "Badilisha Nenosiri",
     "comingSoonBody": "Kubadilisha nenosiri kunakuja hivi karibuni. Kwa sasa, ingia kwa barua pepe na nenosiri lako.",
-    "googleUnavailable": "Kuingia kwa Google kunaandaliwa na kutapatikana hivi karibuni.",
+    "googleFailed": "Kuingia kwa Google kumeshindikana. Jaribu tena, au ingia kwa barua pepe yako.",
+    "googleNoPlayServices": "Kuingia kwa Google kunahitaji huduma za Google Play kwenye simu hii.",
+    "googleEmailTaken": "Barua pepe hii tayari ina akaunti ya Momento. Ingia kwa barua pepe na nenosiri lako.",
     "strength": {
       "title": "Uimara wa nenosiri",
       "empty": "Refu zaidi ni imara zaidi. Kifungu kifupi cha maneno machache kinafaa.",

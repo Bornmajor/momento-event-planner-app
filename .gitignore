@@ -45,3 +45,9 @@ example
 # generated native folders
 /ios
 /android
+
+# EAS signing credentials (keystore + passwords). Never commit.
+credentials.json
+credentials/
+*.jks
+*.keystore

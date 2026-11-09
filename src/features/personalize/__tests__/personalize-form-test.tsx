@@ -21,6 +21,8 @@ import { router } from 'expo-router';
 // eslint-disable-next-line import/first
 import { personalizeApi, savedEventsApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
+import { formatEventDate } from '@/features/events/format';
+// eslint-disable-next-line import/first
 import { queryClient } from '@/lib/query-client';
 // eslint-disable-next-line import/first
 import '@/features/saved-events/mutations';
@@ -83,6 +85,10 @@ describe('Personalize', () => {
         expect.objectContaining({ userId: 'u1', title: 'Jazz usiku', description: 'Jioni ya jazz.', reminderMinutes: 1440 }),
       ),
     );
+    // The date is the app's own, in the user's time zone, not the backend's venue-time text.
+    const { facts } = (addToCalendar as jest.Mock).mock.calls[0][0];
+    expect(facts.dateTimeText).toBe(formatEventDate(event.start, 'en'));
+    expect(facts.venueText).toBe('Ronnie Scott’s, London');
     await waitFor(() => expect(savedEventsApi.save).toHaveBeenCalledWith('E1'));
     expect(router.back).toHaveBeenCalled();
   });

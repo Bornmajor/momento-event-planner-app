@@ -96,6 +96,8 @@ language, light and dark. Batch 3 starts once you approve them (changes go into 
 | 5.5 | **Independent code review** (`/code-review`), fix findings | Findings fixed or explained |
 | 5.6 | **README**: setup, `.env`, dev build install, scripts, architecture summary, photo credits | A new contributor can run the app from the README |
 | 5.7 | **TODO: revise the project structure**: review the `src/` layout (feature boundaries, shared components, where hooks live), move files if needed, and update the README's Project structure section | Agreed structure documented; no behaviour change |
+| 5.8 | **TODO (after the backend is hosted): production APK workflow** — an EAS Workflow `.eas/workflows/production-build.yml` (manual trigger, or on a version tag) that builds the `production` profile as an installable APK. Before it: host the backend on HTTPS, set `EXPO_PUBLIC_API_URL` for the EAS `production` environment to that URL, and add `"android": { "buildType": "apk" }` to the `production` profile (it builds a Play Store AAB by default). Syntax checked against the current EAS Workflows docs when written. | A production APK installs from the EAS build page and works against the hosted API |
+| 5.9 | **Google sign-in for release builds**: add `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` to the EAS `preview` and `production` environments, and create a Google Cloud Android OAuth client for each release keystore SHA-1 (EAS keystore, plus Google Play app signing if published there) | "Continue with Google" works in the preview APK |
 
 ---
 

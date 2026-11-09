@@ -72,6 +72,7 @@
     "doctor": "expo-doctor"
   },
   "private": true,
+  "license": "MIT",
   "overrides": {
     "openapi-typescript": {
       "typescript": "$typescript"

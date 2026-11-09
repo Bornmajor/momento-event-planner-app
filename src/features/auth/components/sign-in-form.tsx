@@ -12,7 +12,7 @@ import { MIN_TOUCH } from '@/theme/tokens';
 import { applyApiError } from '../form-errors';
 import { signInSchema, type SignInValues } from '../schemas';
 import { useSignIn } from '../use-auth-mutations';
-import { AuthHeader, FooterLink } from './auth-parts';
+import { AuthHeader, FooterLink, SocialSignIn } from './auth-parts';
 
 /** The whole Sign In screen: header and fields scroll; Sign In and the Sign Up link are pinned at the bottom. */
 export function SignInForm() {
@@ -40,6 +40,7 @@ export function SignInForm() {
       actions={
         <>
           <Button label={t('auth.signIn')} onPress={onSubmit} loading={signIn.isPending} />
+          <SocialSignIn />
           <FooterLink prompt={t('auth.noAccount')} action={t('auth.signUp')} onPress={() => router.replace('/sign-up')} />
         </>
       }>
