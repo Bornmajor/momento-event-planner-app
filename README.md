@@ -103,6 +103,35 @@ npm start
 
 Open the Momento app on your phone and connect to the dev server. Press `r` in the terminal to reload.
 
+## Project structure
+
+> A first outline; it will be revised.
+
+```text
+src/
+  app/            Screens and navigation (Expo Router: every file is a route)
+    (auth)/         Welcome, sign in, two-step sign up, password templates
+    (app)/          Signed-in area: tabs (Explore, My Events, Settings), event details, Personalize, Profile
+  features/       Feature logic and components
+    auth/           Session, sign-in/up forms, password strength
+    events/         Search, categories, event cards, date formatting
+    personalize/    AI personalize form, add to calendar
+    saved-events/   My Events, offline save/remove queue, calendar entry ids
+    profile/        Profile form, account deletion
+    settings/       Language preference
+    welcome/        Welcome collage
+  components/     Shared UI (buttons, fields, snackbar, layouts) and form fields
+  api/            API client, endpoints, types generated from the backend's OpenAPI spec
+  lib/            Query cache, calendar, i18n, storage, logger
+  locales/        Translations: en, fr, sw
+  theme/          Colours, typography, theme store
+api/openapi.yaml  Copy of the backend's API spec
+design/           Design references and logo sources
+scripts/          Asset generators (logo, welcome collage)
+```
+
+Tests sit next to the code in `__tests__` folders (outside `src/app`, since every file there becomes a screen).
+
 ## Scripts
 
 | Command | What it does |

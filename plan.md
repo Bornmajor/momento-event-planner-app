@@ -95,6 +95,7 @@ language, light and dark. Batch 3 starts once you approve them (changes go into 
 | 5.4 | **End-to-end on the device** against the API over ngrok: intent.md success criteria 1–8 | All 8 criteria pass |
 | 5.5 | **Independent code review** (`/code-review`), fix findings | Findings fixed or explained |
 | 5.6 | **README**: setup, `.env`, dev build install, scripts, architecture summary, photo credits | A new contributor can run the app from the README |
+| 5.7 | **TODO: revise the project structure**: review the `src/` layout (feature boundaries, shared components, where hooks live), move files if needed, and update the README's Project structure section | Agreed structure documented; no behaviour change |
 
 ---
 
