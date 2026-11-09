@@ -142,6 +142,11 @@ Tests sit next to the code in `__tests__` folders (outside `src/app`, since ever
 | `npm run gen:api` | Regenerate API types after copying the backend's `docs/openapi.yaml` to `api/openapi.yaml` |
 | `npm run doctor` | Check Expo dependencies and config |
 
+## Credits
+
+Welcome screen photos from [Pexels](https://www.pexels.com/), free to use under the
+[Pexels license](https://www.pexels.com/license/). Event data from the Ticketmaster Discovery API.
+
 ## Project docs
 
 [intent.md](intent.md) (what and why) · [spec.md](spec.md) (how) · [plan.md](plan.md) (build plan) ·
