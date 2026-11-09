@@ -51,8 +51,6 @@
   "auth": {
     "signInTitle": "Welcome Back!",
     "signInSubtitle": "Sign in to keep planning the events you love.",
-    "signUpTitle": "Create Account",
-    "signUpSubtitle": "Join Momento and never miss an event moment.",
     "email": "Email",
     "password": "Password",
     "firstName": "First name",
@@ -79,13 +77,38 @@
     "confirmPassword": "Confirm password",
     "resetPassword": "Reset Password",
     "comingSoonBody": "Password reset is coming soon. For now, sign in with your email and password.",
-    "googleUnavailable": "Google sign-in is being set up and will be available soon."
+    "googleUnavailable": "Google sign-in is being set up and will be available soon.",
+    "strength": {
+      "title": "Password strength",
+      "empty": "Longer is stronger. A short phrase of a few words works well.",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "weakTip": "Too easy to guess. Add more words or characters.",
+      "fairTip": "Getting there. A few more characters will make it much harder to guess.",
+      "goodTip": "Good password. Longer still is even better.",
+      "strongTip": "Great, this password is hard to guess."
+    }
   },
   "validation": {
     "email": "Enter a valid email address.",
     "passwordRequired": "Enter your password.",
     "passwordRules": "Your password doesn't meet the rules below.",
     "nameRequired": "This field is required.",
-    "nameTooLong": "Use 50 characters or fewer."
+    "nameTooLong": "Use 50 characters or fewer.",
+    "passwordWeak": "This password is too easy to guess. Try a longer one.",
+    "confirmRequired": "Confirm your password.",
+    "passwordsMatch": "Passwords don't match."
+  },
+  "signUp": {
+    "progress": "Step {{step}} of {{total}}",
+    "detailsTitle": "Tell us about you",
+    "detailsSubtitle": "Start with the basics. You can change them later in your profile.",
+    "passwordTitle": "Create a password",
+    "passwordSubtitle": "Pick something you'll remember but others can't guess.",
+    "continue": "Continue",
+    "createAccount": "Create Account",
+    "welcome": "Welcome to Momento, {{name}}!"
   }
 }

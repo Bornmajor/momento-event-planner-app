@@ -51,8 +51,6 @@
   "auth": {
     "signInTitle": "Karibu Tena!",
     "signInSubtitle": "Ingia ili uendelee kupanga matukio unayoyapenda.",
-    "signUpTitle": "Fungua Akaunti",
-    "signUpSubtitle": "Jiunge na Momento usikose tukio lolote.",
     "email": "Barua pepe",
     "password": "Nenosiri",
     "firstName": "Jina la kwanza",
@@ -79,13 +77,38 @@
     "confirmPassword": "Thibitisha nenosiri",
     "resetPassword": "Badilisha Nenosiri",
     "comingSoonBody": "Kubadilisha nenosiri kunakuja hivi karibuni. Kwa sasa, ingia kwa barua pepe na nenosiri lako.",
-    "googleUnavailable": "Kuingia kwa Google kunaandaliwa na kutapatikana hivi karibuni."
+    "googleUnavailable": "Kuingia kwa Google kunaandaliwa na kutapatikana hivi karibuni.",
+    "strength": {
+      "title": "Uimara wa nenosiri",
+      "empty": "Refu zaidi ni imara zaidi. Kifungu kifupi cha maneno machache kinafaa.",
+      "weak": "Dhaifu",
+      "fair": "Wastani",
+      "good": "Nzuri",
+      "strong": "Imara",
+      "weakTip": "Ni rahisi sana kukisia. Ongeza maneno au herufi zaidi.",
+      "fairTip": "Unakaribia. Herufi chache zaidi zitalifanya kuwa gumu zaidi kukisia.",
+      "goodTip": "Nenosiri zuri. Refu zaidi ni bora zaidi.",
+      "strongTip": "Safi, nenosiri hili ni gumu kukisia."
+    }
   },
   "validation": {
     "email": "Weka barua pepe sahihi.",
     "passwordRequired": "Weka nenosiri lako.",
     "passwordRules": "Nenosiri lako halikidhi masharti yaliyo hapa chini.",
     "nameRequired": "Sehemu hii inahitajika.",
-    "nameTooLong": "Tumia herufi 50 au chache."
+    "nameTooLong": "Tumia herufi 50 au chache.",
+    "passwordWeak": "Nenosiri hili ni rahisi sana kukisia. Jaribu refu zaidi.",
+    "confirmRequired": "Thibitisha nenosiri lako.",
+    "passwordsMatch": "Manenosiri hayalingani."
+  },
+  "signUp": {
+    "progress": "Hatua {{step}} kati ya {{total}}",
+    "detailsTitle": "Tuambie kuhusu wewe",
+    "detailsSubtitle": "Anza na taarifa za msingi. Unaweza kuzibadilisha baadaye kwenye wasifu wako.",
+    "passwordTitle": "Unda nenosiri",
+    "passwordSubtitle": "Chagua kitu utakachokumbuka lakini wengine hawawezi kukisia.",
+    "continue": "Endelea",
+    "createAccount": "Fungua Akaunti",
+    "welcome": "Karibu Momento, {{name}}!"
   }
 }

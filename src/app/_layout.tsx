@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
+import { SnackbarHost } from '@/components/ui';
 import { restoreSession, useSession } from '@/features/auth/session';
 import { syncDeviceLanguage, useLanguageStore } from '@/features/settings/language-store';
 import { persistOptions, queryClient } from '@/lib/query-client';
@@ -80,6 +81,7 @@ function RootNavigator({ cacheRestored }: { cacheRestored: boolean }) {
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
       </Stack>
+      <SnackbarHost />
     </ThemeProvider>
   );
 }

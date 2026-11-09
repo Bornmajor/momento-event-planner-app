@@ -51,8 +51,6 @@
   "auth": {
     "signInTitle": "Bon retour !",
     "signInSubtitle": "Connectez-vous pour continuer à planifier vos événements préférés.",
-    "signUpTitle": "Créer un compte",
-    "signUpSubtitle": "Rejoignez Momento et ne manquez plus aucun moment.",
     "email": "E-mail",
     "password": "Mot de passe",
     "firstName": "Prénom",
@@ -79,13 +77,38 @@
     "confirmPassword": "Confirmer le mot de passe",
     "resetPassword": "Réinitialiser",
     "comingSoonBody": "La réinitialisation du mot de passe arrive bientôt. En attendant, connectez-vous avec votre e-mail et votre mot de passe.",
-    "googleUnavailable": "La connexion avec Google est en cours de configuration et sera bientôt disponible."
+    "googleUnavailable": "La connexion avec Google est en cours de configuration et sera bientôt disponible.",
+    "strength": {
+      "title": "Force du mot de passe",
+      "empty": "Plus il est long, plus il est solide. Une courte phrase de quelques mots fonctionne bien.",
+      "weak": "Faible",
+      "fair": "Moyen",
+      "good": "Bon",
+      "strong": "Fort",
+      "weakTip": "Trop facile à deviner. Ajoutez des mots ou des caractères.",
+      "fairTip": "Presque. Quelques caractères de plus le rendront bien plus difficile à deviner.",
+      "goodTip": "Bon mot de passe. Encore plus long, c'est encore mieux.",
+      "strongTip": "Parfait, ce mot de passe est difficile à deviner."
+    }
   },
   "validation": {
     "email": "Saisissez une adresse e-mail valide.",
     "passwordRequired": "Saisissez votre mot de passe.",
     "passwordRules": "Votre mot de passe ne respecte pas les règles ci-dessous.",
     "nameRequired": "Ce champ est obligatoire.",
-    "nameTooLong": "50 caractères maximum."
+    "nameTooLong": "50 caractères maximum.",
+    "passwordWeak": "Ce mot de passe est trop facile à deviner. Essayez-en un plus long.",
+    "confirmRequired": "Confirmez votre mot de passe.",
+    "passwordsMatch": "Les mots de passe ne correspondent pas."
+  },
+  "signUp": {
+    "progress": "Étape {{step}} sur {{total}}",
+    "detailsTitle": "Parlez-nous de vous",
+    "detailsSubtitle": "Commencez par l'essentiel. Vous pourrez le modifier plus tard dans votre profil.",
+    "passwordTitle": "Créez un mot de passe",
+    "passwordSubtitle": "Choisissez-en un facile à retenir pour vous, mais difficile à deviner.",
+    "continue": "Continuer",
+    "createAccount": "Créer un compte",
+    "welcome": "Bienvenue sur Momento, {{name}} !"
   }
 }

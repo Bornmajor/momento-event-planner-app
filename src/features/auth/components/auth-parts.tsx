@@ -7,7 +7,6 @@ import { AppText, BackButton, Button } from '@/components/ui';
 import { MIN_TOUCH } from '@/theme/tokens';
 import { useTheme } from '@/theme/use-theme';
 
-import { passwordChecks } from '../schemas';
 import { useGoogleSignIn } from '../use-google-sign-in';
 
 /** Back button, optional round icon, centred title and subtitle (auth design). */
@@ -77,34 +76,6 @@ export function FormMessage({ messageKey }: { messageKey: string | null }) {
   );
 }
 
-/** Live checklist of the backend's password rules (8+ characters, a letter, a number). */
-export function PasswordChecklist({ password }: { password: string }) {
-  const { t } = useTranslation();
-  const { colors } = useTheme();
-  const checks = passwordChecks(password);
-  const rules = [
-    { ok: checks.length, label: t('auth.ruleLength') },
-    { ok: checks.letter, label: t('auth.ruleLetter') },
-    { ok: checks.digit, label: t('auth.ruleDigit') },
-  ];
-  return (
-    <View style={{ gap: 6 }} accessibilityLabel={t('auth.passwordRulesTitle')}>
-      {rules.map((rule) => (
-        <View key={rule.label} style={styles.rule} accessibilityState={{ checked: rule.ok }} accessible>
-          <Ionicons
-            name={rule.ok ? 'checkmark-circle' : 'ellipse-outline'}
-            size={18}
-            color={rule.ok ? colors.success : colors.textMuted}
-          />
-          <AppText variant="caption" color={rule.ok ? 'text' : 'textMuted'}>
-            {rule.label}
-          </AppText>
-        </View>
-      ))}
-    </View>
-  );
-}
-
 /** "or continue with" + the Google button. */
 export function SocialSignIn() {
   const { t } = useTranslation();
@@ -146,7 +117,6 @@ const styles = StyleSheet.create({
   bold: { fontWeight: '700' },
   message: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1 },
   flex: { flex: 1 },
-  rule: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   dividerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   line: { flex: 1, height: StyleSheet.hairlineWidth },
 });

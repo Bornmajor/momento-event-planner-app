@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { ComponentProps, ReactNode } from 'react';
 import { ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { useTheme } from '@/theme/use-theme';
@@ -10,20 +10,27 @@ import { useTheme } from '@/theme/use-theme';
 import { AppText } from './app-text';
 import { Button } from './button';
 
-/** Screen container: safe area, themed background, optional scrolling. */
+const ALL_EDGES: Edge[] = ['top', 'right', 'bottom', 'left'];
+
+/**
+ * Screen container: safe area, themed background, optional scrolling. Pass edges without 'top' when a layout above
+ * already handles the notch (e.g. the Sign Up progress header).
+ */
 export function Screen({
   children,
   scroll = false,
   style,
+  edges = ALL_EDGES,
 }: {
   children: ReactNode;
   scroll?: boolean;
   style?: ViewStyle;
+  edges?: Edge[];
 }) {
   const { colors, spacing } = useTheme();
   const content = [{ padding: spacing.xl, gap: spacing.lg }, style];
   return (
-    <SafeAreaView style={[styles.fill, { backgroundColor: colors.background }]}>
+    <SafeAreaView edges={edges} style={[styles.fill, { backgroundColor: colors.background }]}>
       {scroll ? (
         <ScrollView contentContainerStyle={[styles.grow, ...content]} keyboardShouldPersistTaps="handled">
           {children}

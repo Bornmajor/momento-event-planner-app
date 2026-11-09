@@ -15,6 +15,8 @@ const light = {
   text: '#111113',
   textMuted: '#60646C',
   danger: '#D93025',
+  /** Amber, e.g. a "fair" password. Dark enough for text on light backgrounds. */
+  warning: '#B26A00',
   success: '#1E9E62',
   overlay: 'rgba(0,0,0,0.4)',
 };
@@ -30,6 +32,7 @@ const dark: typeof light = {
   text: '#F5F5F7',
   textMuted: '#A1A1AA',
   danger: '#FF6B5E',
+  warning: '#F5B041',
   success: '#3DD68C',
   overlay: 'rgba(0,0,0,0.6)',
 };

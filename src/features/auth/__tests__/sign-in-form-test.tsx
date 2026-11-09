@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
 import { ApiError } from '@/api/errors';
+import { SnackbarHost } from '@/components/ui';
 import '@/lib/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
@@ -22,6 +23,7 @@ async function renderForm() {
   await render(
     <QueryClientProvider client={client}>
       <SignInForm />
+      <SnackbarHost />
     </QueryClientProvider>,
   );
 }
