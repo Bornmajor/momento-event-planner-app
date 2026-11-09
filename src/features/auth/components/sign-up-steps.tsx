@@ -12,7 +12,7 @@ import { applyApiError } from '../form-errors';
 import { detailsSchema, passwordStepSchema, type DetailsValues, type PasswordStepValues } from '../schemas';
 import { useSignUpDraft } from '../sign-up-draft';
 import { useSignUp } from '../use-auth-mutations';
-import { AuthHeader, FooterLink } from './auth-parts';
+import { AuthHeader, FooterLink, SocialSignIn } from './auth-parts';
 import { PasswordStrengthMeter } from './password-strength-meter';
 
 /** Step 1: basic details. Saved to the in-memory draft, then on to the password step. */
@@ -47,6 +47,7 @@ export function DetailsStep() {
       actions={
         <>
           <Button label={t('signUp.continue')} onPress={onContinue} />
+          <SocialSignIn />
           <FooterLink prompt={t('auth.haveAccount')} action={t('auth.signIn')} onPress={() => router.replace('/sign-in')} />
         </>
       }>

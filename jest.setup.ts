@@ -1,5 +1,10 @@
 // Test environment setup. EXPO_PUBLIC_* vars are inlined by Expo at build time; tests need a value.
 process.env.EXPO_PUBLIC_API_URL = 'https://api.test/api/v1';
+process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID = 'web-client.apps.googleusercontent.com';
+
+// Google sign-in is native code; the package ships a Jest mock that signs in as a mock user.
+// Required by file path: the package's "exports" map doesn't expose it.
+require('./node_modules/@react-native-google-signin/google-signin/jest/build/jest/setup');
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),

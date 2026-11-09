@@ -69,7 +69,9 @@
     "confirmPassword": "Confirm password",
     "resetPassword": "Reset Password",
     "comingSoonBody": "Password reset is coming soon. For now, sign in with your email and password.",
-    "googleUnavailable": "Google sign-in is being set up and will be available soon.",
+    "googleFailed": "Google sign-in didn't work. Try again, or sign in with your email.",
+    "googleNoPlayServices": "Google sign-in needs Google Play services on this phone.",
+    "googleEmailTaken": "This email already has a Momento account. Sign in with your email and password.",
     "strength": {
       "title": "Password strength",
       "empty": "Longer is stronger. A short phrase of a few words works well.",

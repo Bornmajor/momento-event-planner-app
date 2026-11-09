@@ -3,11 +3,11 @@ import type { ComponentProps } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { AppText, BackButton, Button } from '@/components/ui';
+import { AppText, BackButton, Button, snackbar } from '@/components/ui';
 import { MIN_TOUCH } from '@/theme/tokens';
 import { useTheme } from '@/theme/use-theme';
 
-import { useGoogleSignIn } from '../use-google-sign-in';
+import { GoogleSignInError, googleSignInEnabled, useGoogleSignIn } from '../use-google-sign-in';
 
 /** Back button, optional round icon, centred title and subtitle (auth design). */
 export function AuthHeader({
@@ -76,13 +76,25 @@ export function FormMessage({ messageKey }: { messageKey: string | null }) {
   );
 }
 
-/** "or continue with" + the Google button. */
+/** "or continue with" + the Google button. Hidden when no Google client ID is configured. */
 export function SocialSignIn() {
   const { t } = useTranslation();
   const { colors, spacing } = useTheme();
   const google = useGoogleSignIn();
+  if (!googleSignInEnabled) return null;
+
+  const onPress = async () => {
+    try {
+      const result = await google.mutateAsync();
+      // Success: the session flips the route guard to the signed-in area.
+      if (result?.isNewUser) snackbar.success(t('signUp.welcome', { name: result.firstName }));
+    } catch (error) {
+      snackbar.error(t(error instanceof GoogleSignInError ? error.messageKey : 'errors.UNKNOWN'));
+    }
+  };
+
   return (
-    <View style={{ gap: spacing.lg }}>
+    <View style={{ gap: spacing.md }}>
       <View style={styles.dividerRow}>
         <View style={[styles.line, { backgroundColor: colors.border }]} />
         <AppText variant="caption" color="textMuted">
@@ -95,9 +107,8 @@ export function SocialSignIn() {
         variant="outline"
         icon="logo-google"
         loading={google.isPending}
-        onPress={google.signIn}
+        onPress={() => void onPress()}
       />
-      <FormMessage messageKey={google.errorKey} />
     </View>
   );
 }

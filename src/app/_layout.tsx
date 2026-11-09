@@ -1,6 +1,7 @@
 import '@/lib/i18n';
 // Registers the offline-capable save mutation before the cache restores queued ones (spec §5.2).
 import '@/features/saved-events/mutations';
+import '@/features/auth/use-google-sign-in'; // registers the Google sign-out on session end
 
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';

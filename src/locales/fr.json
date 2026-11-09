@@ -69,7 +69,9 @@
     "confirmPassword": "Confirmer le mot de passe",
     "resetPassword": "Réinitialiser",
     "comingSoonBody": "La réinitialisation du mot de passe arrive bientôt. En attendant, connectez-vous avec votre e-mail et votre mot de passe.",
-    "googleUnavailable": "La connexion avec Google est en cours de configuration et sera bientôt disponible.",
+    "googleFailed": "La connexion avec Google a échoué. Réessayez ou connectez-vous avec votre e-mail.",
+    "googleNoPlayServices": "La connexion avec Google nécessite les services Google Play sur ce téléphone.",
+    "googleEmailTaken": "Cet e-mail a déjà un compte Momento. Connectez-vous avec votre e-mail et votre mot de passe.",
     "strength": {
       "title": "Force du mot de passe",
       "empty": "Plus il est long, plus il est solide. Une courte phrase de quelques mots fonctionne bien.",
