@@ -111,5 +111,47 @@
     "continue": "Continuer",
     "createAccount": "Créer un compte",
     "welcome": "Bienvenue sur Momento, {{name}} !"
+  },
+  "tabs": {
+    "explore": "Explorer",
+    "myEvents": "Mes événements",
+    "settings": "Paramètres"
+  },
+  "explore": {
+    "hello": "Bonjour",
+    "titleTop": "Prévoyez la suite",
+    "titleLead": "Explorez",
+    "titleEmphasis": "les événements",
+    "search": "Rechercher des événements",
+    "closeSearch": "Fermer la recherche",
+    "searchPlaceholder": "Événements, artistes ou lieux",
+    "all": "Tous",
+    "details": "Détails",
+    "emptyTitle": "Aucun événement trouvé",
+    "emptyFiltered": "Essayez un autre mot-clé ou une autre catégorie.",
+    "emptyAll": "Aucun événement à venir pour le moment. Tirez vers le bas pour actualiser.",
+    "endOfList": "Vous avez tout vu."
+  },
+  "categories": {
+    "music": "Musique",
+    "sports": "Sports",
+    "arts-theatre": "Arts et théâtre",
+    "film": "Cinéma",
+    "miscellaneous": "Autres"
+  },
+  "event": {
+    "tickets": "Obtenir des billets",
+    "notFound": "Cet événement n'est plus disponible.",
+    "noDescription": "Aucune description fournie.",
+    "status": {
+      "cancelled": "Annulé",
+      "postponed": "Reporté",
+      "rescheduled": "Reprogrammé",
+      "offsale": "Vente terminée"
+    }
+  },
+  "myEvents": {
+    "emptyTitle": "Aucun événement enregistré",
+    "emptyBody": "Les événements ajoutés à votre calendrier apparaîtront ici."
   }
 }

@@ -55,3 +55,14 @@ Based on [reference/auth-screens.webp](reference/auth-screens.webp), **without t
 - Build every form with `FormScreen` (`src/components/ui/layout.tsx`) and pass the buttons as `actions`.
 - Onboarding flows (Sign Up): a top bar with the back button, then the segmented progress indicator under it, both
   inside the top safe area.
+
+## Explore (Home)
+
+Based on the "Live Moment / Explore the Events" reference screen, adapted to Momento's pink theme and the original plan
+(native tabs Explore · My Events · Settings, not the reference's floating tab bar):
+
+- Header: initials avatar, "Hello" + full name, round search button (opens a search field under the title).
+- Title on two lines, "Plan What's Next / Explore **the Events**", the emphasis in brand pink.
+- Category pill chips ("All" first); the selected chip is filled with the primary colour.
+- Event cards: title, date and venue, a "Details" pill on the right, and a large rounded image underneath.
+- The Ticketmaster data has no attendee counts, so the reference's "1.2k+ people joined" row is left out.

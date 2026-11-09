@@ -111,5 +111,47 @@
     "continue": "Continue",
     "createAccount": "Create Account",
     "welcome": "Welcome to Momento, {{name}}!"
+  },
+  "tabs": {
+    "explore": "Explore",
+    "myEvents": "My Events",
+    "settings": "Settings"
+  },
+  "explore": {
+    "hello": "Hello",
+    "titleTop": "Plan What's Next",
+    "titleLead": "Explore",
+    "titleEmphasis": "the Events",
+    "search": "Search events",
+    "closeSearch": "Close search",
+    "searchPlaceholder": "Search events, artists or venues",
+    "all": "All",
+    "details": "Details",
+    "emptyTitle": "No events found",
+    "emptyFiltered": "Try another keyword or category.",
+    "emptyAll": "There are no upcoming events right now. Pull down to refresh.",
+    "endOfList": "You've reached the end."
+  },
+  "categories": {
+    "music": "Music",
+    "sports": "Sports",
+    "arts-theatre": "Arts & Theatre",
+    "film": "Film",
+    "miscellaneous": "Other"
+  },
+  "event": {
+    "tickets": "Get Tickets",
+    "notFound": "This event isn't available anymore.",
+    "noDescription": "No description provided.",
+    "status": {
+      "cancelled": "Cancelled",
+      "postponed": "Postponed",
+      "rescheduled": "Rescheduled",
+      "offsale": "Off sale"
+    }
+  },
+  "myEvents": {
+    "emptyTitle": "No saved events yet",
+    "emptyBody": "Events you add to your calendar will show up here."
   }
 }

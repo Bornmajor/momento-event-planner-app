@@ -7,7 +7,7 @@ import '@/lib/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
 jest.mock('@/api/endpoints', () => ({ authApi: { login: jest.fn() } }));
-jest.mock('@/features/auth/session', () => ({ startSession: jest.fn() }));
+jest.mock('@/features/auth/session', () => ({ startSession: jest.fn(), onSessionEnd: jest.fn() }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { authApi } from '@/api/endpoints';

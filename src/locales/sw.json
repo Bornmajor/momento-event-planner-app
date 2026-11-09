@@ -111,5 +111,47 @@
     "continue": "Endelea",
     "createAccount": "Fungua Akaunti",
     "welcome": "Karibu Momento, {{name}}!"
+  },
+  "tabs": {
+    "explore": "Gundua",
+    "myEvents": "Matukio Yangu",
+    "settings": "Mipangilio"
+  },
+  "explore": {
+    "hello": "Habari",
+    "titleTop": "Panga Kinachofuata",
+    "titleLead": "Gundua",
+    "titleEmphasis": "Matukio",
+    "search": "Tafuta matukio",
+    "closeSearch": "Funga utafutaji",
+    "searchPlaceholder": "Tafuta matukio, wasanii au kumbi",
+    "all": "Yote",
+    "details": "Maelezo",
+    "emptyTitle": "Hakuna matukio yaliyopatikana",
+    "emptyFiltered": "Jaribu neno au kundi lingine.",
+    "emptyAll": "Hakuna matukio yajayo kwa sasa. Vuta chini ili kuonyesha upya.",
+    "endOfList": "Umefika mwisho."
+  },
+  "categories": {
+    "music": "Muziki",
+    "sports": "Michezo",
+    "arts-theatre": "Sanaa na Maigizo",
+    "film": "Filamu",
+    "miscellaneous": "Mengineyo"
+  },
+  "event": {
+    "tickets": "Pata Tiketi",
+    "notFound": "Tukio hili halipatikani tena.",
+    "noDescription": "Hakuna maelezo yaliyotolewa.",
+    "status": {
+      "cancelled": "Limeghairiwa",
+      "postponed": "Limeahirishwa",
+      "rescheduled": "Limepangwa upya",
+      "offsale": "Mauzo yamefungwa"
+    }
+  },
+  "myEvents": {
+    "emptyTitle": "Bado hakuna matukio yaliyohifadhiwa",
+    "emptyBody": "Matukio unayoongeza kwenye kalenda yataonekana hapa."
   }
 }

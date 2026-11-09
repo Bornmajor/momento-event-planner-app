@@ -1,5 +1,5 @@
 import { api } from './http';
-import type { components } from './schema';
+import type { components, operations } from './schema';
 
 /** Types generated from the backend's OpenAPI spec (npm run gen:api). */
 type Schemas = components['schemas'];
@@ -15,6 +15,9 @@ export type Category = Schemas['Category'];
 export type SavedEventView = Schemas['SavedEventView'];
 export type PersonalizeRequest = Schemas['PersonalizeRequest'];
 export type PersonalizeResponse = Schemas['PersonalizeResponse'];
+export type CategoryId = Schemas['CategoryId'];
+export type EventSearchParams = NonNullable<operations['searchEvents']['parameters']['query']>;
+export type EventPage = operations['searchEvents']['responses'][200]['content']['application/json'];
 
 export const authApi = {
   register: (body: RegisterRequest) => api.post<AuthResponse>('/auth/register', body, { auth: false }),
@@ -29,4 +32,10 @@ export const meApi = {
   get: () => api.get<{ user: User }>('/me'),
   update: (body: UpdateMeRequest) => api.patch<{ user: User }>('/me', body),
   delete: () => api.delete<void>('/me'),
+};
+
+export const eventsApi = {
+  search: (params: EventSearchParams) => api.get<EventPage>('/events', { query: params }),
+  categories: () => api.get<{ items: Category[] }>('/events/categories'),
+  get: (id: string) => api.get<{ event: Event }>(`/events/${encodeURIComponent(id)}`),
 };
