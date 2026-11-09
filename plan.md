@@ -1,7 +1,7 @@
 # Plan — Momento mobile app (frontend)
 
 > Status: **APPROVED (2026-11-09)**. Phase 3 of the workflow. Implements [spec.md](spec.md) (approved).
-> Progress: Batch 1 in progress (`2-foundation`).
+> Progress: **Batch 1 ✅** (`2-foundation`, awaiting review; dev build pending EAS login).
 
 ## How the work runs
 

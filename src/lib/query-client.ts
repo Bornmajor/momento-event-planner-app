@@ -1,0 +1,68 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { focusManager, onlineManager, QueryClient } from '@tanstack/react-query';
+import type { PersistQueryClientProviderProps } from '@tanstack/react-query-persist-client';
+import { AppState, Platform } from 'react-native';
+
+import { ApiError } from '@/api/errors';
+import { onSessionEnd } from '@/features/auth/session';
+
+const MINUTE = 60_000;
+
+/** Freshness per kind of data (spec §5.1). Use these when defining queries. */
+export const cacheTimes = {
+  categories: { staleTime: Infinity, gcTime: Infinity },
+  events: { staleTime: 2 * MINUTE, gcTime: 10 * MINUTE },
+  event: { staleTime: 10 * MINUTE, gcTime: 30 * MINUTE },
+  me: { staleTime: 5 * MINUTE, gcTime: Infinity },
+  savedEvents: { staleTime: MINUTE, gcTime: 7 * 24 * 60 * MINUTE },
+} as const;
+
+export const queryKeys = {
+  categories: ['categories'] as const,
+  events: (params: object) => ['events', params] as const,
+  event: (id: string) => ['event', id] as const,
+  me: ['me'] as const,
+  savedEvents: ['saved-events'] as const,
+};
+
+/** Retry network and 5xx failures twice; never retry 4xx (they won't succeed on a retry). */
+function shouldRetry(failureCount: number, error: unknown) {
+  if (error instanceof ApiError && error.status < 500) return false;
+  return failureCount < 2;
+}
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: shouldRetry, staleTime: MINUTE },
+    mutations: { retry: false },
+  },
+});
+
+// Refetch when the app returns to the foreground…
+AppState.addEventListener('change', (status) => {
+  if (Platform.OS !== 'web') focusManager.setFocused(status === 'active');
+});
+// …and pause/resume queries and mutations with the connection (offline mode, spec §5.2).
+onlineManager.setEventListener((setOnline) =>
+  NetInfo.addEventListener((state) => setOnline(state.isConnected !== false)),
+);
+
+const persister = createAsyncStoragePersister({ storage: AsyncStorage, key: 'momento.query-cache' });
+
+/** Only My Events (and queued mutations) are kept for offline use (spec §5.2). */
+export const persistOptions: PersistQueryClientProviderProps['persistOptions'] = {
+  persister,
+  maxAge: cacheTimes.savedEvents.gcTime,
+  buster: 'v1', // bump when persisted data shapes change
+  dehydrateOptions: {
+    shouldDehydrateQuery: (query) => query.queryKey[0] === 'saved-events' && query.state.status === 'success',
+  },
+};
+
+// Signing out clears the cache and the persisted copy, so the next user never sees old data.
+onSessionEnd(async () => {
+  queryClient.clear();
+  await persister.removeClient();
+});

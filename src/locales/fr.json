@@ -1,0 +1,47 @@
+{
+  "app": {
+    "name": "Momento",
+    "slogan": "Voir plus loin et planifier la suite"
+  },
+  "common": {
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "ok": "OK",
+    "loading": "Chargement…",
+    "comingSoon": "Bientôt disponible",
+    "offline": "Vous êtes hors ligne",
+    "offlineHint": "Certaines informations peuvent être obsolètes jusqu'à votre reconnexion.",
+    "somethingWrong": "Une erreur s'est produite"
+  },
+  "placeholder": {
+    "signedOut": "L'écran d'accueil arrive dans la prochaine étape.",
+    "signedIn": "Vous êtes connecté. Explorer, Mes événements et Paramètres arrivent bientôt.",
+    "theme": "Thème",
+    "language": "Langue",
+    "system": "Système",
+    "light": "Clair",
+    "dark": "Sombre",
+    "signOut": "Se déconnecter"
+  },
+  "a11y": {
+    "back": "Retour",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "logo": "Logo Momento"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Veuillez vérifier les champs indiqués.",
+    "UNAUTHENTICATED": "Votre session a expiré. Veuillez vous reconnecter.",
+    "INVALID_CREDENTIALS": "E-mail ou mot de passe incorrect.",
+    "NOT_FOUND": "Introuvable.",
+    "EMAIL_TAKEN": "Un compte existe déjà avec cet e-mail.",
+    "SAVED_LIMIT_REACHED": "Vous pouvez enregistrer jusqu'à 100 événements.",
+    "PAYLOAD_TOO_LARGE": "Trop de données à envoyer.",
+    "RATE_LIMITED": "Trop de tentatives. Réessayez dans quelques minutes.",
+    "AI_LIMIT_REACHED": "Vous avez atteint la limite de personnalisation du jour.",
+    "UPSTREAM_UNAVAILABLE": "Le service est occupé. Veuillez réessayer.",
+    "INTERNAL": "Une erreur s'est produite de notre côté.",
+    "NETWORK": "Pas de connexion. Vérifiez votre accès à Internet et réessayez.",
+    "UNKNOWN": "Une erreur s'est produite. Veuillez réessayer."
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "app": {
+    "name": "Momento",
+    "slogan": "Looking ahead and planning what's next"
+  },
+  "common": {
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "loading": "Loading…",
+    "comingSoon": "Coming soon",
+    "offline": "You're offline",
+    "offlineHint": "Some things may be out of date until you reconnect.",
+    "somethingWrong": "Something went wrong"
+  },
+  "placeholder": {
+    "signedOut": "Welcome screen coming in the next batch.",
+    "signedIn": "You're signed in. Explore, My Events and Settings arrive soon.",
+    "theme": "Theme",
+    "language": "Language",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "signOut": "Sign out"
+  },
+  "a11y": {
+    "back": "Go back",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "logo": "Momento logo"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Please check the highlighted fields.",
+    "UNAUTHENTICATED": "Your session has ended. Please sign in again.",
+    "INVALID_CREDENTIALS": "Email or password is incorrect.",
+    "NOT_FOUND": "We couldn't find that.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "SAVED_LIMIT_REACHED": "You can save up to 100 events.",
+    "PAYLOAD_TOO_LARGE": "That's too much data to send.",
+    "RATE_LIMITED": "Too many attempts. Please try again in a few minutes.",
+    "AI_LIMIT_REACHED": "You've reached today's personalization limit.",
+    "UPSTREAM_UNAVAILABLE": "The service is busy. Please try again.",
+    "INTERNAL": "Something went wrong on our side.",
+    "NETWORK": "No connection. Check your internet and try again.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  }
+}

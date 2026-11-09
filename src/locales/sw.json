@@ -1,0 +1,47 @@
+{
+  "app": {
+    "name": "Momento",
+    "slogan": "Kutazama mbele na kupanga kinachofuata"
+  },
+  "common": {
+    "retry": "Jaribu tena",
+    "cancel": "Ghairi",
+    "ok": "Sawa",
+    "loading": "Inapakia…",
+    "comingSoon": "Inakuja hivi karibuni",
+    "offline": "Uko nje ya mtandao",
+    "offlineHint": "Baadhi ya taarifa huenda zimepitwa na wakati hadi utakapounganishwa tena.",
+    "somethingWrong": "Hitilafu imetokea"
+  },
+  "placeholder": {
+    "signedOut": "Skrini ya kukaribisha inakuja katika hatua inayofuata.",
+    "signedIn": "Umeingia. Gundua, Matukio Yangu na Mipangilio vinakuja hivi karibuni.",
+    "theme": "Mandhari",
+    "language": "Lugha",
+    "system": "Mfumo",
+    "light": "Mwanga",
+    "dark": "Giza",
+    "signOut": "Toka"
+  },
+  "a11y": {
+    "back": "Rudi nyuma",
+    "showPassword": "Onyesha nenosiri",
+    "hidePassword": "Ficha nenosiri",
+    "logo": "Nembo ya Momento"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Tafadhali kagua sehemu zilizoonyeshwa.",
+    "UNAUTHENTICATED": "Muda wako wa kuingia umeisha. Tafadhali ingia tena.",
+    "INVALID_CREDENTIALS": "Barua pepe au nenosiri si sahihi.",
+    "NOT_FOUND": "Hatukupata hicho.",
+    "EMAIL_TAKEN": "Tayari kuna akaunti yenye barua pepe hii.",
+    "SAVED_LIMIT_REACHED": "Unaweza kuhifadhi hadi matukio 100.",
+    "PAYLOAD_TOO_LARGE": "Data ni nyingi mno kutuma.",
+    "RATE_LIMITED": "Majaribio mengi mno. Tafadhali jaribu tena baada ya dakika chache.",
+    "AI_LIMIT_REACHED": "Umefikia kikomo cha leo cha kubinafsisha.",
+    "UPSTREAM_UNAVAILABLE": "Huduma ina shughuli nyingi. Tafadhali jaribu tena.",
+    "INTERNAL": "Hitilafu imetokea upande wetu.",
+    "NETWORK": "Hakuna muunganisho. Kagua intaneti yako kisha ujaribu tena.",
+    "UNKNOWN": "Hitilafu imetokea. Tafadhali jaribu tena."
+  }
+}
