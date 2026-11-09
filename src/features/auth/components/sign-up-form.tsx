@@ -17,11 +17,12 @@ export function SignUpForm() {
   const { t } = useTranslation();
   const signUp = useSignUp();
   const [formError, setFormError] = useState<string | null>(null);
-  const refs = {
-    lastName: useRef<TextInputRef>(null),
-    email: useRef<TextInputRef>(null),
-    password: useRef<TextInputRef>(null),
-  };
+  // Each hook call is its own statement: inside an object literal the React Compiler caches them, so they run only
+  // on the first render and the hook order breaks ("Should have a queue").
+  const lastNameRef = useRef<TextInputRef>(null);
+  const emailRef = useRef<TextInputRef>(null);
+  const passwordRef = useRef<TextInputRef>(null);
+  const refs = { lastName: lastNameRef, email: emailRef, password: passwordRef };
 
   const { control, handleSubmit, setError } = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
