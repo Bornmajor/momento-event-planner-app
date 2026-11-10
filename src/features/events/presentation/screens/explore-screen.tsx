@@ -17,6 +17,15 @@ import { toWhen, WhenFilter, type WhenSelection } from '../components/when-filte
 import { useCategories } from '../hooks/use-categories';
 import { useEventSearch } from '../hooks/use-event-search';
 
+// Defined once, outside the screen: the cards are memoized, so the list must hand them the same function and the
+// same separator component on every render, or every visible card re-renders (VirtualizedList "slow to update").
+const openEvent = (id: string) => router.push({ pathname: '/events/[id]', params: { id } });
+
+function Separator() {
+  const { spacing } = useTheme();
+  return <View style={{ height: spacing.lg }} />;
+}
+
 /** Explore (spec §6): greeting, title, search, category chips and the infinite list of upcoming events. */
 export function ExploreScreen() {
   const { t } = useTranslation();
@@ -84,13 +93,14 @@ export function ExploreScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={{ paddingHorizontal: spacing.xl }}>
-            <EventCard
-              event={item}
-              onPress={() => router.push({ pathname: '/events/[id]', params: { id: item.id } })}
-            />
+            <EventCard event={item} onPress={openEvent} />
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={{ height: spacing.lg }} />}
+        ItemSeparatorComponent={Separator}
+        // Cards are tall (~300 dp), so a few per batch fill the screen; fewer rows mounted at once.
+        initialNumToRender={4}
+        maxToRenderPerBatch={4}
+        windowSize={7}
         ListHeaderComponent={header}
         ListHeaderComponentStyle={{ marginBottom: spacing.md }}
         ListEmptyComponent={empty}

@@ -24,8 +24,9 @@ export const SavedEventRow = memo(function SavedEventRow({
 }: {
   saved: SavedEvent;
   inCalendar: boolean;
-  onOpen: () => void;
-  onRemove: () => void;
+  /** Receives the event id (one stable function from the list, so memo can skip unchanged rows). */
+  onOpen: (eventId: string) => void;
+  onRemove: (saved: SavedEvent) => void;
 }) {
   const { t, i18n } = useTranslation();
   const { colors, radii, spacing } = useTheme();
@@ -40,7 +41,7 @@ export const SavedEventRow = memo(function SavedEventRow({
         !event && styles.dimmed,
       ]}>
       <Pressable
-        onPress={event ? onOpen : undefined}
+        onPress={event ? () => onOpen(saved.eventId) : undefined}
         disabled={!event}
         accessibilityRole="button"
         accessibilityLabel={event ? event.title : t('myEvents.unavailable')}
@@ -83,7 +84,7 @@ export const SavedEventRow = memo(function SavedEventRow({
         </View>
       </Pressable>
       <Pressable
-        onPress={onRemove}
+        onPress={() => onRemove(saved)}
         accessibilityRole="button"
         accessibilityLabel={t('myEvents.remove')}
         hitSlop={6}
