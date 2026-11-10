@@ -1,41 +1,38 @@
-import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { personalizeApi, type Event, type EventSummary, type Language, type PersonalizeResponse } from '@/api/endpoints';
-import { ApiError } from '@/core/api/api-error';
-import { failureMessage } from '@/core/failures';
 import { AppText, BackButton, Button, FormScreen, OfflineBanner, snackbar, TextField } from '@/components/ui';
-import { useSession } from '@/features/auth';
-import { formatEventDate, formatVenue } from '@/features/events';
-import { useSaveEvent } from '@/features/saved-events';
+import { openCalendarEntry, openSystemSettings } from '@/core/calendar/device-calendar';
+import { failureMessage } from '@/core/failures';
 import { LANGUAGES } from '@/core/i18n/i18n';
-import { openCalendarEntry, openSystemSettings } from '@/lib/calendar';
 import { logger } from '@/core/logger';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
+import { useSession, type Language } from '@/features/auth';
+import { formatEventDate, formatVenue, type EventView } from '@/features/events';
 
-import { addToCalendar, CalendarPermissionError } from './add-to-calendar';
+import { AiLimitFailure, CalendarPermissionFailure } from '../../domain/failures';
+import type { CalendarFacts } from '../../domain/models/personalization';
+import { useAddToCalendar } from '../hooks/use-add-to-calendar';
+import { usePersonalize } from '../hooks/use-personalize';
 
 /** Reminder choices (spec §6): at start, 15 min, 1 hour, 1 day before. */
 const REMINDERS = [0, 15, 60, 1440] as const;
-
-type EventLike = EventSummary & Partial<Pick<Event, 'description' | 'notes'>>;
 
 /**
  * Personalize + add to calendar (intent §4.4). The original text fills the editable fields; Shorten and/or Translate
  * runs one AI request and replaces them; the user can still edit, then picks a reminder and adds it to the calendar.
  */
-export function PersonalizeForm({ event }: { event: EventLike }) {
+export function PersonalizeForm({ event }: { event: EventView }) {
   const { t, i18n } = useTranslation();
   const { colors, radii, spacing } = useTheme();
   const userId = useSession((s) => s.userId);
-  const saveEvent = useSaveEvent();
+  const addToCalendar = useAddToCalendar();
 
   const originalDescription = event.description || event.notes || '';
-  const originalFacts: PersonalizeResponse['facts'] = {
+  const originalFacts: CalendarFacts = {
     dateTimeText: formatEventDate(event.start, i18n.language),
     venueText: formatVenue(event.venue),
     url: event.url,
@@ -51,25 +48,30 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
   const [reminder, setReminder] = useState<number>(60);
   const [adding, setAdding] = useState(false);
 
-  const personalize = useMutation({
-    /** `textLanguage`: the language the result is written in (the translation target, else the app language). */
-    mutationFn: (_textLanguage: string) =>
-      personalizeApi.run(event.id, { shorten, ...(translate ? { translateTo: language } : {}) }),
-    onSuccess: (result, textLanguage) => {
+  const personalize = usePersonalize(
+    event.id,
+    (result, textLanguage) => {
       setTitle(result.title);
       setDescription(result.description);
       // The backend writes the date in the venue's time zone; show it in the user's, like everywhere else in the app.
       setFacts({ ...result.facts, dateTimeText: formatEventDate(event.start, textLanguage) });
       setFromCache(result.cached);
     },
-    onError: (error) => {
-      if (error instanceof ApiError && error.code === 'AI_LIMIT_REACHED') {
+    (failure) => {
+      if (failure instanceof AiLimitFailure) {
         snackbar.error(t('personalize.limitReached'), { label: t('personalize.useOriginal'), onPress: resetToOriginal });
       } else {
-        snackbar.error(t(failureMessage(error)));
+        snackbar.error(t(failureMessage(failure)));
       }
     },
-  });
+  );
+
+  /** Runs one AI request: shorten and/or translate. The result is written in the target language, else the app's. */
+  const applyAi = () =>
+    personalize.mutate({
+      options: { shorten, ...(translate ? { translateTo: language } : {}) },
+      textLanguage: translate ? language : i18n.language,
+    });
 
   function resetToOriginal() {
     setTitle(event.title);
@@ -82,23 +84,28 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
     if (!userId) return;
     setAdding(true);
     try {
-      const calendarEventId = await addToCalendar({ userId, event, title, description, facts, reminderMinutes: reminder });
-      // Shows in My Events at once; sent now, or queued and sent when back online.
-      saveEvent.mutate({ eventId: event.id, event: { ...event, description: event.description ?? null, notes: event.notes ?? null } });
+      const calendarEventId = await addToCalendar({
+        userId,
+        event: { ...event, description: event.description ?? null, notes: event.notes ?? null },
+        title,
+        description,
+        facts,
+        reminderMinutes: reminder,
+      });
       // The event is usually weeks away; "View" jumps straight to it in the calendar app.
       snackbar.success(t('personalize.added', { date: facts.dateTimeText }), {
         label: t('personalize.view'),
         onPress: () => void openCalendarEntry(calendarEventId),
       });
       router.back();
-    } catch (error) {
-      if (error instanceof CalendarPermissionError) {
+    } catch (failure) {
+      if (failure instanceof CalendarPermissionFailure) {
         snackbar.error(
           t('personalize.permissionNeeded'),
-          error.result === 'blocked' ? { label: t('personalize.openSettings'), onPress: () => void openSystemSettings() } : undefined,
+          failure.result === 'blocked' ? { label: t('personalize.openSettings'), onPress: () => void openSystemSettings() } : undefined,
         );
       } else {
-        logger.error('add to calendar failed', error);
+        logger.error('add to calendar failed', failure);
         snackbar.error(t('personalize.calendarFailed'));
       }
     } finally {
@@ -137,7 +144,7 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
           label={t('personalize.apply')}
           variant="outline"
           icon="sparkles-outline"
-          onPress={() => personalize.mutate(translate ? language : i18n.language)}
+          onPress={applyAi}
           loading={personalize.isPending}
           disabled={!canApply}
         />

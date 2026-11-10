@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { meApi, type UpdateMeRequest } from '@/api/endpoints';
 import { signOut } from '@/features/auth';
 import { useCalendarEntries } from '@/features/saved-events';
-import { deleteCalendarEntry } from '@/lib/calendar';
+import { deleteCalendarEntry } from '@/core/calendar/device-calendar';
 import { queryClient, queryKeys } from '@/core/query/query-client';
 
 const name = z.string().trim().min(1, { message: 'validation.nameRequired' }).max(50, { message: 'validation.nameTooLong' });

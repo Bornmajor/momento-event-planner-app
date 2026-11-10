@@ -1,5 +1,5 @@
 import { useSession } from '@/features/auth';
-import { deleteCalendarEntry } from '@/lib/calendar';
+import { deleteCalendarEntry } from '@/core/calendar/device-calendar';
 
 import { calendarEntries } from '../../data/sources/calendar-entries-local-source';
 import { removeSavedEvent } from '../../domain/use-cases/remove-saved-event';

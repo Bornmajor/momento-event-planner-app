@@ -1,6 +1,6 @@
 jest.mock('@/api/endpoints', () => ({ meApi: { update: jest.fn(), delete: jest.fn() }, savedEventsApi: {} }));
 jest.mock('@/features/auth', () => ({ onSessionEnd: jest.fn(), signOut: jest.fn() }));
-jest.mock('@/lib/calendar', () => ({ deleteCalendarEntry: jest.fn(async () => undefined) }));
+jest.mock('@/core/calendar/device-calendar', () => ({ deleteCalendarEntry: jest.fn(async () => undefined) }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { meApi } from '@/api/endpoints';
@@ -9,7 +9,7 @@ import { signOut } from '@/features/auth';
 // eslint-disable-next-line import/first
 import { useCalendarEntries } from '@/features/saved-events';
 // eslint-disable-next-line import/first
-import { deleteCalendarEntry } from '@/lib/calendar';
+import { deleteCalendarEntry } from '@/core/calendar/device-calendar';
 // eslint-disable-next-line import/first
 import { deleteAccount, profileSchema, toUpdateRequest } from '../account';
 

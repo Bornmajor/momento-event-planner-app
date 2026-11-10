@@ -1,5 +1,3 @@
-import { buildCalendarNotes } from '@/features/personalize/notes';
-
 jest.mock('expo-calendar', () => ({
   requestCalendarPermissions: jest.fn(),
   getCalendars: jest.fn(),
@@ -15,19 +13,13 @@ jest.mock('expo-calendar', () => ({
 // eslint-disable-next-line import/first -- mocks must be registered first
 import * as Calendar from 'expo-calendar';
 // eslint-disable-next-line import/first
-import { entryTiming, getWritableCalendar } from '../calendar';
+import { entryTiming, getWritableCalendar } from '../device-calendar';
 
 const getCalendars = Calendar.getCalendars as jest.Mock;
 const createCalendar = Calendar.createCalendar as jest.Mock;
 
 describe('calendar', () => {
   beforeEach(() => jest.clearAllMocks());
-
-  it('builds notes from the description and the exact facts', () => {
-    expect(
-      buildCalendarNotes('  Jazz night.  ', { dateTimeText: 'Tue 1 Dec · 19:30', venueText: 'Ronnie Scott’s, London', url: 'https://t.co/x' }),
-    ).toBe('Jazz night.\n\n🗓 Tue 1 Dec · 19:30\n📍 Ronnie Scott’s, London\n🎟 https://t.co/x');
-  });
 
   it("picks the Google account's main calendar over phone-only, hidden or read-only ones", async () => {
     const account = { name: 'ada@gmail.com', isLocalAccount: false };

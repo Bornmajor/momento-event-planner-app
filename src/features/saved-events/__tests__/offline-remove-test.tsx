@@ -11,12 +11,12 @@ jest.mock('@/features/auth', () => ({
   onSessionEnd: jest.fn(),
   useSession: (select: (s: { userId: string }) => unknown) => select({ userId: 'u1' }),
 }));
-jest.mock('@/lib/calendar', () => ({ deleteCalendarEntry: jest.fn(async () => undefined) }));
+jest.mock('@/core/calendar/device-calendar', () => ({ deleteCalendarEntry: jest.fn(async () => undefined) }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { savedEventsRemoteSource } from '../data/sources/saved-events-remote-source';
 // eslint-disable-next-line import/first
-import { deleteCalendarEntry } from '@/lib/calendar';
+import { deleteCalendarEntry } from '@/core/calendar/device-calendar';
 // eslint-disable-next-line import/first
 import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first

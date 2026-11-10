@@ -1,7 +1,6 @@
 import * as Calendar from 'expo-calendar';
 import { Linking, Platform } from 'react-native';
 
-import type { EventSummary } from '@/features/events';
 import { BRAND } from '@/core/theme/tokens';
 
 import { logger } from '@/core/logger';
@@ -93,8 +92,16 @@ function createMomentoCalendar() {
   });
 }
 
+/** When an event starts (the same shape as an event's `start`; core doesn't import features). */
+export interface EntryStart {
+  localDate: string;
+  localTime: string | null;
+  dateTime: string | null;
+  timezone: string | null;
+}
+
 export interface CalendarEntryInput {
-  start: EventSummary['start'];
+  start: EntryStart;
   title: string;
   notes: string;
   location: string | null;
@@ -107,7 +114,7 @@ export interface CalendarEntryInput {
  * Start, end and time zone for the entry. With a UTC start it's a timed event in the venue's time zone (2-hour
  * default length); without one (time not announced) it's an all-day event on the local date.
  */
-export function entryTiming(start: EventSummary['start']) {
+export function entryTiming(start: EntryStart) {
   if (start.dateTime) {
     const startDate = new Date(start.dateTime);
     return {
