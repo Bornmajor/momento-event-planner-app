@@ -7,6 +7,9 @@
 
 ## 1. Architecture overview
 
+> **Superseded by §12 (2026-11-10).** The diagram below shows the original layout; the code now uses layered features.
+> See §12 and [docs/architecture.md](docs/architecture.md).
+
 ```
 ┌──────────────────────────── Expo app (SDK 58, React Native 0.88) ─────────────────────────────┐
 │  src/app/ (Expo Router: screens only)                                                          │
@@ -38,11 +41,11 @@
 | Framework | **Expo SDK 58**, React 19.3, React Native 0.88, TypeScript strict, React Compiler (already on) | Existing project |
 | Navigation | **Expo Router** with **`Stack.Protected`** guards; native tabs (`expo-router/native-tabs`) | File-based routes (AGENTS.md). Protected routes are the documented SDK 58 auth pattern. |
 | Server data | **TanStack Query v5** | Caching, loading/error states, infinite scrolling for event lists, retries, refetch on focus, cache updates after mutations |
-| HTTP | **`fetch` wrapper** in `src/api/client.ts`. **No axios.** | ~40 lines cover what axios would add: base URL, Bearer token, ngrok header, JSON handling, a 15 s timeout (`AbortController`), one-at-a-time token refresh, and `ApiError { code, message, details }` for non-2xx responses |
+| HTTP | **`fetch` wrapper** in `src/core/api/http-client.ts`. **No axios.** | ~40 lines cover what axios would add: base URL, Bearer token, ngrok header, JSON handling, a 15 s timeout (`AbortController`), one-at-a-time token refresh, and `ApiError { code, message, details }` for non-2xx responses |
 | Offline | **TanStack Query persistence** (`@tanstack/react-query-persist-client` + the AsyncStorage persister), **saved events only** | My Events opens instantly offline. Save and remove actions done offline are queued and sent when back online. WatermelonDB was considered and rejected (§5.2). |
-| Logging | `src/lib/logger.ts` (no output unless `__DEV__`) + ESLint `no-console` | Release builds print nothing. Tokens and personal data are never logged. |
+| Logging | `src/core/logger.ts` (no output unless `__DEV__`) + ESLint `no-console` | Release builds print nothing. Tokens and personal data are never logged. |
 | CI / CD | **GitHub Actions** (checks on every PR) + **EAS Workflows** (builds) | §9 |
-| API types | **`openapi-typescript`**, generated from the backend's `docs/openapi.yaml` into `src/api/schema.d.ts` | Request and response types can't drift from the backend contract |
+| API types | **`openapi-typescript`**, generated from the backend's `docs/openapi.yaml` into `src/core/api/schema.d.ts` | Request and response types can't drift from the backend contract |
 | Forms | **react-hook-form + zod** | Validation rules mirror the backend (password: 8+ characters, a letter and a digit; names 1–50) |
 | Client state | **Zustand** with persistence to **AsyncStorage** (`@react-native-async-storage/async-storage`) | Small and explicit. Holds the session (access token in memory only), theme and language choice, and the event id → calendar entry id map. |
 | Tokens | **`expo-secure-store`** | Encrypted storage (Android Keystore / iOS Keychain). Works in Expo Go. |
@@ -59,6 +62,9 @@
 All packages are added with `npx expo install` so the versions match SDK 58.
 
 ## 3. Folder structure
+
+> **Superseded by §12.2 (2026-11-10).** Kept for history; the current structure is in §12.2 and
+> [docs/architecture.md](docs/architecture.md).
 
 ```
 src/
@@ -263,7 +269,7 @@ API URL on `APP_VARIANT`.
 
 ### 9.2 Logging in release builds
 
-- All app logging goes through `src/lib/logger.ts`, whose methods do nothing unless `__DEV__` is true. Release builds
+- All app logging goes through `src/core/logger.ts`, whose methods do nothing unless `__DEV__` is true. Release builds
   therefore print nothing from our code.
 - ESLint `no-console` (error) stops stray `console.*` calls; only the logger may use `console`.
 - Never log tokens, passwords or full API responses, even in development.
@@ -361,7 +367,7 @@ src/
                              · schema.d.ts (generated DTO types)
     failures/                app-failure.ts (Network, Unauthenticated, RateLimited, ServerUnavailable, Cancelled,
                              Unknown) · map-api-error.ts (shared codes → failures) · failure-message.ts (→ i18n key)
-    storage/  query/  i18n/  theme/  logger.ts
+    calendar/ (the phone calendar, shared)  storage/  query/  i18n/  theme/  hooks/  logger.ts
   components/                shared UI kit (unchanged)
   features/<feature>/
     data/        sources/*-remote-source.ts · sources/*-local-source.ts · dto/*.dto.ts · mappers/*.mapper.ts

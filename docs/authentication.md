@@ -183,12 +183,15 @@ environment variable (plan task 5.9).
 
 | Part | File |
 |---|---|
-| Session state, start-up restore, refresh, sign-out | `src/features/auth/session.ts` |
-| SecureStore and Remember me | `src/lib/secure-tokens.ts` |
-| Bearer header, shared refresh on `401`, retry | `src/api/client.ts` |
-| Email sign-in and sign-up | `src/features/auth/use-auth-mutations.ts` |
-| Google sign-in | `src/features/auth/use-google-sign-in.ts` |
-| Clearing cached data on sign-out | `src/lib/query-client.ts` |
+| Start-up restore, refresh, sign-out (rules) | `src/features/auth/domain/use-cases/session.ts` |
+| Session state, tokens on the device, sign-out listeners | `src/features/auth/presentation/state/session-store.ts` |
+| Wiring the use cases, connecting refresh to the HTTP client | `src/features/auth/presentation/session-controller.ts` |
+| SecureStore and Remember me | `src/features/auth/data/sources/token-local-source.ts` |
+| `/auth/*` calls; mapping data and errors | `src/features/auth/data/sources/auth-remote-source.ts`, `src/features/auth/data/auth-repository.ts` |
+| Bearer header, shared refresh on `401` | `src/core/api/http-client.ts` |
+| Email sign-in and sign-up | `src/features/auth/domain/use-cases/sign-in.ts`, `sign-up.ts` |
+| Google sign-in | `src/features/auth/domain/use-cases/sign-in-with-google.ts`, `src/features/auth/data/sources/google-account-source.ts` |
+| Clearing cached data on sign-out | `src/core/query/query-client.ts` (`clearQueryCache`) |
 | Route guards | `src/app/_layout.tsx` |
 | Backend tokens (JWT, rotation, reuse detection) | `src/modules/auth/tokens.ts` in the API repo |
 | Backend Google verification | `src/modules/auth/google-verifier.ts` in the API repo |

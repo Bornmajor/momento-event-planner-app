@@ -113,26 +113,18 @@ Open the Momento app on your phone and connect to the dev server. Press `r` in t
 
 ## Project structure
 
-> A first outline; it will be revised.
+Each feature is split into layers: **sources** (API and device) → **repository** (maps data and errors) → **use
+case** (business rules) → **hooks and stores** → **screens**. [docs/architecture.md](docs/architecture.md) explains how
+the layers talk to each other, how errors become messages, and walks through sign-up.
 
 ```text
 src/
-  app/            Screens and navigation (Expo Router: every file is a route)
-    (auth)/         Welcome, sign in, two-step sign up, password templates
-    (app)/          Signed-in area: tabs (Explore, My Events, Settings), event details, Personalize, Profile
-  features/       Feature logic and components
-    auth/           Session, sign-in/up forms, password strength
-    events/         Search, categories, event cards, date formatting
-    personalize/    AI personalize form, add to calendar
-    saved-events/   My Events, offline save/remove queue, calendar entry ids
-    profile/        Profile form, account deletion
-    settings/       Language preference
-    welcome/        Welcome collage
-  components/     Shared UI (buttons, fields, snackbar, layouts) and form fields
-  api/            API client, endpoints, types generated from the backend's OpenAPI spec
-  lib/            Query cache, calendar, i18n, storage, logger
+  app/            Routes (Expo Router); each one re-exports a feature screen
+  core/           Shared infrastructure: HTTP client, failures, query cache, calendar, i18n, theme, storage
+  components/     Shared UI kit and form helpers
+  features/       auth, events, saved-events, personalize, profile, settings, welcome
+    <feature>/      data/ · domain/ · presentation/ · index.ts (public API)
   locales/        Translations: en, fr, sw
-  theme/          Colours, typography, theme store
 api/openapi.yaml  Copy of the backend's API spec
 design/           Design references and logo sources
 scripts/          Asset generators (logo, welcome collage)
@@ -162,4 +154,5 @@ Welcome screen photos from [Pexels](https://www.pexels.com/), free to use under 
 ## Project docs
 
 [intent.md](intent.md) (what and why) · [spec.md](spec.md) (how) · [plan.md](plan.md) (build plan) ·
+[architecture](docs/architecture.md) (layers and errors) · [authentication](docs/authentication.md) (sign-in and tokens) ·
 [design/](design/README.md) (design references)
