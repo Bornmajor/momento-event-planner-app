@@ -19,7 +19,8 @@ const FLAGGED = new Set(['cancelled', 'postponed', 'rescheduled', 'offsale']);
  * Explore event card (reference design): title and details on top with a pill "Details" button, a large rounded
  * image underneath. The whole card opens the event.
  */
-export const EventCard = memo(function EventCard({ event, onPress }: { event: EventSummary; onPress: () => void }) {
+/** `onPress` receives the event id, so the list can pass one stable function and memo can skip unchanged cards. */
+export const EventCard = memo(function EventCard({ event, onPress }: { event: EventSummary; onPress: (eventId: string) => void }) {
   const { t, i18n } = useTranslation();
   const { colors, radii, spacing } = useTheme();
   const venue = formatVenue(event.venue);
@@ -27,7 +28,7 @@ export const EventCard = memo(function EventCard({ event, onPress }: { event: Ev
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => onPress(event.id)}
       accessibilityRole="button"
       accessibilityLabel={[event.title, date, venue].filter(Boolean).join(', ')}
       style={({ pressed }) => [

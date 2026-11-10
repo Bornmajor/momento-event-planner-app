@@ -15,6 +15,14 @@ import { SavedEventRow } from '../components/saved-event-row';
 import { useRemoveEvent } from '../hooks/use-remove-event';
 import { useSavedEvents } from '../hooks/use-saved-events';
 
+// Defined once, outside the screen, so the memoized rows get the same function and separator every render.
+const openEvent = (id: string) => router.push({ pathname: '/events/[id]', params: { id } });
+
+function Separator() {
+  const { spacing } = useTheme();
+  return <View style={{ height: spacing.md }} />;
+}
+
 /**
  * My Events (spec §6): saved events, newest first. Opens offline from the copy kept on the phone, refreshes when
  * online, and removes optimistically (queued while offline).
@@ -80,12 +88,12 @@ export function MyEventsScreen() {
             <SavedEventRow
               saved={item}
               inCalendar={Boolean(calendarIds?.[item.eventId])}
-              onOpen={() => router.push({ pathname: '/events/[id]', params: { id: item.eventId } })}
-              onRemove={() => confirmRemove(item)}
+              onOpen={openEvent}
+              onRemove={confirmRemove}
             />
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={{ height: spacing.md }} />}
+        ItemSeparatorComponent={Separator}
         ListHeaderComponent={header}
         ListEmptyComponent={empty}
         contentContainerStyle={{ paddingBottom: spacing.xxl, flexGrow: 1 }}
