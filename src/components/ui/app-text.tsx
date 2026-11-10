@@ -1,7 +1,7 @@
 import { Text, type TextProps } from 'react-native';
 
-import type { Colors, TypographyVariant } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import type { Colors, TypographyVariant } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 export interface AppTextProps extends TextProps {
   variant?: TypographyVariant;

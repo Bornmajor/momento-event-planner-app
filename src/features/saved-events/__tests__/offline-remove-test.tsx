@@ -2,7 +2,7 @@ import { onlineManager, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 
-import '@/lib/i18n';
+import '@/core/i18n/i18n';
 
 jest.mock('@/api/endpoints', () => ({
   savedEventsApi: { list: jest.fn(), save: jest.fn(), remove: jest.fn() },
@@ -19,7 +19,7 @@ import { savedEventsApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
 import { deleteCalendarEntry } from '@/lib/calendar';
 // eslint-disable-next-line import/first
-import { queryClient, queryKeys } from '@/lib/query-client';
+import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
 import { useCalendarEntries } from '../calendar-entries';
 // eslint-disable-next-line import/first

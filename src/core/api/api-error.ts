@@ -27,13 +27,6 @@ export class RequestCancelledError extends Error {
   }
 }
 
-/** Translation key for an error (`errors.<CODE>`), for showing a message to the user. */
-export function errorMessageKey(error: unknown): string {
-  if (error instanceof ApiError) return `errors.${error.code}`;
-  if (error instanceof NetworkError) return 'errors.NETWORK';
-  return 'errors.UNKNOWN';
-}
-
 /** Field errors from a VALIDATION_ERROR, keyed by field path (for forms). */
 export function fieldErrors(error: unknown): Record<string, string> {
   if (!(error instanceof ApiError) || !Array.isArray(error.details)) return {};

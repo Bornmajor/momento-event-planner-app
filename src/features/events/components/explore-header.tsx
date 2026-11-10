@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui';
 import { useMe } from '@/features/profile/use-me';
-import { fonts, MIN_TOUCH } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { fonts, MIN_TOUCH } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 /**
  * Explore top section (reference design): avatar with "Hello, name" and a round search button, then the big

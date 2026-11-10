@@ -2,9 +2,9 @@ import * as Calendar from 'expo-calendar';
 import { Linking, Platform } from 'react-native';
 
 import type { EventSummary } from '@/api/endpoints';
-import { BRAND } from '@/theme/tokens';
+import { BRAND } from '@/core/theme/tokens';
 
-import { logger } from './logger';
+import { logger } from '@/core/logger';
 
 /**
  * Device calendar helpers (spec §6 "Add to calendar"), on the SDK 58 object API: `getCalendars()` returns

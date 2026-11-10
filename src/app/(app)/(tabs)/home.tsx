@@ -5,15 +5,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import type { CategoryId } from '@/api/endpoints';
-import { errorMessageKey } from '@/api/errors';
+import { failureMessage } from '@/core/failures';
 import { AppText, EmptyState, ErrorState, OfflineBanner, TextField } from '@/components/ui';
 import { CategoryChips } from '@/features/events/components/category-chips';
 import { EventCard } from '@/features/events/components/event-card';
 import { ExploreHeader } from '@/features/events/components/explore-header';
 import { toWhen, WhenFilter, type WhenSelection } from '@/features/events/components/when-filter';
 import { useCategories, useEventSearch } from '@/features/events/use-events';
-import { useDebouncedValue } from '@/lib/use-debounced-value';
-import { useTheme } from '@/theme/use-theme';
+import { useDebouncedValue } from '@/core/hooks/use-debounced-value';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Explore (spec §6): greeting, title, search, category chips and the infinite list of upcoming events. */
 export default function ExploreScreen() {
@@ -60,7 +60,7 @@ export default function ExploreScreen() {
   const empty = search.isPending ? (
     <ActivityIndicator color={colors.brand} style={{ marginTop: spacing.xxxl }} />
   ) : search.isError ? (
-    <ErrorState message={t(errorMessageKey(search.error))} onRetry={() => void search.refetch()} />
+    <ErrorState message={t(failureMessage(search.error))} onRetry={() => void search.refetch()} />
   ) : (
     <EmptyState
       icon="search-outline"

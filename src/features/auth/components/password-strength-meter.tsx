@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui';
 import { SegmentedBar } from '@/components/ui/segmented-bar';
-import type { Colors } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import type { Colors } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { usePasswordStrength, type StrengthScore } from '../password-strength';
 import { passwordChecks } from '../schemas';

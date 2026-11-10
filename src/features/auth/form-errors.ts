@@ -1,6 +1,7 @@
 import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 
-import { ApiError, errorMessageKey } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
+import { failureMessage } from '@/core/failures';
 
 /**
  * Puts an API error where the user will see it: on the matching field when the API names one (validation details,
@@ -28,5 +29,5 @@ export function applyApiError<T extends FieldValues>(
       if (placed) return null;
     }
   }
-  return errorMessageKey(error);
+  return failureMessage(error);
 }

@@ -5,11 +5,11 @@ const expoConfig = require('eslint-config-expo/flat');
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*', 'coverage/*', 'src/api/schema.d.ts'],
+    ignores: ['dist/*', 'coverage/*', 'src/core/api/schema.d.ts'],
   },
   {
     rules: {
-      // Release builds must print nothing; use src/lib/logger.ts (spec §9.2).
+      // Release builds must print nothing; use src/core/logger.ts (spec §9.2).
       'no-console': 'error',
     },
   },

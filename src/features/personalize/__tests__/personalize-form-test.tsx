@@ -1,9 +1,9 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 import { SnackbarHost } from '@/components/ui';
-import '@/lib/i18n';
+import '@/core/i18n/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
 jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, savedEventsApi: { save: jest.fn() }, meApi: { update: jest.fn() } }));
@@ -23,7 +23,7 @@ import { personalizeApi, savedEventsApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
 import { formatEventDate } from '@/features/events/format';
 // eslint-disable-next-line import/first
-import { queryClient } from '@/lib/query-client';
+import { queryClient } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
 import '@/features/saved-events/mutations';
 // eslint-disable-next-line import/first

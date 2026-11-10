@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 
 import { authApi, type AuthResponse } from '@/api/endpoints';
-import { ApiError } from '@/api/errors';
-import { setAuthHooks } from '@/api/http';
-import { logger } from '@/lib/logger';
+import { ApiError } from '@/core/api/api-error';
+import { setAuthHooks } from '@/core/api/http';
+import { logger } from '@/core/logger';
+import { clearQueryCache } from '@/core/query/query-client';
 import * as tokens from '@/lib/secure-tokens';
 
 export type SessionStatus = 'restoring' | 'signedIn' | 'signedOut';
@@ -24,6 +25,9 @@ const sessionEndListeners: Listener[] = [];
 export function onSessionEnd(listener: Listener) {
   sessionEndListeners.push(listener);
 }
+
+// Signing out clears cached server data (core can't import features, so the feature registers it).
+onSessionEnd(clearQueryCache);
 
 async function endSession() {
   await tokens.clearSession();

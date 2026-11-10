@@ -1,8 +1,8 @@
 import { NativeTabs } from 'expo-router/native-tabs';
 import { useTranslation } from 'react-i18next';
 
-import { fonts } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { fonts } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Native tabs (spec §2): Explore · My Events · Settings. Material Symbols on Android, SF Symbols on iOS. */
 export default function TabsLayout() {

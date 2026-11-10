@@ -11,7 +11,7 @@ import { AppText, BackButton, Button, FormScreen, OfflineBanner, snackbar, TextF
 import { applyApiError } from '@/features/auth/form-errors';
 import { profileSchema, useUpdateProfile, type ProfileValues } from '@/features/profile/account';
 import { useMe } from '@/features/profile/use-me';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Profile (spec §6): first name, last name and phone; email shown but not editable. */
 export default function ProfileScreen() {

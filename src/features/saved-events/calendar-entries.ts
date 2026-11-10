@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { zustandStorage } from '@/lib/storage';
+import { zustandStorage } from '@/core/storage/zustand-storage';
 
 /**
  * Which device calendar entry belongs to which saved event, kept on this device only (each phone's calendar has its

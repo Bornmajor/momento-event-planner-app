@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { meApi, savedEventsApi, type Event, type Language, type SavedEventView } from '@/api/endpoints';
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 import { snackbar } from '@/components/ui/snackbar';
-import i18n from '@/lib/i18n';
-import { cacheTimes, queryClient, queryKeys } from '@/lib/query-client';
+import i18n from '@/core/i18n/i18n';
+import { cacheTimes, queryClient, queryKeys } from '@/core/query/query-client';
 
 /**
  * Offline-first saved events (spec §5.2). The list lives in the query cache, which is persisted to the phone, so My

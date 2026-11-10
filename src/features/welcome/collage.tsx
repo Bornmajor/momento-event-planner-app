@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /**
  * Welcome photo collage (design/README.md). The image carries its own soft fade and a transparent background,

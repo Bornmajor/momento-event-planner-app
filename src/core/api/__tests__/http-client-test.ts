@@ -1,5 +1,5 @@
-import { createApiClient, type AuthHooks } from '../client';
-import { ApiError, NetworkError, RequestCancelledError } from '../errors';
+import { createApiClient, type AuthHooks } from '../http-client';
+import { ApiError, NetworkError, RequestCancelledError } from '../api-error';
 
 interface FakeResponse {
   status: number;

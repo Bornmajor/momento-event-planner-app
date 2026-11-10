@@ -3,11 +3,11 @@ import { ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import type { Event, EventSummary } from '@/api/endpoints';
-import { errorMessageKey } from '@/api/errors';
+import { failureMessage } from '@/core/failures';
 import { BackButton, ErrorState, FormScreen } from '@/components/ui';
 import { useEvent } from '@/features/events/use-events';
 import { PersonalizeForm } from '@/features/personalize/personalize-form';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Personalize + add to calendar for one event (spec §6). Waits for the full event so the description is there. */
 export default function PersonalizeScreen() {
@@ -23,7 +23,7 @@ export default function PersonalizeScreen() {
       <FormScreen actions={null}>
         <BackButton />
         {query.isError ? (
-          <ErrorState message={t(errorMessageKey(query.error))} onRetry={() => void query.refetch()} />
+          <ErrorState message={t(failureMessage(query.error))} onRetry={() => void query.refetch()} />
         ) : (
           <ActivityIndicator color={colors.brand} style={{ marginTop: spacing.xxxl }} />
         )}

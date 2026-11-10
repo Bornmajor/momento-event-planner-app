@@ -5,8 +5,7 @@ import { focusManager, onlineManager, QueryClient } from '@tanstack/react-query'
 import type { PersistQueryClientProviderProps } from '@tanstack/react-query-persist-client';
 import { AppState, Platform } from 'react-native';
 
-import { ApiError } from '@/api/errors';
-import { onSessionEnd } from '@/features/auth/session';
+import { ApiError } from '@/core/api/api-error';
 
 const MINUTE = 60_000;
 
@@ -61,8 +60,8 @@ export const persistOptions: PersistQueryClientProviderProps['persistOptions'] =
   },
 };
 
-// Signing out clears the cache and the persisted copy, so the next user never sees old data.
-onSessionEnd(async () => {
+/** Clears the cache and its saved copy on the device, so the next user never sees old data (called on sign-out). */
+export async function clearQueryCache() {
   queryClient.clear();
   await persister.removeClient();
-});
+}

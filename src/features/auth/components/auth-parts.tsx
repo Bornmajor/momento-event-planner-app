@@ -4,8 +4,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { AppText, BackButton, Button, snackbar } from '@/components/ui';
-import { MIN_TOUCH } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { MIN_TOUCH } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { GoogleSignInError, googleSignInEnabled, useGoogleSignIn } from '../use-google-sign-in';
 

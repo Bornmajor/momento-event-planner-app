@@ -5,7 +5,7 @@ import { KeyboardAvoidingView, ScrollView, StyleSheet, View, type ViewStyle } fr
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { AppText } from './app-text';
 import { Button } from './button';

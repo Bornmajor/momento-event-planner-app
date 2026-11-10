@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import i18n, { deviceLanguage, type AppLanguage } from '@/lib/i18n';
-import { zustandStorage } from '@/lib/storage';
+import i18n, { deviceLanguage, type AppLanguage } from '@/core/i18n/i18n';
+import { zustandStorage } from '@/core/storage/zustand-storage';
 
 interface LanguageState {
   /** The user's explicit choice; `null` means "follow the phone's language". */

@@ -1,4 +1,4 @@
-import { ApiError, NetworkError } from '@/api/errors';
+import { ApiError, NetworkError } from '@/core/api/api-error';
 
 jest.mock('@/lib/secure-tokens', () => ({
   getRefreshToken: jest.fn(),

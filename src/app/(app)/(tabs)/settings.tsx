@@ -5,18 +5,18 @@ import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
-import { errorMessageKey } from '@/api/errors';
+import { failureMessage } from '@/core/failures';
 import { AppText, Button, OfflineBanner, SegmentedControl, snackbar } from '@/components/ui';
 import { signOut, useSession } from '@/features/auth/session';
 import { deleteAccount } from '@/features/profile/account';
 import { useMe } from '@/features/profile/use-me';
 import { useUpdateLanguage } from '@/features/saved-events/mutations';
 import { useLanguageStore } from '@/features/settings/language-store';
-import { LANGUAGE_NAMES, LANGUAGES, type AppLanguage } from '@/lib/i18n';
-import { logger } from '@/lib/logger';
-import { MIN_TOUCH } from '@/theme/tokens';
-import { useThemeStore, type ThemePreference } from '@/theme/theme-store';
-import { useTheme } from '@/theme/use-theme';
+import { LANGUAGE_NAMES, LANGUAGES, type AppLanguage } from '@/core/i18n/i18n';
+import { logger } from '@/core/logger';
+import { MIN_TOUCH } from '@/core/theme/tokens';
+import { useThemeStore, type ThemePreference } from '@/core/theme/theme-store';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Settings (spec §6): profile, theme, language (also saved to the account), sign out, delete account. */
 export default function SettingsScreen() {
@@ -55,7 +55,7 @@ export default function SettingsScreen() {
             snackbar.success(t('settings.deleted'));
           } catch (error) {
             logger.warn('delete account failed', error);
-            snackbar.error(t(errorMessageKey(error)));
+            snackbar.error(t(failureMessage(error)));
             setDeleting(false);
           }
         },

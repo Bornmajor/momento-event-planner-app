@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { meApi } from '@/api/endpoints';
-import { cacheTimes, queryKeys } from '@/lib/query-client';
+import { cacheTimes, queryKeys } from '@/core/query/query-client';
 
 /** The signed-in user. Sign in / sign up seed this cache, so it's usually there without a request. */
 export function useMe() {

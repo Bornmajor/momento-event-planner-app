@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { eventsApi, type CategoryId, type EventPage, type EventSearchParams, type EventSummary } from '@/api/endpoints';
 import { findSavedEvent } from '@/features/saved-events/mutations';
-import { cacheTimes, queryClient, queryKeys } from '@/lib/query-client';
+import { cacheTimes, queryClient, queryKeys } from '@/core/query/query-client';
 
 import { nextPageParam, PAGE_SIZE } from './format';
 

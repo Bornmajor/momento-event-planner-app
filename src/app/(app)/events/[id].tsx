@@ -6,13 +6,14 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import type { Event, EventSummary } from '@/api/endpoints';
-import { ApiError, errorMessageKey } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
+import { failureMessage } from '@/core/failures';
 import { AppText, BackButton, Button, EmptyState, ErrorState, FormScreen, OfflineBanner } from '@/components/ui';
 import { formatEventDate, formatVenue, formatVenueTime } from '@/features/events/format';
 import { useEvent } from '@/features/events/use-events';
 import { useSession } from '@/features/auth/session';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Statuses shown as a badge on the image (on sale / unknown show nothing). */
 const FLAGGED = new Set(['cancelled', 'postponed', 'rescheduled', 'offsale']);
@@ -40,7 +41,7 @@ export default function EventDetailsScreen() {
         ) : notFound ? (
           <EmptyState icon="calendar-outline" title={t('event.notFound')} />
         ) : (
-          <ErrorState message={t(errorMessageKey(query.error))} onRetry={() => void query.refetch()} />
+          <ErrorState message={t(failureMessage(query.error))} onRetry={() => void query.refetch()} />
         )}
       </FormScreen>
     );

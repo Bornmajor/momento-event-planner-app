@@ -1,5 +1,5 @@
-import { api } from './http';
-import type { components, operations } from './schema';
+import { api } from '@/core/api/http';
+import type { components, operations } from '@/core/api/schema';
 
 /** Types generated from the backend's OpenAPI spec (npm run gen:api). */
 type Schemas = components['schemas'];

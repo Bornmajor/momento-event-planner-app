@@ -5,14 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import type { SavedEventView } from '@/api/endpoints';
-import { errorMessageKey } from '@/api/errors';
+import { failureMessage } from '@/core/failures';
 import { AppText, EmptyState, ErrorState, OfflineBanner } from '@/components/ui';
 import { useSession } from '@/features/auth/session';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
 import { useSavedEvents } from '@/features/saved-events/mutations';
 import { SavedEventRow } from '@/features/saved-events/saved-event-row';
 import { useRemoveEvent } from '@/features/saved-events/use-remove-event';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /**
  * My Events (spec §6): saved events, newest first. Opens offline from the copy kept on the phone, refreshes when
@@ -64,7 +64,7 @@ export default function MyEventsScreen() {
       <ActivityIndicator color={colors.brand} style={{ marginTop: spacing.xxxl }} />
     )
   ) : saved.isError ? (
-    <ErrorState message={t(errorMessageKey(saved.error))} onRetry={() => void saved.refetch()} />
+    <ErrorState message={t(failureMessage(saved.error))} onRetry={() => void saved.refetch()} />
   ) : (
     <EmptyState icon="bookmark-outline" title={t('myEvents.emptyTitle')} message={t('myEvents.emptyBody')} />
   );

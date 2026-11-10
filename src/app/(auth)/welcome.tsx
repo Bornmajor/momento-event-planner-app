@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AppText, Button, OfflineBanner } from '@/components/ui';
 import { FooterLink } from '@/features/auth/components/auth-parts';
 import { WelcomeCollage } from '@/features/welcome/collage';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 /**
  * First screen after the splash (design/README.md): collage on top, then centred app name, slogan,

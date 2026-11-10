@@ -1,4 +1,4 @@
-import { createApiClient, type AuthHooks } from './client';
+import { createApiClient, type AuthHooks } from './http-client';
 
 /**
  * The app's API client. The session module plugs in how to read and refresh tokens (setAuthHooks), so this file

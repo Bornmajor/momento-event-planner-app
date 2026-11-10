@@ -1,6 +1,6 @@
-import { logger } from '@/lib/logger';
+import { logger } from '@/core/logger';
 
-import { ApiError, NetworkError, RequestCancelledError } from './errors';
+import { ApiError, NetworkError, RequestCancelledError } from './api-error';
 
 export interface AuthHooks {
   /** The current access token, or null (signed out, or restored offline without one yet). */

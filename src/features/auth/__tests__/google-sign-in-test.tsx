@@ -10,15 +10,15 @@ jest.mock('@/features/saved-events/mutations', () => ({ queueLanguageUpdate: jes
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { authApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 // eslint-disable-next-line import/first
 import { startSession } from '@/features/auth/session';
 // eslint-disable-next-line import/first
 import { queueLanguageUpdate } from '@/features/saved-events/mutations';
 // eslint-disable-next-line import/first
-import i18n from '@/lib/i18n';
+import i18n from '@/core/i18n/i18n';
 // eslint-disable-next-line import/first
-import { queryClient, queryKeys } from '@/lib/query-client';
+import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
 import { useGoogleSignIn } from '../use-google-sign-in';
 

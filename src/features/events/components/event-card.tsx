@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { EventSummary } from '@/api/endpoints';
 import { AppText } from '@/components/ui';
-import { MIN_TOUCH } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { MIN_TOUCH } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { formatEventDate, formatVenue, hasStarted } from '../format';
 

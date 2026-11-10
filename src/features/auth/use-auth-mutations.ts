@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 
 import { authApi } from '@/api/endpoints';
 import { queueLanguageUpdate } from '@/features/saved-events/mutations';
-import i18n, { isAppLanguage } from '@/lib/i18n';
-import { queryClient, queryKeys } from '@/lib/query-client';
+import i18n, { isAppLanguage } from '@/core/i18n/i18n';
+import { queryClient, queryKeys } from '@/core/query/query-client';
 
 import type { SignInValues, SignUpValues } from './schemas';
 import { startSession } from './session';

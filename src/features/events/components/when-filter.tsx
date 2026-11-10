@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Checkbox } from '@/components/ui';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 import type { EventWhen } from '../use-events';
 

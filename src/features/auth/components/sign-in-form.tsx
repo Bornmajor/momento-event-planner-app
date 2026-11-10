@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
 import { AppText, Button, Checkbox, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
-import { MIN_TOUCH } from '@/theme/tokens';
+import { MIN_TOUCH } from '@/core/theme/tokens';
 
 import { applyApiError } from '../form-errors';
 import { signInSchema, type SignInValues } from '../schemas';

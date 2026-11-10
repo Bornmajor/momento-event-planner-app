@@ -5,16 +5,17 @@ import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { personalizeApi, type Event, type EventSummary, type Language, type PersonalizeResponse } from '@/api/endpoints';
-import { ApiError, errorMessageKey } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
+import { failureMessage } from '@/core/failures';
 import { AppText, BackButton, Button, FormScreen, OfflineBanner, snackbar, TextField } from '@/components/ui';
 import { useSession } from '@/features/auth/session';
 import { formatEventDate, formatVenue } from '@/features/events/format';
 import { useSaveEvent } from '@/features/saved-events/mutations';
-import { LANGUAGES } from '@/lib/i18n';
+import { LANGUAGES } from '@/core/i18n/i18n';
 import { openCalendarEntry, openSystemSettings } from '@/lib/calendar';
-import { logger } from '@/lib/logger';
-import { MIN_TOUCH } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { logger } from '@/core/logger';
+import { MIN_TOUCH } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { addToCalendar, CalendarPermissionError } from './add-to-calendar';
 
@@ -65,7 +66,7 @@ export function PersonalizeForm({ event }: { event: EventLike }) {
       if (error instanceof ApiError && error.code === 'AI_LIMIT_REACHED') {
         snackbar.error(t('personalize.limitReached'), { label: t('personalize.useOriginal'), onPress: resetToOriginal });
       } else {
-        snackbar.error(t(errorMessageKey(error)));
+        snackbar.error(t(failureMessage(error)));
       }
     },
   });

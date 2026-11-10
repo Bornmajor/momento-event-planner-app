@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { Category, CategoryId } from '@/api/endpoints';
 import { AppText } from '@/components/ui';
-import { MIN_TOUCH } from '@/theme/tokens';
-import { useTheme } from '@/theme/use-theme';
+import { MIN_TOUCH } from '@/core/theme/tokens';
+import { useTheme } from '@/core/theme/use-theme';
 
 /** Horizontal pill chips: "All" first, then the API's categories. The selected chip is filled with the brand colour. */
 export function CategoryChips({

@@ -2,11 +2,12 @@ import { GoogleSignin, isErrorWithCode, isSuccessResponse, statusCodes } from '@
 import { useMutation } from '@tanstack/react-query';
 
 import { authApi } from '@/api/endpoints';
-import { ApiError, errorMessageKey } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
+import { failureMessage } from '@/core/failures';
 import { queueLanguageUpdate } from '@/features/saved-events/mutations';
-import i18n, { isAppLanguage } from '@/lib/i18n';
-import { logger } from '@/lib/logger';
-import { queryClient, queryKeys } from '@/lib/query-client';
+import i18n, { isAppLanguage } from '@/core/i18n/i18n';
+import { logger } from '@/core/logger';
+import { queryClient, queryKeys } from '@/core/query/query-client';
 
 import { onSessionEnd, startSession } from './session';
 
@@ -75,7 +76,7 @@ async function signInWithGoogle(): Promise<GoogleSignInResult> {
   } catch (error) {
     await GoogleSignin.signOut().catch(() => undefined); // let them pick another account next time
     if (error instanceof ApiError && error.code === 'EMAIL_TAKEN') throw new GoogleSignInError('auth.googleEmailTaken');
-    throw new GoogleSignInError(errorMessageKey(error));
+    throw new GoogleSignInError(failureMessage(error));
   }
 
   await startSession(result, true);

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppText, BackButton, SegmentedBar } from '@/components/ui';
 import { useSignUpDraft } from '@/features/auth/sign-up-draft';
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 const STEPS = 2;
 

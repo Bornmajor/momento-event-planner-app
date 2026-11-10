@@ -2,7 +2,7 @@ import { Appearance } from 'react-native';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { zustandStorage } from '@/lib/storage';
+import { zustandStorage } from '@/core/storage/zustand-storage';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 

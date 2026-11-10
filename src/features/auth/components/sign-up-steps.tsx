@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
 import { Button, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
 
