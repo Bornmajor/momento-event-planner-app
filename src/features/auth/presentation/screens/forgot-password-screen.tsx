@@ -2,9 +2,9 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AppText, Button, FormScreen, TextField } from '@/components/ui';
+import { AppText, Button, FooterLink, FormScreen, TextField } from '@/components/ui';
 
-import { AuthHeader, FooterLink } from '../components/auth-parts';
+import { AuthHeader } from '../components/auth-parts';
 
 /** UI template only in Version 1 (intent.md): no API call yet. */
 export function ForgotPasswordScreen() {

@@ -1,12 +1,20 @@
 import { setAuthHooks } from '@/core/api/http';
 import i18n, { isAppLanguage } from '@/core/i18n/i18n';
-import { queueLanguageUpdate } from '@/features/profile/language-mutation';
 
 import { authRepository } from '../data/auth-repository';
 import { googleSignInEnabled } from '../data/sources/google-account-source';
-import type { AuthDeps } from '../domain/ports';
+import type { AuthDeps, Preferences } from '../domain/ports';
 import * as sessionUseCases from '../domain/use-cases/session';
 import { onSessionEnd, sessionGateway, useSession } from './state/session-store';
+
+/** Saving the account language belongs to profile; the root layout connects it (configureAuth), so auth never
+ * imports profile and the two features don't depend on each other. */
+let saveAccountLanguage: Preferences['queueLanguageUpdate'] = () => undefined;
+
+/** Connects what auth needs from other features. Called once by the root layout. */
+export function configureAuth(options: { queueLanguageUpdate: Preferences['queueLanguageUpdate'] }) {
+  saveAccountLanguage = options.queueLanguageUpdate;
+}
 
 /**
  * Wires the auth use cases to their real dependencies (the composition point for this feature) and exposes the
@@ -17,7 +25,7 @@ export const authDeps: AuthDeps = {
   session: sessionGateway,
   preferences: {
     appLanguage: () => (isAppLanguage(i18n.language) ? i18n.language : null),
-    queueLanguageUpdate,
+    queueLanguageUpdate: (language) => saveAccountLanguage(language),
   },
 };
 

@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 import { applyFailure } from '@/components/form/apply-failure';
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
-import { AppText, Button, Checkbox, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
+import { AppText, Button, Checkbox, FooterLink, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 
-import { AuthHeader, FooterLink, SocialSignIn } from '../components/auth-parts';
+import { AuthHeader, SocialSignIn } from '../components/auth-parts';
 import { useSignIn } from '../hooks/use-sign-in';
 import { signInSchema, type SignInValues } from '../schemas';
 

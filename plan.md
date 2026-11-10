@@ -123,7 +123,7 @@ green, and the app behaves the same.
 - [x] 5.7.3 event details screen: `ApiError` `NOT_FOUND` → `EventNotFoundFailure`
 - [x] 5.7.4 saved-events offline queue: save `404` → `EventNotFoundFailure`
 - [x] 5.7.5 personalize form: `AI_LIMIT_REACHED` → `AiLimitFailure`
-- [ ] 5.7.6 replace the remaining deep cross-feature imports with the profile public index: events → `profile/use-me`, auth and settings → `profile/language-mutation` (saved-events ones done in 5.7.4)
+- [x] 5.7.6 replace the remaining deep cross-feature imports with public indexes (auth no longer imports profile: the root layout connects them with `configureAuth`)
 - [ ] 5.7.7 narrow `failureMessage()` and `shouldRetry()` to `AppFailure` only, once nothing passes raw errors
 
 ---

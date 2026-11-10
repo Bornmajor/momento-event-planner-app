@@ -1,7 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { meApi, type Language } from '@/api/endpoints';
 import { queryClient, queryKeys } from '@/core/query/query-client';
+import type { Language } from '@/features/auth';
+
+import { profileRepository } from '../data/profile-repository';
 
 /**
  * The account's language is the default for AI personalization (intent §4.5). Saving it is a mutation that pauses
@@ -11,8 +13,8 @@ import { queryClient, queryKeys } from '@/core/query/query-client';
 export const updateLanguageKey = ['update-language'] as const;
 
 queryClient.setMutationDefaults(updateLanguageKey, {
-  mutationFn: (language: Language) => meApi.update({ language }),
-  onSuccess: (result: unknown) => queryClient.setQueryData(queryKeys.me, (result as { user: unknown }).user),
+  mutationFn: (language: Language) => profileRepository.updateLanguage(language),
+  onSuccess: (user: unknown) => queryClient.setQueryData(queryKeys.me, user),
 });
 
 export function useUpdateLanguage() {

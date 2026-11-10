@@ -1,13 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ComponentProps } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { AppText, BackButton, Button, snackbar } from '@/components/ui';
-import { MIN_TOUCH } from '@/core/theme/tokens';
-import { useTheme } from '@/core/theme/use-theme';
-
 import { failureMessage } from '@/core/failures';
+import { useTheme } from '@/core/theme/use-theme';
 
 import { EmailTakenFailure, GoogleSignInFailure } from '../../domain/failures';
 import { googleSignInEnabled, useGoogleSignIn } from '../hooks/use-google-sign-in';
@@ -50,40 +48,6 @@ export function AuthHeader({
           {subtitle}
         </AppText>
       </View>
-    </View>
-  );
-}
-
-/** "Don't have an account? Sign Up" style footer. */
-export function FooterLink({ prompt, action, onPress }: { prompt: string; action: string; onPress: () => void }) {
-  return (
-    <View style={styles.footer}>
-      <AppText variant="caption" color="textMuted">
-        {prompt}
-      </AppText>
-      <Pressable onPress={onPress} accessibilityRole="link" hitSlop={10} style={styles.footerAction}>
-        <AppText variant="caption" style={styles.bold}>
-          {action}
-        </AppText>
-      </Pressable>
-    </View>
-  );
-}
-
-/** A form-level error (e.g. wrong credentials, offline), announced by screen readers. */
-export function FormMessage({ messageKey }: { messageKey: string | null }) {
-  const { t } = useTranslation();
-  const { colors, radii, spacing } = useTheme();
-  if (!messageKey) return null;
-  return (
-    <View
-      accessibilityRole="alert"
-      accessibilityLiveRegion="polite"
-      style={[styles.message, { borderRadius: radii.md, borderColor: colors.danger, padding: spacing.md }]}>
-      <Ionicons name="alert-circle-outline" size={18} color={colors.danger} />
-      <AppText variant="caption" color="danger" style={styles.flex}>
-        {t(messageKey)}
-      </AppText>
     </View>
   );
 }
@@ -135,11 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4, flexWrap: 'wrap' },
-  footerAction: { minHeight: MIN_TOUCH, justifyContent: 'center' },
-  bold: { fontWeight: '700' },
-  message: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1 },
-  flex: { flex: 1 },
   dividerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   line: { flex: 1, height: StyleSheet.hairlineWidth },
 });

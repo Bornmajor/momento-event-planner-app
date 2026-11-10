@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FormTextField } from '@/components/form/form-fields';
-import { Button, FormScreen, OfflineBanner, type TextInputRef } from '@/components/ui';
+import { Button, FooterLink, FormScreen, OfflineBanner, type TextInputRef } from '@/components/ui';
 
-import { AuthHeader, FooterLink, SocialSignIn } from '../components/auth-parts';
+import { AuthHeader, SocialSignIn } from '../components/auth-parts';
 import { detailsSchema, type DetailsValues } from '../schemas';
 import { useSignUpDraft } from '../state/sign-up-draft-store';
 

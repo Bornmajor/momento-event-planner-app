@@ -7,7 +7,6 @@ jest.mock('@/features/auth/data/sources/auth-remote-source', () => ({ authRemote
 jest.mock('@/features/auth/data/sources/token-local-source', () => ({
   tokenLocalSource: { saveSession: jest.fn(), clearSession: jest.fn(), isRemembered: () => true },
 }));
-jest.mock('@/features/profile/language-mutation', () => ({ queueLanguageUpdate: jest.fn() }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { ApiError } from '@/core/api/api-error';
@@ -16,9 +15,7 @@ import i18n from '@/core/i18n/i18n';
 // eslint-disable-next-line import/first
 import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
-import { queueLanguageUpdate } from '@/features/profile/language-mutation';
-// eslint-disable-next-line import/first
-import { useSession } from '..';
+import { configureAuth, useSession } from '..';
 // eslint-disable-next-line import/first
 import { authRemoteSource } from '../data/sources/auth-remote-source';
 // eslint-disable-next-line import/first
@@ -27,6 +24,10 @@ import { tokenLocalSource } from '../data/sources/token-local-source';
 import { EmailTakenFailure } from '../domain/failures';
 // eslint-disable-next-line import/first
 import { useGoogleSignIn } from '../presentation/hooks/use-google-sign-in';
+
+// What the root layout connects: saving the account language (profile).
+const queueLanguageUpdate = jest.fn();
+configureAuth({ queueLanguageUpdate });
 
 const user = { id: 'u1', email: 'ada@example.com', firstName: 'Ada', lastName: 'L', language: 'en' };
 const wrapper = ({ children }: { children: ReactNode }) => (

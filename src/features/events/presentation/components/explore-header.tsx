@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui';
-import { useMe } from '@/features/profile/use-me';
+import { useMe } from '@/features/profile';
 import { fonts, MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
 
