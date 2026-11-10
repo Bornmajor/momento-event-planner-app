@@ -297,7 +297,7 @@ API URL on `APP_VARIANT`.
 | 6 | Offline support | Included in Version 1, saved events only (§5.2); intent.md §4.6 |
 | 7 | State and data | Zustand for client state, TanStack Query + `fetch` for server data (no axios) |
 | 8 | Build variants | None for now (§9.1). Logging is silent in release builds (§9.2). |
-| 9 | Code organisation | **Proposed (2026-11-10):** layered features, sources → repository → use case (only with rules) → hooks/stores → UI, with `data/`, `domain/` and `presentation/` in each feature and a shared `core/` (§12) |
+| 9 | Code organisation | **Approved (2026-11-10):** layered features, sources → repository → use case (only with rules) → hooks/stores → UI, with `data/`, `domain/` and `presentation/` in each feature and a shared `core/` (§12) |
 
 ## 11. Testing strategy (lean)
 
@@ -312,7 +312,7 @@ API URL on `APP_VARIANT`.
 
 ## 12. Layered feature architecture (task 5.7)
 
-> Status: **PROPOSED (2026-11-10), awaiting approval.** Once approved it replaces §1's diagram and §3's folder
+> Status: **APPROVED (2026-11-10).** It replaces §1's diagram and §3's folder
 > structure. No behaviour changes: it only reorganises the code.
 
 ### 12.1 Flow and rules
