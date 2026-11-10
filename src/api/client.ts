@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 
-import { ApiError, NetworkError } from './errors';
+import { ApiError, NetworkError, RequestCancelledError } from './errors';
 
 export interface AuthHooks {
   /** The current access token, or null (signed out, or restored offline without one yet). */
@@ -25,6 +25,11 @@ export interface RequestOptions {
   query?: Query;
   /** Send the access token (default true). Public endpoints pass false. */
   auth?: boolean;
+  /**
+   * Cancels the request when aborted. TanStack Query passes one to every query and aborts it when the result is no
+   * longer needed (e.g. the search changed while the old search was loading).
+   */
+  signal?: AbortSignal;
 }
 
 function buildUrl(baseUrl: string, path: string, query?: Query) {
@@ -50,7 +55,14 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
     return refreshing;
   }
 
-  async function send(method: string, url: string, body: unknown, token: string | null): Promise<Response> {
+  async function send(
+    method: string,
+    url: string,
+    body: unknown,
+    token: string | null,
+    signal?: AbortSignal,
+  ): Promise<Response> {
+    if (signal?.aborted) throw new RequestCancelledError();
     const headers: Record<string, string> = {
       Accept: 'application/json',
       'ngrok-skip-browser-warning': 'true',
@@ -58,8 +70,11 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (token) headers.Authorization = `Bearer ${token}`;
 
+    // One controller for both reasons to stop: our timeout, or the caller no longer needing the result.
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const cancel = () => controller.abort();
+    signal?.addEventListener('abort', cancel);
     try {
       return await fetchFn(url, {
         method,
@@ -68,9 +83,10 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
         signal: controller.signal,
       });
     } catch {
-      throw new NetworkError();
+      throw signal?.aborted ? new RequestCancelledError() : new NetworkError();
     } finally {
       clearTimeout(timer);
+      signal?.removeEventListener('abort', cancel);
     }
   }
 
@@ -98,11 +114,12 @@ export function createApiClient({ baseUrl, auth, fetchFn = fetch, timeoutMs = 15
 
     const started = Date.now();
     try {
-      let response = await send(method, url, body, useAuth ? auth.getAccessToken() : null);
+      let response = await send(method, url, body, useAuth ? auth.getAccessToken() : null, options.signal);
       if (response.status === 401 && useAuth) {
         logger.debug(`${method} ${path} → 401, refreshing the access token`);
+        // Not cancellable: the refresh is shared with other requests and rotates the refresh token.
         const token = await refreshOnce(); // rejects with ApiError(401) or NetworkError
-        response = await send(method, url, body, token);
+        response = await send(method, url, body, token, options.signal);
       }
       const result = await parse<T>(response);
       logRequest(method, path, started, `${response.status}`);
@@ -129,11 +146,14 @@ export type ApiClient = ReturnType<typeof createApiClient>;
  */
 function logRequest(method: string, path: string, started: number, outcome: string) {
   const line = `${method} ${path} → ${outcome} (${Date.now() - started} ms)`;
-  if (/^2dd$/.test(outcome)) logger.info(line);
+  if (/^2dd$/.test(outcome) || outcome === CANCELLED) logger.info(line);
   else logger.warn(line);
 }
 
+const CANCELLED = 'cancelled (no longer needed)';
+
 function describe(error: unknown): string {
+  if (error instanceof RequestCancelledError) return CANCELLED;
   if (error instanceof ApiError) return `${error.status} ${error.code}`;
   if (error instanceof NetworkError) return 'network error (offline, timeout or wrong URL)';
   return 'failed';
