@@ -6,7 +6,10 @@ import { SnackbarHost } from '@/components/ui';
 import '@/core/i18n/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
-jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, savedEventsApi: { save: jest.fn() }, meApi: { update: jest.fn() } }));
+jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, meApi: { update: jest.fn() } }));
+jest.mock('@/features/saved-events/data/sources/saved-events-remote-source', () => ({
+  savedEventsRemoteSource: { save: jest.fn(), list: jest.fn() },
+}));
 jest.mock('@/features/auth', () => ({
   onSessionEnd: jest.fn(),
   useSession: (select: (s: { userId: string }) => unknown) => select({ userId: 'u1' }),
@@ -19,13 +22,15 @@ jest.mock('@/features/personalize/add-to-calendar', () => ({
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { router } from 'expo-router';
 // eslint-disable-next-line import/first
-import { personalizeApi, savedEventsApi } from '@/api/endpoints';
+import { personalizeApi } from '@/api/endpoints';
+// eslint-disable-next-line import/first
+import { savedEventsRemoteSource } from '@/features/saved-events/data/sources/saved-events-remote-source';
 // eslint-disable-next-line import/first
 import { formatEventDate } from '@/features/events';
 // eslint-disable-next-line import/first
 import { queryClient } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
-import '@/features/saved-events/mutations';
+import '@/features/saved-events/presentation/offline-mutations';
 // eslint-disable-next-line import/first
 import { addToCalendar } from '../add-to-calendar';
 // eslint-disable-next-line import/first
@@ -68,7 +73,7 @@ describe('Personalize', () => {
       facts: { dateTimeText: 'Jumanne, 1 Desemba 19:30', venueText: 'Ronnie Scott’s, London', url: event.url },
       cached: true,
     });
-    (savedEventsApi.save as jest.Mock).mockResolvedValue({});
+    (savedEventsRemoteSource.save as jest.Mock).mockResolvedValue({});
     await renderForm();
 
     await fireEvent.press(screen.getByRole('button', { name: 'Apply with AI' }));
@@ -89,7 +94,7 @@ describe('Personalize', () => {
     const { facts } = (addToCalendar as jest.Mock).mock.calls[0][0];
     expect(facts.dateTimeText).toBe(formatEventDate(event.start, 'en'));
     expect(facts.venueText).toBe('Ronnie Scott’s, London');
-    await waitFor(() => expect(savedEventsApi.save).toHaveBeenCalledWith('E1'));
+    await waitFor(() => expect(savedEventsRemoteSource.save).toHaveBeenCalledWith('E1'));
     expect(router.back).toHaveBeenCalled();
   });
 

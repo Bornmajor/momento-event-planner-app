@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 
 import { zustandStorage } from '@/core/storage/zustand-storage';
 
+import type { CalendarEntries } from '../../domain/ports';
+
 /**
  * Which device calendar entry belongs to which saved event, kept on this device only (each phone's calendar has its
  * own ids). Keyed by user id, so two accounts on one phone never mix (spec §6).
@@ -35,3 +37,9 @@ export const useCalendarEntries = create<CalendarEntriesState>()(
 export function getCalendarEntryId(userId: string | null, eventId: string): string | undefined {
   return userId ? useCalendarEntries.getState().byUser[userId]?.[eventId] : undefined;
 }
+
+/** The calendar-entry links as the use cases see them (domain/ports.ts). */
+export const calendarEntries: CalendarEntries = {
+  find: (userId, eventId) => useCalendarEntries.getState().byUser[userId]?.[eventId],
+  forget: (userId, eventId) => useCalendarEntries.getState().remove(userId, eventId),
+};

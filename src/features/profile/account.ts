@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { meApi, type UpdateMeRequest } from '@/api/endpoints';
 import { signOut } from '@/features/auth';
-import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
+import { useCalendarEntries } from '@/features/saved-events';
 import { deleteCalendarEntry } from '@/lib/calendar';
 import { queryClient, queryKeys } from '@/core/query/query-client';
 

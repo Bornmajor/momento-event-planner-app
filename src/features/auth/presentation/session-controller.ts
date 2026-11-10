@@ -1,6 +1,6 @@
 import { setAuthHooks } from '@/core/api/http';
 import i18n, { isAppLanguage } from '@/core/i18n/i18n';
-import { queueLanguageUpdate } from '@/features/saved-events/mutations';
+import { queueLanguageUpdate } from '@/features/profile/language-mutation';
 
 import { authRepository } from '../data/auth-repository';
 import { googleSignInEnabled } from '../data/sources/google-account-source';

@@ -9,7 +9,7 @@ import { AppText, BackButton, Button, EmptyState, ErrorState, FormScreen, Offlin
 import { failureMessage } from '@/core/failures';
 import { useTheme } from '@/core/theme/use-theme';
 import { useSession } from '@/features/auth';
-import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
+import { useCalendarEntries } from '@/features/saved-events';
 
 import { EventNotFoundFailure } from '../../domain/failures';
 import { formatEventDate, formatVenue, formatVenueTime } from '../format';

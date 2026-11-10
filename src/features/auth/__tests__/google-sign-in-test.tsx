@@ -7,7 +7,7 @@ jest.mock('@/features/auth/data/sources/auth-remote-source', () => ({ authRemote
 jest.mock('@/features/auth/data/sources/token-local-source', () => ({
   tokenLocalSource: { saveSession: jest.fn(), clearSession: jest.fn(), isRemembered: () => true },
 }));
-jest.mock('@/features/saved-events/mutations', () => ({ queueLanguageUpdate: jest.fn() }));
+jest.mock('@/features/profile/language-mutation', () => ({ queueLanguageUpdate: jest.fn() }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { ApiError } from '@/core/api/api-error';
@@ -16,7 +16,7 @@ import i18n from '@/core/i18n/i18n';
 // eslint-disable-next-line import/first
 import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
-import { queueLanguageUpdate } from '@/features/saved-events/mutations';
+import { queueLanguageUpdate } from '@/features/profile/language-mutation';
 // eslint-disable-next-line import/first
 import { useSession } from '..';
 // eslint-disable-next-line import/first

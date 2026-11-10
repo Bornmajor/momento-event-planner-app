@@ -4,9 +4,8 @@ import type { ReactNode } from 'react';
 
 import '@/core/i18n/i18n';
 
-jest.mock('@/api/endpoints', () => ({
-  savedEventsApi: { list: jest.fn(), save: jest.fn(), remove: jest.fn() },
-  meApi: { update: jest.fn() },
+jest.mock('@/features/saved-events/data/sources/saved-events-remote-source', () => ({
+  savedEventsRemoteSource: { list: jest.fn(), save: jest.fn(), remove: jest.fn() },
 }));
 jest.mock('@/features/auth', () => ({
   onSessionEnd: jest.fn(),
@@ -15,17 +14,17 @@ jest.mock('@/features/auth', () => ({
 jest.mock('@/lib/calendar', () => ({ deleteCalendarEntry: jest.fn(async () => undefined) }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
-import { savedEventsApi } from '@/api/endpoints';
+import { savedEventsRemoteSource } from '../data/sources/saved-events-remote-source';
 // eslint-disable-next-line import/first
 import { deleteCalendarEntry } from '@/lib/calendar';
 // eslint-disable-next-line import/first
 import { queryClient, queryKeys } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
-import { useCalendarEntries } from '../calendar-entries';
+import { useCalendarEntries } from '../data/sources/calendar-entries-local-source';
 // eslint-disable-next-line import/first
-import '../mutations';
+import '../presentation/offline-mutations';
 // eslint-disable-next-line import/first
-import { useRemoveEvent } from '../use-remove-event';
+import { useRemoveEvent } from '../presentation/hooks/use-remove-event';
 
 const saved = (eventId: string) => ({ eventId, savedAt: '2026-11-09T10:00:00Z', available: true, event: null });
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -40,8 +39,8 @@ afterEach(() => {
 
 describe('removing a saved event offline', () => {
   it('updates the list and the calendar at once, and sends the removal when back online', async () => {
-    (savedEventsApi.remove as jest.Mock).mockResolvedValue(undefined);
-    (savedEventsApi.list as jest.Mock).mockResolvedValue({ items: [saved('B')], page: 0, size: 50, totalItems: 1 });
+    (savedEventsRemoteSource.remove as jest.Mock).mockResolvedValue(undefined);
+    (savedEventsRemoteSource.list as jest.Mock).mockResolvedValue({ items: [saved('B')], page: 0, size: 50, totalItems: 1 });
     queryClient.setQueryData(queryKeys.savedEvents, [saved('A'), saved('B')]);
     useCalendarEntries.getState().set('u1', 'A', 'cal-A');
 
@@ -53,7 +52,7 @@ describe('removing a saved event offline', () => {
     await waitFor(() => expect(queryClient.getQueryData<{ eventId: string }[]>(queryKeys.savedEvents)?.map((s) => s.eventId)).toEqual(['B']));
     expect(deleteCalendarEntry).toHaveBeenCalledWith('cal-A');
     expect(useCalendarEntries.getState().byUser.u1?.A).toBeUndefined();
-    expect(savedEventsApi.remove).not.toHaveBeenCalled();
+    expect(savedEventsRemoteSource.remove).not.toHaveBeenCalled();
     expect(queryClient.getMutationCache().getAll()[0]?.state.isPaused).toBe(true);
 
     // Back online: the queued removal goes out.
@@ -61,6 +60,6 @@ describe('removing a saved event offline', () => {
       onlineManager.setOnline(true);
       await queryClient.resumePausedMutations();
     });
-    await waitFor(() => expect(savedEventsApi.remove).toHaveBeenCalledWith('A'));
+    await waitFor(() => expect(savedEventsRemoteSource.remove).toHaveBeenCalledWith('A'));
   });
 });

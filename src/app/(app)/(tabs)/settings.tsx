@@ -10,7 +10,7 @@ import { AppText, Button, OfflineBanner, SegmentedControl, snackbar } from '@/co
 import { signOut, useSession } from '@/features/auth';
 import { deleteAccount } from '@/features/profile/account';
 import { useMe } from '@/features/profile/use-me';
-import { useUpdateLanguage } from '@/features/saved-events/mutations';
+import { useUpdateLanguage } from '@/features/profile/language-mutation';
 import { useLanguageStore } from '@/features/settings/language-store';
 import { LANGUAGE_NAMES, LANGUAGES, type AppLanguage } from '@/core/i18n/i18n';
 import { logger } from '@/core/logger';

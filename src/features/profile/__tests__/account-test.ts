@@ -7,7 +7,7 @@ import { meApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
 import { signOut } from '@/features/auth';
 // eslint-disable-next-line import/first
-import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
+import { useCalendarEntries } from '@/features/saved-events';
 // eslint-disable-next-line import/first
 import { deleteCalendarEntry } from '@/lib/calendar';
 // eslint-disable-next-line import/first

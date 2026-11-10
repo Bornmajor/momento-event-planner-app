@@ -1,6 +1,6 @@
 import type { EventSummary, PersonalizeResponse } from '@/api/endpoints';
 import { createCalendarEntry, deleteCalendarEntry, requestCalendarAccess, type PermissionResult } from '@/lib/calendar';
-import { getCalendarEntryId, useCalendarEntries } from '@/features/saved-events/calendar-entries';
+import { getCalendarEntryId, useCalendarEntries } from '@/features/saved-events';
 
 import { buildCalendarNotes } from './notes';
 

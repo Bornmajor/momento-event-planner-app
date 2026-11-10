@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { cacheTimes, queryClient, queryKeys } from '@/core/query/query-client';
-import { findSavedEvent } from '@/features/saved-events/mutations';
+import { findSavedEvent } from '@/features/saved-events';
 
 import { eventsRepository } from '../../data/events-repository';
 import type { EventPage, EventSummary, EventView } from '../../domain/models/event';

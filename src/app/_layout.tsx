@@ -1,6 +1,7 @@
 import '@/core/i18n/i18n';
-// Registers the offline-capable save mutation before the cache restores queued ones (spec §5.2).
-import '@/features/saved-events/mutations';
+// Register the offline-capable mutations before the cache restores queued ones (spec §5.2).
+import '@/features/saved-events/presentation/offline-mutations';
+import '@/features/profile/language-mutation';
 
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';

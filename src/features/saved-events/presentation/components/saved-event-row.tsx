@@ -4,11 +4,13 @@ import { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import type { SavedEventView } from '@/api/endpoints';
 import { AppText } from '@/components/ui';
-import { formatEventDate, formatVenue } from '@/features/events';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
+import { formatEventDate, formatVenue } from '@/features/events';
+
+import type { SavedEvent } from '../../domain/models/saved-event';
+
 
 /**
  * One saved event (My Events): thumbnail, title, date in the user's time zone and venue, plus a remove button.
@@ -20,7 +22,7 @@ export const SavedEventRow = memo(function SavedEventRow({
   onOpen,
   onRemove,
 }: {
-  saved: SavedEventView;
+  saved: SavedEvent;
   inCalendar: boolean;
   onOpen: () => void;
   onRemove: () => void;

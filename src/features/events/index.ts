@@ -11,6 +11,7 @@ export type {
   EventView,
   Venue,
 } from './domain/models/event';
+export { toEvent } from './data/mappers/event.mapper';
 export { EventNotFoundFailure } from './domain/failures';
 export { deviceTimeZone, formatEventDate, formatVenue, formatVenueTime } from './presentation/format';
 export { useEvent } from './presentation/hooks/use-event';
