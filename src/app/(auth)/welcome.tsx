@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { AppText, Button, OfflineBanner } from '@/components/ui';
-import { FooterLink } from '@/features/auth/components/auth-parts';
+import { FooterLink } from '@/features/auth/presentation/components/auth-parts';
 import { WelcomeCollage } from '@/features/welcome/collage';
 import { useTheme } from '@/core/theme/use-theme';
 

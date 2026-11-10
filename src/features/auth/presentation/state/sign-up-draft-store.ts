@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import type { DetailsValues } from './schemas';
+import type { DetailsValues } from '../schemas';
 
 /**
  * Sign Up details carried from step 1 to step 2. Kept in memory only (never persisted) and cleared once the account

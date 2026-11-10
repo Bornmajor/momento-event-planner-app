@@ -11,7 +11,7 @@ import { failureMessage } from '@/core/failures';
 import { AppText, BackButton, Button, EmptyState, ErrorState, FormScreen, OfflineBanner } from '@/components/ui';
 import { formatEventDate, formatVenue, formatVenueTime } from '@/features/events/format';
 import { useEvent } from '@/features/events/use-events';
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
 import { useTheme } from '@/core/theme/use-theme';
 

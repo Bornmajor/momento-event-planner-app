@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { failureMessage } from '@/core/failures';
 import { AppText, Button, OfflineBanner, SegmentedControl, snackbar } from '@/components/ui';
-import { signOut, useSession } from '@/features/auth/session';
+import { signOut, useSession } from '@/features/auth';
 import { deleteAccount } from '@/features/profile/account';
 import { useMe } from '@/features/profile/use-me';
 import { useUpdateLanguage } from '@/features/saved-events/mutations';

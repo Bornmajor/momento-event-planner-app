@@ -5,17 +5,17 @@ import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { applyFailure } from '@/components/form/apply-failure';
 import { FormPasswordField, FormTextField } from '@/components/form/form-fields';
 import { AppText, Button, Checkbox, FormScreen, OfflineBanner, snackbar, type TextInputRef } from '@/components/ui';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 
-import { applyApiError } from '../form-errors';
+import { AuthHeader, FooterLink, SocialSignIn } from '../components/auth-parts';
+import { useSignIn } from '../hooks/use-sign-in';
 import { signInSchema, type SignInValues } from '../schemas';
-import { useSignIn } from '../use-auth-mutations';
-import { AuthHeader, FooterLink, SocialSignIn } from './auth-parts';
 
 /** The whole Sign In screen: header and fields scroll; Sign In and the Sign Up link are pinned at the bottom. */
-export function SignInForm() {
+export function SignInScreen() {
   const { t } = useTranslation();
   const signIn = useSignIn();
   const passwordRef = useRef<TextInputRef>(null);
@@ -30,7 +30,7 @@ export function SignInForm() {
       await signIn.mutateAsync(values);
       // Success: the session flips the route guard to the signed-in area.
     } catch (error) {
-      const messageKey = applyApiError(error, ['email', 'password'], setError);
+      const messageKey = applyFailure(error, ['email', 'password'], setError);
       if (messageKey) snackbar.error(t(messageKey));
     }
   });

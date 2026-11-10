@@ -8,7 +8,7 @@ jest.mock('@/api/endpoints', () => ({
   savedEventsApi: { list: jest.fn(), save: jest.fn(), remove: jest.fn() },
   meApi: { update: jest.fn() },
 }));
-jest.mock('@/features/auth/session', () => ({
+jest.mock('@/features/auth', () => ({
   onSessionEnd: jest.fn(),
   useSession: (select: (s: { userId: string }) => unknown) => select({ userId: 'u1' }),
 }));

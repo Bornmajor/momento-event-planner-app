@@ -6,23 +6,25 @@ import { SnackbarHost } from '@/components/ui';
 import '@/core/i18n/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
-jest.mock('@/api/endpoints', () => ({ authApi: { login: jest.fn() } }));
-jest.mock('@/features/auth/session', () => ({ startSession: jest.fn(), onSessionEnd: jest.fn() }));
+jest.mock('@/features/auth/data/sources/auth-remote-source', () => ({ authRemoteSource: { login: jest.fn() } }));
+jest.mock('@/features/auth/data/sources/token-local-source', () => ({
+  tokenLocalSource: { saveSession: jest.fn(), clearSession: jest.fn(), isRemembered: () => true },
+}));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
-import { authApi } from '@/api/endpoints';
+import { authRemoteSource } from '../data/sources/auth-remote-source';
 // eslint-disable-next-line import/first
-import { startSession } from '@/features/auth/session';
+import { tokenLocalSource } from '../data/sources/token-local-source';
 // eslint-disable-next-line import/first
-import { SignInForm } from '../components/sign-in-form';
+import { SignInScreen } from '../presentation/screens/sign-in-screen';
 
-const login = authApi.login as jest.Mock;
+const login = authRemoteSource.login as jest.Mock;
 
 async function renderForm() {
   const client = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
   await render(
     <QueryClientProvider client={client}>
-      <SignInForm />
+      <SignInScreen />
       <SnackbarHost />
     </QueryClientProvider>,
   );
@@ -51,7 +53,8 @@ describe('SignInForm', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Sign In' }));
 
     await waitFor(() => expect(login).toHaveBeenCalledWith({ email: 'ada@example.com', password: 'Passw0rd!' }));
-    await waitFor(() => expect(startSession).toHaveBeenCalledWith(result, true));
+    // Remembered session: the refresh token is kept on the device.
+    await waitFor(() => expect(tokenLocalSource.saveSession).toHaveBeenCalledWith('r', 'u1', true));
   });
 
   it('shows the translated message when the credentials are wrong', async () => {
@@ -63,6 +66,6 @@ describe('SignInForm', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Sign In' }));
 
     expect(await screen.findByText('Email or password is incorrect.')).toBeOnTheScreen();
-    expect(startSession).not.toHaveBeenCalled();
+    expect(tokenLocalSource.saveSession).not.toHaveBeenCalled();
   });
 });

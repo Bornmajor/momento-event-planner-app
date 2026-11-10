@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import type { User } from '@/api/endpoints';
 import { FormTextField } from '@/components/form/form-fields';
 import { AppText, BackButton, Button, FormScreen, OfflineBanner, snackbar, TextField, type TextInputRef } from '@/components/ui';
-import { applyApiError } from '@/features/auth/form-errors';
+import { applyFailure } from '@/components/form/apply-failure';
 import { profileSchema, useUpdateProfile, type ProfileValues } from '@/features/profile/account';
 import { useMe } from '@/features/profile/use-me';
 import { useTheme } from '@/core/theme/use-theme';
@@ -47,7 +47,7 @@ function ProfileForm({ user }: { user: User }) {
       snackbar.success(t('profile.saved'));
       router.back();
     } catch (error) {
-      const messageKey = applyApiError(error, ['firstName', 'lastName', 'phone'], setError);
+      const messageKey = applyFailure(error, ['firstName', 'lastName', 'phone'], setError);
       if (messageKey) snackbar.error(t(messageKey));
     }
   });

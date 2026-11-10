@@ -48,3 +48,6 @@ export async function clearSession() {
   await SecureStore.deleteItemAsync(REFRESH_KEY);
   await SecureStore.deleteItemAsync(USER_KEY);
 }
+
+/** The device's session storage, as one object for the session gateway (and easy to mock in tests). */
+export const tokenLocalSource = { isRemembered, saveSession, saveRefreshToken, getRefreshToken, getUserId, clearSession };

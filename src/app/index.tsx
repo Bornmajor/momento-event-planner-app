@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router';
 
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 
 /**
  * The app's start URL ("/"). Not behind a guard, so it always resolves: signed-out users go to the welcome screen,

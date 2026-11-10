@@ -1,7 +1,6 @@
 import '@/core/i18n/i18n';
 // Registers the offline-capable save mutation before the cache restores queued ones (spec §5.2).
 import '@/features/saved-events/mutations';
-import '@/features/auth/use-google-sign-in'; // registers the Google sign-out on session end
 
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
@@ -11,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { SnackbarHost } from '@/components/ui';
-import { restoreSession, useSession } from '@/features/auth/session';
+import { restoreSession, useSession } from '@/features/auth';
 import { syncDeviceLanguage, useLanguageStore } from '@/features/settings/language-store';
 import { persistOptions, queryClient } from '@/core/query/query-client';
 import { useThemeStore } from '@/core/theme/theme-store';

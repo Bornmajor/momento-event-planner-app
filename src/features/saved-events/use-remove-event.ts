@@ -1,4 +1,4 @@
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 import { deleteCalendarEntry } from '@/lib/calendar';
 
 import { getCalendarEntryId, useCalendarEntries } from './calendar-entries';

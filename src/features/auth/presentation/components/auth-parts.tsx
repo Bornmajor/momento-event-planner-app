@@ -7,7 +7,19 @@ import { AppText, BackButton, Button, snackbar } from '@/components/ui';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
 
-import { GoogleSignInError, googleSignInEnabled, useGoogleSignIn } from '../use-google-sign-in';
+import { failureMessage } from '@/core/failures';
+
+import { EmailTakenFailure, GoogleSignInFailure } from '../../domain/failures';
+import { googleSignInEnabled, useGoogleSignIn } from '../hooks/use-google-sign-in';
+
+/** Google sign-in failures in Google's own words; anything else uses the shared messages. */
+function googleFailureMessage(failure: unknown): string {
+  if (failure instanceof GoogleSignInFailure) {
+    return failure.reason === 'noPlayServices' ? 'auth.googleNoPlayServices' : 'auth.googleFailed';
+  }
+  if (failure instanceof EmailTakenFailure) return 'auth.googleEmailTaken';
+  return failureMessage(failure);
+}
 
 /** Back button, optional round icon, centred title and subtitle (auth design). */
 export function AuthHeader({
@@ -87,9 +99,9 @@ export function SocialSignIn() {
     try {
       const result = await google.mutateAsync();
       // Success: the session flips the route guard to the signed-in area.
-      if (result?.isNewUser) snackbar.success(t('signUp.welcome', { name: result.firstName }));
-    } catch (error) {
-      snackbar.error(t(error instanceof GoogleSignInError ? error.messageKey : 'errors.UNKNOWN'));
+      if (result?.isNewUser) snackbar.success(t('signUp.welcome', { name: result.user.firstName }));
+    } catch (failure) {
+      snackbar.error(t(googleFailureMessage(failure)));
     }
   };
 

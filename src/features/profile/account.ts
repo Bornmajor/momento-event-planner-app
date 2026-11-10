@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { meApi, type UpdateMeRequest } from '@/api/endpoints';
-import { signOut } from '@/features/auth/session';
+import { signOut } from '@/features/auth';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
 import { deleteCalendarEntry } from '@/lib/calendar';
 import { queryClient, queryKeys } from '@/core/query/query-client';

@@ -340,8 +340,12 @@ remote / local source  →  repository  →  use case (only with real rules)  �
 
 **Dependency rules:**
 - `presentation → domain ← data`: `domain/` imports nothing from `data/`, `presentation/`, React or TanStack.
-- Features import other features **only through their `domain/`** (for example `Event` from `events/domain`), never
-  through their `data/` or `presentation/`. This is enforced with an ESLint `no-restricted-imports` rule.
+- Features import other features **only through their public `index.ts`** (for example `useSession`, `signOut` and
+  `User` from `@/features/auth`), never through their `data/` or `presentation/` internals. Route files in `src/app`
+  may import a feature's screens directly. This is enforced with an ESLint `no-restricted-imports` rule.
+- **Use cases receive their dependencies as an argument** (`signUp(input, deps)`): the interfaces (ports) are
+  declared in `domain/ports.ts`, the data layer implements the repositories, presentation implements session state,
+  and `presentation/session-controller.ts` wires them together.
 - Domain models stay **JSON-safe**: dates are ISO strings, not `Date`, because the saved-events cache is persisted as
   JSON.
 - **No DI container or `*Impl` classes:** a repository is a typed object (`export const authRepository:

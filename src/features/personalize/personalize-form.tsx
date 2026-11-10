@@ -8,7 +8,7 @@ import { personalizeApi, type Event, type EventSummary, type Language, type Pers
 import { ApiError } from '@/core/api/api-error';
 import { failureMessage } from '@/core/failures';
 import { AppText, BackButton, Button, FormScreen, OfflineBanner, snackbar, TextField } from '@/components/ui';
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 import { formatEventDate, formatVenue } from '@/features/events/format';
 import { useSaveEvent } from '@/features/saved-events/mutations';
 import { LANGUAGES } from '@/core/i18n/i18n';

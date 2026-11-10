@@ -4,10 +4,6 @@ import type { components, operations } from '@/core/api/schema';
 /** Types generated from the backend's OpenAPI spec (npm run gen:api). */
 type Schemas = components['schemas'];
 export type User = Schemas['User'];
-export type AuthResponse = Schemas['AuthResponse'];
-export type TokenPair = Schemas['TokenPair'];
-export type RegisterRequest = Schemas['RegisterRequest'];
-export type LoginRequest = Schemas['LoginRequest'];
 export type UpdateMeRequest = Schemas['UpdateMeRequest'];
 export type Event = Schemas['Event'];
 export type EventSummary = Schemas['EventSummary'];
@@ -19,15 +15,6 @@ export type CategoryId = Schemas['CategoryId'];
 export type Language = Schemas['Language'];
 export type EventSearchParams = NonNullable<operations['searchEvents']['parameters']['query']>;
 export type EventPage = operations['searchEvents']['responses'][200]['content']['application/json'];
-
-export const authApi = {
-  register: (body: RegisterRequest) => api.post<AuthResponse>('/auth/register', body, { auth: false }),
-  login: (body: LoginRequest) => api.post<AuthResponse>('/auth/login', body, { auth: false }),
-  google: (idToken: string) =>
-    api.post<AuthResponse & { isNewUser: boolean }>('/auth/google', { idToken }, { auth: false }),
-  refresh: (refreshToken: string) => api.post<TokenPair>('/auth/refresh', { refreshToken }, { auth: false }),
-  logout: (refreshToken: string) => api.post<void>('/auth/logout', { refreshToken }, { auth: false }),
-};
 
 export const meApi = {
   get: () => api.get<{ user: User }>('/me'),

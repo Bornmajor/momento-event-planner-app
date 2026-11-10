@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { SavedEventView } from '@/api/endpoints';
 import { failureMessage } from '@/core/failures';
 import { AppText, EmptyState, ErrorState, OfflineBanner } from '@/components/ui';
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 import { useCalendarEntries } from '@/features/saved-events/calendar-entries';
 import { useSavedEvents } from '@/features/saved-events/mutations';
 import { SavedEventRow } from '@/features/saved-events/saved-event-row';

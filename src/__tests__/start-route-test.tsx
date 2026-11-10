@@ -2,11 +2,11 @@ import { Stack } from 'expo-router';
 import { renderRouter, screen } from 'expo-router/testing-library';
 import { Text } from 'react-native';
 
-import { useSession } from '@/features/auth/session';
+import { useSession } from '@/features/auth';
 
 import Index from '@/app/index';
 
-jest.mock('@/features/auth/session', () => {
+jest.mock('@/features/auth', () => {
   const { create } = jest.requireActual('zustand');
   return { useSession: create(() => ({ status: 'restoring', accessToken: null, userId: null })) };
 });
