@@ -7,7 +7,7 @@ import { useTheme } from '@/core/theme/use-theme';
  * Welcome photo collage (design/README.md). The image carries its own soft fade and a transparent background,
  * so it sits on the light and dark theme backgrounds alike.
  */
-const COLLAGE = require('../../../assets/images/welcome-collage.png');
+const COLLAGE = require('@/assets/images/welcome-collage.png');
 
 /**
  * Soft fade over the bottom of the collage (reference design): tall but gentle, so the bottom photos stay mostly
