@@ -5,7 +5,7 @@ import { focusManager, onlineManager, QueryClient } from '@tanstack/react-query'
 import type { PersistQueryClientProviderProps } from '@tanstack/react-query-persist-client';
 import { AppState, Platform } from 'react-native';
 
-import { mapApiError, NetworkFailure, ServerUnavailableFailure } from '@/core/failures';
+import { asFailure, NetworkFailure, ServerUnavailableFailure } from '@/core/failures';
 
 const MINUTE = 60_000;
 
@@ -28,11 +28,10 @@ export const queryKeys = {
 
 /**
  * Retry twice only when trying again can help: no connection or a server-side problem. Everything else (rejected
- * input, not found, rate limited, signed out, cancelled) won't succeed on a retry. Accepts domain failures and,
- * until every feature has a repository, raw API errors.
+ * input, not found, rate limited, signed out, cancelled) won't succeed on a retry.
  */
 export function shouldRetry(failureCount: number, error: unknown) {
-  const failure = mapApiError(error);
+  const failure = asFailure(error);
   const transient = failure instanceof NetworkFailure || failure instanceof ServerUnavailableFailure;
   return transient && failureCount < 2;
 }

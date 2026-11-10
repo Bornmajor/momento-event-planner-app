@@ -124,7 +124,7 @@ green, and the app behaves the same.
 - [x] 5.7.4 saved-events offline queue: save `404` → `EventNotFoundFailure`
 - [x] 5.7.5 personalize form: `AI_LIMIT_REACHED` → `AiLimitFailure`
 - [x] 5.7.6 replace the remaining deep cross-feature imports with public indexes (auth no longer imports profile: the root layout connects them with `configureAuth`)
-- [ ] 5.7.7 narrow `failureMessage()` and `shouldRetry()` to `AppFailure` only, once nothing passes raw errors
+- [x] 5.7.7 narrow `failureMessage()`, `shouldRetry()` and `applyFailure()` to failures only (`asFailure`: anything that is not a failure is `UnknownFailure`)
 
 ---
 
