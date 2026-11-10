@@ -115,6 +115,16 @@ green, and the app behaves the same.
 | 5.7.6 | **Profile, settings, welcome**: profile repository and use case `delete-account`; settings and welcome become presentation only | Account test still passes |
 | 5.7.7 | **Guard rails and docs**: ESLint `no-restricted-imports` for the dependency rules (spec §12.1); remove the old `api/`, `lib/` and flat feature files; update the README's Project structure, `docs/authentication.md` file paths, and spec §1/§3 | Lint fails on a cross-layer import; docs match the code |
 
+**Raw-error checks to switch to failures** (each when its feature gets a repository):
+
+- [ ] 5.7.2 `session.ts`: `ApiError` status `401` → `UnauthenticatedFailure` (refresh and restore)
+- [ ] 5.7.2 `form-errors.ts` and sign-up step 2: `EMAIL_TAKEN` / `VALIDATION_ERROR` → `EmailTakenFailure` / `ValidationFailure`
+- [ ] 5.7.2 `use-google-sign-in.ts`: `ApiError` `EMAIL_TAKEN` → `EmailTakenFailure`
+- [ ] 5.7.3 event details screen: `ApiError` `NOT_FOUND` → `EventNotFoundFailure`
+- [ ] 5.7.4 saved-events offline queue: save `404` → `EventNotFoundFailure`
+- [ ] 5.7.5 personalize form: `AI_LIMIT_REACHED` → `AiLimitFailure`
+- [ ] 5.7.7 narrow `failureMessage()` and `shouldRetry()` to `AppFailure` only, once nothing passes raw errors
+
 ---
 
 ## Dependencies between batches

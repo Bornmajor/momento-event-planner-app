@@ -7,11 +7,19 @@
  */
 export abstract class AppFailure extends Error {
   abstract readonly code: string;
+
+  constructor(message?: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = new.target.name; // "NetworkFailure: …" in logs instead of "Error: …"
+  }
 }
 
 /** No connection, DNS failure or timeout. */
 export class NetworkFailure extends AppFailure {
   readonly code = 'NETWORK';
+  constructor() {
+    super('NETWORK');
+  }
 }
 
 /** The server or a service behind it isn't working (`code`: SERVER_UNREACHABLE, UPSTREAM_UNAVAILABLE or INTERNAL). */

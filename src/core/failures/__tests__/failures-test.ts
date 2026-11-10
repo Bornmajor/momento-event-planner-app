@@ -1,5 +1,6 @@
 import { ApiError, NetworkError, RequestCancelledError } from '@/core/api/api-error';
 import '@/core/i18n/i18n';
+import { shouldRetry } from '@/core/query/query-client';
 
 import {
   CancelledFailure,
@@ -35,5 +36,19 @@ describe('failures', () => {
     expect(failureMessage(new ServerUnavailableFailure('INTERNAL'))).toBe('errors.INTERNAL');
     expect(failureMessage(new ApiError(403, 'FORBIDDEN', 'no'))).toBe('errors.UNKNOWN'); // no message for it
     expect(failureMessage(new Error('?'))).toBe('errors.UNKNOWN');
+  });
+
+  it('retries only when trying again can help (no connection, server problem), at most twice', () => {
+    expect(shouldRetry(0, new NetworkFailure())).toBe(true);
+    expect(shouldRetry(1, new ApiError(502, 'UPSTREAM_UNAVAILABLE', 'down'))).toBe(true);
+    expect(shouldRetry(2, new NetworkError())).toBe(false); // already retried twice
+    expect(shouldRetry(0, new RejectedFailure('NOT_FOUND'))).toBe(false);
+    expect(shouldRetry(0, new ApiError(429, 'RATE_LIMITED', 'slow down'))).toBe(false);
+    expect(shouldRetry(0, new CancelledFailure())).toBe(false);
+  });
+
+  it('names failures after their class, for readable logs', () => {
+    expect(new NetworkFailure().name).toBe('NetworkFailure');
+    expect(String(new RejectedFailure('NOT_FOUND'))).toBe('RejectedFailure: NOT_FOUND');
   });
 });
