@@ -21,7 +21,7 @@ import { router } from 'expo-router';
 // eslint-disable-next-line import/first
 import { personalizeApi, savedEventsApi } from '@/api/endpoints';
 // eslint-disable-next-line import/first
-import { formatEventDate } from '@/features/events/format';
+import { formatEventDate } from '@/features/events';
 // eslint-disable-next-line import/first
 import { queryClient } from '@/core/query/query-client';
 // eslint-disable-next-line import/first

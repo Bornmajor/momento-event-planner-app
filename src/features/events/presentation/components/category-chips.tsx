@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import type { Category, CategoryId } from '@/api/endpoints';
+import type { Category, CategoryId } from '../../domain/models/event';
 import { AppText } from '@/components/ui';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';

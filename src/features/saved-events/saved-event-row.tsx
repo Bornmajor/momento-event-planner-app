@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { SavedEventView } from '@/api/endpoints';
 import { AppText } from '@/components/ui';
-import { formatEventDate, formatVenue } from '@/features/events/format';
+import { formatEventDate, formatVenue } from '@/features/events';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui';
 import { useTheme } from '@/core/theme/use-theme';
 
-import type { EventWhen } from '../use-events';
+import type { EventWhen } from '../../domain/models/event';
 
 export interface WhenSelection {
   now: boolean;

@@ -2,10 +2,9 @@ import { useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import type { Event, EventSummary } from '@/api/endpoints';
 import { failureMessage } from '@/core/failures';
 import { BackButton, ErrorState, FormScreen } from '@/components/ui';
-import { useEvent } from '@/features/events/use-events';
+import { useEvent } from '@/features/events';
 import { PersonalizeForm } from '@/features/personalize/personalize-form';
 import { useTheme } from '@/core/theme/use-theme';
 
@@ -15,7 +14,7 @@ export default function PersonalizeScreen() {
   const { t } = useTranslation();
   const { colors, spacing } = useTheme();
   const query = useEvent(id);
-  const event = query.data as (EventSummary & Partial<Pick<Event, 'description' | 'notes'>>) | undefined;
+  const event = query.data;
 
   // The list summary has no description yet; wait for the full event (placeholder data is the summary).
   if (!event || query.isPlaceholderData) {

@@ -120,9 +120,10 @@ green, and the app behaves the same.
 - [x] 5.7.2 `session.ts`: `ApiError` status `401` → `UnauthenticatedFailure` (refresh and restore)
 - [x] 5.7.2 `form-errors.ts` and sign-up step 2: `EMAIL_TAKEN` / `VALIDATION_ERROR` → `EmailTakenFailure` / `ValidationFailure`
 - [x] 5.7.2 `use-google-sign-in.ts`: `ApiError` `EMAIL_TAKEN` → `EmailTakenFailure`
-- [ ] 5.7.3 event details screen: `ApiError` `NOT_FOUND` → `EventNotFoundFailure`
+- [x] 5.7.3 event details screen: `ApiError` `NOT_FOUND` → `EventNotFoundFailure`
 - [ ] 5.7.4 saved-events offline queue: save `404` → `EventNotFoundFailure`
 - [ ] 5.7.5 personalize form: `AI_LIMIT_REACHED` → `AiLimitFailure`
+- [ ] 5.7.4 / 5.7.6 replace remaining deep cross-feature imports with public indexes: events → `saved-events/mutations` (`findSavedEvent`), `saved-events/calendar-entries`, `profile/use-me`; auth → `saved-events/mutations` (`queueLanguageUpdate`)
 - [ ] 5.7.7 narrow `failureMessage()` and `shouldRetry()` to `AppFailure` only, once nothing passes raw errors
 
 ---

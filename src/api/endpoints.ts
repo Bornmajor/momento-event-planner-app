@@ -22,13 +22,6 @@ export const meApi = {
   delete: () => api.delete<void>('/me'),
 };
 
-export const eventsApi = {
-  // `signal`: lets TanStack Query cancel a request whose result is no longer needed.
-  search: (params: EventSearchParams, signal?: AbortSignal) => api.get<EventPage>('/events', { query: params, signal }),
-  categories: (signal?: AbortSignal) => api.get<{ items: Category[] }>('/events/categories', { signal }),
-  get: (id: string, signal?: AbortSignal) => api.get<{ event: Event }>(`/events/${encodeURIComponent(id)}`, { signal }),
-};
-
 export const personalizeApi = {
   run: (eventId: string, body: PersonalizeRequest) =>
     api.post<PersonalizeResponse>(`/events/${encodeURIComponent(eventId)}/personalize`, body),

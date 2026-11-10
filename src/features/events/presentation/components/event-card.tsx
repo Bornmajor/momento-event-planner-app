@@ -4,12 +4,13 @@ import { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import type { EventSummary } from '@/api/endpoints';
+import type { EventSummary } from '../../domain/models/event';
 import { AppText } from '@/components/ui';
 import { MIN_TOUCH } from '@/core/theme/tokens';
 import { useTheme } from '@/core/theme/use-theme';
 
-import { formatEventDate, formatVenue, hasStarted } from '../format';
+import { hasStarted } from '../../domain/event-rules';
+import { formatEventDate, formatVenue } from '../format';
 
 /** Statuses worth flagging on the card (on sale / unknown show nothing). */
 const FLAGGED = new Set(['cancelled', 'postponed', 'rescheduled', 'offsale']);

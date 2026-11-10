@@ -1,7 +1,7 @@
 import * as Calendar from 'expo-calendar';
 import { Linking, Platform } from 'react-native';
 
-import type { EventSummary } from '@/api/endpoints';
+import type { EventSummary } from '@/features/events';
 import { BRAND } from '@/core/theme/tokens';
 
 import { logger } from '@/core/logger';
