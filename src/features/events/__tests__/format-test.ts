@@ -1,4 +1,5 @@
-import { formatEventDate, formatVenue, formatVenueTime, hasStarted, nextPageParam } from '../format';
+import { hasStarted, nextPageParam } from '../domain/event-rules';
+import { formatEventDate, formatVenue, formatVenueTime } from '../presentation/format';
 
 describe('event formatting', () => {
   // A London show at 19:30 local time (19:30 UTC in December).

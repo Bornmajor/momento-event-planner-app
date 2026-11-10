@@ -1,24 +1,26 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 import { SnackbarHost } from '@/components/ui';
-import '@/lib/i18n';
+import '@/core/i18n/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
-jest.mock('@/api/endpoints', () => ({ authApi: { register: jest.fn() } }));
-jest.mock('@/features/auth/session', () => ({ startSession: jest.fn(), onSessionEnd: jest.fn() }));
+jest.mock('@/features/auth/data/sources/auth-remote-source', () => ({ authRemoteSource: { register: jest.fn() } }));
+jest.mock('@/features/auth/data/sources/token-local-source', () => ({
+  tokenLocalSource: { saveSession: jest.fn(), clearSession: jest.fn(), isRemembered: () => true },
+}));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { router } from 'expo-router';
 // eslint-disable-next-line import/first
-import { authApi } from '@/api/endpoints';
+import { authRemoteSource } from '../data/sources/auth-remote-source';
 // eslint-disable-next-line import/first
-import { PasswordStep } from '../components/sign-up-steps';
+import { PasswordStepForm } from '../presentation/screens/password-step-screen';
 // eslint-disable-next-line import/first
-import { useSignUpDraft } from '../sign-up-draft';
+import { useSignUpDraft } from '../presentation/state/sign-up-draft-store';
 
-const register = authApi.register as jest.Mock;
+const register = authRemoteSource.register as jest.Mock;
 
 // The first strength check builds the zxcvbn dictionaries, which is slow when all suites run in parallel.
 jest.setTimeout(20_000);
@@ -28,7 +30,7 @@ async function renderStep() {
   const client = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
   await render(
     <QueryClientProvider client={client}>
-      <PasswordStep details={details} />
+      <PasswordStepForm details={details} />
       <SnackbarHost />
     </QueryClientProvider>,
   );

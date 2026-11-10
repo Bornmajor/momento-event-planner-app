@@ -12,7 +12,7 @@ type FormFieldProps<T extends FieldValues> = Omit<TextFieldProps, 'value' | 'onC
 };
 
 /**
- * TextField bound to react-hook-form. Validation messages are translation keys (see features/auth/schemas.ts), so
+ * TextField bound to react-hook-form. Validation messages are translation keys (see features/auth/presentation/schemas.ts), so
  * the error is translated here.
  */
 export function FormTextField<T extends FieldValues>({ control, name, ref, ...props }: FormFieldProps<T>) {

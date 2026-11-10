@@ -1,5 +1,1 @@
-import { SignInForm } from '@/features/auth/components/sign-in-form';
-
-export default function SignInScreen() {
-  return <SignInForm />;
-}
+export { SignInScreen as default } from '@/features/auth/presentation/screens/sign-in-screen';

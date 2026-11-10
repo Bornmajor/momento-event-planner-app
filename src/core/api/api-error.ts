@@ -1,0 +1,38 @@
+/** An error response from the Momento API: `{ error: { code, message, details? } }` (backend docs). */
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code: string,
+    message: string,
+    readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+/** The request never got a response: offline, DNS failure, or timeout. */
+export class NetworkError extends Error {
+  constructor(message = 'Network request failed') {
+    super(message);
+    this.name = 'NetworkError';
+  }
+}
+
+/** The caller cancelled the request (its AbortSignal fired); nothing to show the user. */
+export class RequestCancelledError extends Error {
+  constructor() {
+    super('Request cancelled');
+    this.name = 'RequestCancelledError';
+  }
+}
+
+/** Field errors from a VALIDATION_ERROR, keyed by field path (for forms). */
+export function fieldErrors(error: unknown): Record<string, string> {
+  if (!(error instanceof ApiError) || !Array.isArray(error.details)) return {};
+  const result: Record<string, string> = {};
+  for (const item of error.details as { path?: unknown; message?: unknown }[]) {
+    if (typeof item.path === 'string' && typeof item.message === 'string') result[item.path] = item.message;
+  }
+  return result;
+}

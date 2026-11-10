@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View, type AccessibilityProps } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { useTheme } from '@/theme/use-theme';
+import { useTheme } from '@/core/theme/use-theme';
 
 interface SegmentedBarProps extends Pick<AccessibilityProps, 'accessibilityLabel' | 'accessibilityValue'> {
   /** Number of segments, e.g. 2 onboarding steps or 4 strength levels. */

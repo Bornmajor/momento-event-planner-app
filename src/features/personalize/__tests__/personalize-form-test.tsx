@@ -1,37 +1,48 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 
-import { ApiError } from '@/api/errors';
+import { ApiError } from '@/core/api/api-error';
 import { SnackbarHost } from '@/components/ui';
-import '@/lib/i18n';
+import '@/core/i18n/i18n';
 
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
-jest.mock('@/api/endpoints', () => ({ personalizeApi: { run: jest.fn() }, savedEventsApi: { save: jest.fn() }, meApi: { update: jest.fn() } }));
-jest.mock('@/features/auth/session', () => ({
+jest.mock('@/features/personalize/data/sources/personalize-remote-source', () => ({ personalizeRemoteSource: { run: jest.fn() } }));
+jest.mock('@/features/saved-events/data/sources/saved-events-remote-source', () => ({
+  savedEventsRemoteSource: { save: jest.fn(), list: jest.fn() },
+}));
+jest.mock('@/features/auth', () => ({
   onSessionEnd: jest.fn(),
   useSession: (select: (s: { userId: string }) => unknown) => select({ userId: 'u1' }),
 }));
-jest.mock('@/features/personalize/add-to-calendar', () => ({
-  addToCalendar: jest.fn(async () => 'cal-1'),
-  CalendarPermissionError: class extends Error {},
+// The phone's calendar: access granted, new entries get id cal-1.
+jest.mock('@/core/calendar/device-calendar', () => ({
+  requestCalendarAccess: jest.fn(async () => 'granted'),
+  createCalendarEntry: jest.fn(async () => 'cal-1'),
+  deleteCalendarEntry: jest.fn(async () => undefined),
+  openCalendarEntry: jest.fn(),
+  openSystemSettings: jest.fn(),
 }));
 
 // eslint-disable-next-line import/first -- mocks must be registered first
 import { router } from 'expo-router';
 // eslint-disable-next-line import/first
-import { personalizeApi, savedEventsApi } from '@/api/endpoints';
+import { createCalendarEntry } from '@/core/calendar/device-calendar';
 // eslint-disable-next-line import/first
-import { formatEventDate } from '@/features/events/format';
+import { savedEventsRemoteSource } from '@/features/saved-events/data/sources/saved-events-remote-source';
 // eslint-disable-next-line import/first
-import { queryClient } from '@/lib/query-client';
+import { formatEventDate } from '@/features/events';
 // eslint-disable-next-line import/first
-import '@/features/saved-events/mutations';
+import { queryClient } from '@/core/query/query-client';
 // eslint-disable-next-line import/first
-import { addToCalendar } from '../add-to-calendar';
+import '@/features/saved-events/presentation/offline-mutations';
 // eslint-disable-next-line import/first
-import { PersonalizeForm } from '../personalize-form';
+import { useCalendarEntries } from '@/features/saved-events';
+// eslint-disable-next-line import/first
+import { personalizeRemoteSource } from '../data/sources/personalize-remote-source';
+// eslint-disable-next-line import/first
+import { PersonalizeForm } from '../presentation/components/personalize-form';
 
-const run = personalizeApi.run as jest.Mock;
+const run = personalizeRemoteSource.run as jest.Mock;
 
 const event = {
   id: 'E1',
@@ -68,7 +79,7 @@ describe('Personalize', () => {
       facts: { dateTimeText: 'Jumanne, 1 Desemba 19:30', venueText: 'Ronnie Scott’s, London', url: event.url },
       cached: true,
     });
-    (savedEventsApi.save as jest.Mock).mockResolvedValue({});
+    (savedEventsRemoteSource.save as jest.Mock).mockResolvedValue({});
     await renderForm();
 
     await fireEvent.press(screen.getByRole('button', { name: 'Apply with AI' }));
@@ -81,15 +92,19 @@ describe('Personalize', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Add to Calendar' }));
 
     await waitFor(() =>
-      expect(addToCalendar).toHaveBeenCalledWith(
-        expect.objectContaining({ userId: 'u1', title: 'Jazz usiku', description: 'Jioni ya jazz.', reminderMinutes: 1440 }),
+      expect(createCalendarEntry).toHaveBeenCalledWith(
+        expect.objectContaining({ title: 'Jazz usiku', location: 'Ronnie Scott’s, London', reminderMinutes: 1440 }),
       ),
     );
-    // The date is the app's own, in the user's time zone, not the backend's venue-time text.
-    const { facts } = (addToCalendar as jest.Mock).mock.calls[0][0];
-    expect(facts.dateTimeText).toBe(formatEventDate(event.start, 'en'));
-    expect(facts.venueText).toBe('Ronnie Scott’s, London');
-    await waitFor(() => expect(savedEventsApi.save).toHaveBeenCalledWith('E1'));
+    // Notes: the edited description, then the exact facts. The date is the app's own, in the user's time zone,
+    // not the backend's venue-time text.
+    const { notes } = (createCalendarEntry as jest.Mock).mock.calls[0][0];
+    expect(notes).toBe(
+      `Jioni ya jazz.\n\n🗓 ${formatEventDate(event.start, 'en')}\n📍 Ronnie Scott’s, London\n🎟 ${event.url}`,
+    );
+    // The entry is remembered for this user, and the event is saved to My Events.
+    expect(useCalendarEntries.getState().byUser.u1?.E1).toBe('cal-1');
+    await waitFor(() => expect(savedEventsRemoteSource.save).toHaveBeenCalledWith('E1'));
     expect(router.back).toHaveBeenCalled();
   });
 

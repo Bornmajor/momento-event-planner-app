@@ -1,23 +1,25 @@
-import { ApiError, NetworkError } from '@/api/errors';
+import { ApiError, NetworkError } from '@/core/api/api-error';
 
-jest.mock('@/lib/secure-tokens', () => ({
-  getRefreshToken: jest.fn(),
-  getUserId: jest.fn(),
-  saveSession: jest.fn(),
-  saveRefreshToken: jest.fn(),
-  clearSession: jest.fn(),
-  isRemembered: jest.fn(() => true),
+jest.mock('@/features/auth/data/sources/token-local-source', () => ({
+  tokenLocalSource: {
+    getRefreshToken: jest.fn(),
+    getUserId: jest.fn(),
+    saveSession: jest.fn(),
+    saveRefreshToken: jest.fn(),
+    clearSession: jest.fn(),
+    isRemembered: jest.fn(() => true),
+  },
 }));
-jest.mock('@/api/endpoints', () => ({
-  authApi: { refresh: jest.fn(), logout: jest.fn() },
+jest.mock('@/features/auth/data/sources/auth-remote-source', () => ({
+  authRemoteSource: { refresh: jest.fn(), logout: jest.fn() },
 }));
 
 // eslint-disable-next-line import/first -- the mocks above must be registered before these imports
-import { authApi } from '@/api/endpoints';
+import { restoreSession, useSession } from '..';
 // eslint-disable-next-line import/first
-import * as tokens from '@/lib/secure-tokens';
+import { authRemoteSource } from '../data/sources/auth-remote-source';
 // eslint-disable-next-line import/first
-import { restoreSession, useSession } from '../session';
+import { tokenLocalSource as tokens } from '../data/sources/token-local-source';
 
 const mocked = <T>(fn: T) => fn as unknown as jest.Mock;
 
@@ -27,17 +29,18 @@ beforeEach(() => {
   mocked(tokens.getUserId).mockResolvedValue('user-1');
 });
 
-describe('restoreSession (spec §4)', () => {
+// Runs the real use case, repository (error → failure mapping) and session store; only the sources are fake.
+describe('restoreSession', () => {
   it('signs out when no refresh token is stored', async () => {
     mocked(tokens.getRefreshToken).mockResolvedValue(null);
     await restoreSession();
     expect(useSession.getState().status).toBe('signedOut');
-    expect(authApi.refresh).not.toHaveBeenCalled();
+    expect(authRemoteSource.refresh).not.toHaveBeenCalled();
   });
 
   it('signs in with a fresh access token when the refresh succeeds', async () => {
     mocked(tokens.getRefreshToken).mockResolvedValue('refresh-1');
-    mocked(authApi.refresh).mockResolvedValue({ accessToken: 'access-2', refreshToken: 'refresh-2' });
+    mocked(authRemoteSource.refresh).mockResolvedValue({ accessToken: 'access-2', refreshToken: 'refresh-2' });
 
     await restoreSession();
 
@@ -47,7 +50,7 @@ describe('restoreSession (spec §4)', () => {
 
   it('signs out and clears tokens when the server rejects the refresh token (401)', async () => {
     mocked(tokens.getRefreshToken).mockResolvedValue('refresh-1');
-    mocked(authApi.refresh).mockRejectedValue(new ApiError(401, 'UNAUTHENTICATED', 'Invalid or expired token'));
+    mocked(authRemoteSource.refresh).mockRejectedValue(new ApiError(401, 'UNAUTHENTICATED', 'Invalid or expired token'));
 
     await restoreSession();
 
@@ -57,7 +60,7 @@ describe('restoreSession (spec §4)', () => {
 
   it('stays signed in, offline, when the server cannot be reached', async () => {
     mocked(tokens.getRefreshToken).mockResolvedValue('refresh-1');
-    mocked(authApi.refresh).mockRejectedValue(new NetworkError('offline'));
+    mocked(authRemoteSource.refresh).mockRejectedValue(new NetworkError('offline'));
 
     await restoreSession();
 

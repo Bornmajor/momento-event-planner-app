@@ -1,7 +1,7 @@
-import '@/lib/i18n';
-// Registers the offline-capable save mutation before the cache restores queued ones (spec §5.2).
-import '@/features/saved-events/mutations';
-import '@/features/auth/use-google-sign-in'; // registers the Google sign-out on session end
+import '@/core/i18n/i18n';
+// Register the offline-capable mutations before the cache restores queued ones (spec §5.2).
+import '@/features/saved-events/presentation/offline-mutations';
+import '@/features/profile/presentation/language-mutation';
 
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
@@ -11,11 +11,15 @@ import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
 import { SnackbarHost } from '@/components/ui';
-import { restoreSession, useSession } from '@/features/auth/session';
-import { syncDeviceLanguage, useLanguageStore } from '@/features/settings/language-store';
-import { persistOptions, queryClient } from '@/lib/query-client';
-import { useThemeStore } from '@/theme/theme-store';
-import { useTheme } from '@/theme/use-theme';
+import { persistOptions, queryClient } from '@/core/query/query-client';
+import { useThemeStore } from '@/core/theme/theme-store';
+import { useTheme } from '@/core/theme/use-theme';
+import { configureAuth, restoreSession, useSession } from '@/features/auth';
+import { queueLanguageUpdate } from '@/features/profile';
+import { syncDeviceLanguage, useLanguageStore } from '@/features/settings';
+
+// The root layout is the app's composition point: it connects features that must not import each other.
+configureAuth({ queueLanguageUpdate });
 
 // Keep the splash up until the session and the offline cache are restored (spec §4).
 SplashScreen.preventAutoHideAsync();
